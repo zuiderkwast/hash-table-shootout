@@ -4,8 +4,6 @@ First, some prerequisites are:
 
 * make
 * gcc and recent g++ (4.3-ish?)
-* python (hard-coded for 2.6 -- edit Makefile to use another version)
-* glib
 * boost
 * google sparsehash
 * qt
