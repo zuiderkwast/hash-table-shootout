@@ -7,6 +7,10 @@
 #include <stdio.h>
 #include <math.h>
 
+
+static const size_t MIN_STRING_SIZE = 100;
+
+
 double get_time(void)
 {
     struct timeval tv;
@@ -14,12 +18,8 @@ double get_time(void)
     return tv.tv_sec + (tv.tv_usec / 1000000.0);
 }
 
-char * new_string_from_integer(int num)
-{
-    int ndigits = num == 0 ? 1 : (int)log10(num) + 1;
-    char * str = (char *)malloc(ndigits + 1);
-    sprintf(str, "%d", num);
-    return str;
+std::string get_string_for_key(int key) {
+    return std::string(MIN_STRING_SIZE, 'a') + std::to_string(key);
 }
 
 int main(int argc, char ** argv)
@@ -59,23 +59,23 @@ int main(int argc, char ** argv)
     else if(!strcmp(argv[2], "sequentialstring"))
     {
         for(i = 0; i < num_keys; i++)
-            INSERT_STR_INTO_HASH(new_string_from_integer(i), value);
+            INSERT_STR_INTO_HASH(get_string_for_key(i), value);
     }
 
     else if(!strcmp(argv[2], "randomstring"))
     {
         srandom(1); // for a fair/deterministic comparison
         for(i = 0; i < num_keys; i++)
-            INSERT_STR_INTO_HASH(new_string_from_integer((int)random()), value);
+            INSERT_STR_INTO_HASH(get_string_for_key((int)random()), value);
     }
 
     else if(!strcmp(argv[2], "deletestring"))
     {
         for(i = 0; i < num_keys; i++)
-            INSERT_STR_INTO_HASH(new_string_from_integer(i), value);
+            INSERT_STR_INTO_HASH(get_string_for_key(i), value);
         before = get_time();
         for(i = 0; i < num_keys; i++)
-            DELETE_STR_FROM_HASH(new_string_from_integer(i));
+            DELETE_STR_FROM_HASH(get_string_for_key(i));
     }
 
     double after = get_time();
