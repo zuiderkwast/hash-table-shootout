@@ -40,6 +40,19 @@ int main(int argc, char ** argv)
             INSERT_INT_INTO_HASH(i, value);
     }
 
+    else if(!strcmp(argv[2], "sequentialread"))
+    {
+        for(i = 0; i < num_keys; i++)
+            INSERT_INT_INTO_HASH(i, value);
+        before = get_time();
+        for(i = 0; i < num_keys; i++) {
+            if(FIND_FROM_INT_HASH(i) != value) {
+                printf("error");
+                exit(1);
+            }
+        }
+    }
+
     else if(!strcmp(argv[2], "random"))
     {
         srandom(1); // for a fair/deterministic comparison
@@ -60,6 +73,19 @@ int main(int argc, char ** argv)
     {
         for(i = 0; i < num_keys; i++)
             INSERT_STR_INTO_HASH(get_string_for_key(i), value);
+    }
+
+    else if(!strcmp(argv[2], "sequentialreadstring"))
+    {
+        for(i = 0; i < num_keys; i++)
+            INSERT_STR_INTO_HASH(get_string_for_key(i), value);
+        before = get_time();
+        for(i = 0; i < num_keys; i++) {
+            if(FIND_FROM_STR_HASH(get_string_for_key(i)) != value) {
+                printf("error");
+                exit(1);
+            }
+        }
     }
 
     else if(!strcmp(argv[2], "randomstring"))

@@ -54,10 +54,12 @@
 
     $(function () {
         $.plot($("#sequential-runtime"), chart_data['sequential-runtime'], runtime_settings);
+        $.plot($("#sequentialread-runtime"), chart_data['sequentialread-runtime'], runtime_settings);
         $.plot($("#random-runtime"),     chart_data['random-runtime'],     runtime_settings);
         $.plot($("#delete-runtime"),     chart_data['delete-runtime'],     runtime_settings);
         $.plot($("#sequential-memory"),  chart_data['sequential-memory'],  memory_settings);
         $.plot($("#sequentialstring-runtime"), chart_data['sequentialstring-runtime'], runtime_settings);
+        $.plot($("#sequentialreadstring-runtime"), chart_data['sequentialreadstring-runtime'], runtime_settings);
         $.plot($("#randomstring-runtime"),     chart_data['randomstring-runtime'],     runtime_settings);
         $.plot($("#deletestring-runtime"),     chart_data['deletestring-runtime'],     runtime_settings);
         $.plot($("#sequentialstring-memory"),  chart_data['sequentialstring-memory'],  memory_settings);
@@ -88,6 +90,13 @@
 <div class="chart" id="sequentialstring-runtime"></div>
 <div class="xaxis-title">number of entries in hash table</div>
 
+<h3>Sequential Reads: Execution Time (integers)</h3>
+<div class="chart" id="sequentialread-runtime"></div>
+<div class="xaxis-title">number of entries in hash table</div>
+
+<h3>Sequential Reads: Execution Time (strings)</h3>
+<div class="chart" id="sequentialreadstring-runtime"></div>
+<div class="xaxis-title">number of entries in hash table</div>
 
 <h3>Random Inserts: Execution Time (integers)</h3>
 <div class="chart" id="random-runtime"></div>
