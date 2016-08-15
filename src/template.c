@@ -6,7 +6,9 @@
 #include <unistd.h>
 #include <stdio.h>
 #include <math.h>
-
+#include <vector>
+#include <algorithm>
+#include <random>
 
 static const size_t MIN_STRING_SIZE = 100;
 
@@ -18,8 +20,20 @@ double get_time(void)
     return tv.tv_sec + (tv.tv_usec / 1000000.0);
 }
 
-std::string get_string_for_key(int key) {
+std::string get_string_for_key(int key) 
+{
     return std::string(MIN_STRING_SIZE, 'a') + std::to_string(key);
+}
+
+std::vector<int64_t> get_random_ints(size_t nb_ints, int64_t seed) 
+{
+    std::mt19937_64 rand(seed);
+    
+    std::vector<int64_t> random_ints(nb_ints);
+    std::iota(random_ints.begin(), random_ints.end(), 0);
+    std::shuffle(random_ints.begin(), random_ints.end(), rand);
+    
+    return random_ints;
 }
 
 int main(int argc, char ** argv)
@@ -55,9 +69,10 @@ int main(int argc, char ** argv)
 
     else if(!strcmp(argv[2], "random"))
     {
-        srandom(1); // for a fair/deterministic comparison
+        std::vector<int64_t> keys = get_random_ints(num_keys, 1);
+        before = get_time();
         for(i = 0; i < num_keys; i++)
-            INSERT_INT_INTO_HASH((int)random(), value);
+            INSERT_INT_INTO_HASH(keys[i], value);
     }
 
     else if(!strcmp(argv[2], "delete"))
