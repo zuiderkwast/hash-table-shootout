@@ -69,13 +69,13 @@ int main(int argc, char ** argv)
             DELETE_INT_FROM_HASH(i);
     }
 
-    else if(!strcmp(argv[2], "sequentialstring"))
+    else if(!strcmp(argv[2], "insertstring"))
     {
         for(i = 0; i < num_keys; i++)
             INSERT_STR_INTO_HASH(get_string_for_key(i), value);
     }
 
-    else if(!strcmp(argv[2], "sequentialreadstring"))
+    else if(!strcmp(argv[2], "readstring"))
     {
         for(i = 0; i < num_keys; i++)
             INSERT_STR_INTO_HASH(get_string_for_key(i), value);
@@ -86,13 +86,6 @@ int main(int argc, char ** argv)
                 exit(1);
             }
         }
-    }
-
-    else if(!strcmp(argv[2], "randomstring"))
-    {
-        srandom(1); // for a fair/deterministic comparison
-        for(i = 0; i < num_keys; i++)
-            INSERT_STR_INTO_HASH(get_string_for_key((int)random()), value);
     }
 
     else if(!strcmp(argv[2], "deletestring"))

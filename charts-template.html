@@ -58,11 +58,10 @@
         $.plot($("#random-runtime"),     chart_data['random-runtime'],     runtime_settings);
         $.plot($("#delete-runtime"),     chart_data['delete-runtime'],     runtime_settings);
         $.plot($("#sequential-memory"),  chart_data['sequential-memory'],  memory_settings);
-        $.plot($("#sequentialstring-runtime"), chart_data['sequentialstring-runtime'], runtime_settings);
-        $.plot($("#sequentialreadstring-runtime"), chart_data['sequentialreadstring-runtime'], runtime_settings);
-        $.plot($("#randomstring-runtime"),     chart_data['randomstring-runtime'],     runtime_settings);
+        $.plot($("#insertstring-runtime"), chart_data['insertstring-runtime'], runtime_settings);
+        $.plot($("#readstring-runtime"), chart_data['readstring-runtime'], runtime_settings);
         $.plot($("#deletestring-runtime"),     chart_data['deletestring-runtime'],     runtime_settings);
-        $.plot($("#sequentialstring-memory"),  chart_data['sequentialstring-memory'],  memory_settings);
+        $.plot($("#insertstring-memory"),  chart_data['insertstring-memory'],  memory_settings);
     });
 </script>
 
@@ -86,42 +85,40 @@
 <div class="chart" id="sequential-runtime"></div>
 <div class="xaxis-title">number of entries in hash table</div>
 
-<h3>Sequential Inserts: Execution Time (strings)</h3>
-<div class="chart" id="sequentialstring-runtime"></div>
+<h3>Random Inserts: Execution Time (integers)</h3>
+<div class="chart" id="random-runtime"></div>
+<div class="xaxis-title">number of entries in hash table</div>
+
+<h3>Deletes: Execution Time (integers)</h3>
+<div class="chart" id="delete-runtime"></div>
 <div class="xaxis-title">number of entries in hash table</div>
 
 <h3>Sequential Reads: Execution Time (integers)</h3>
 <div class="chart" id="sequentialread-runtime"></div>
 <div class="xaxis-title">number of entries in hash table</div>
 
-<h3>Sequential Reads: Execution Time (strings)</h3>
-<div class="chart" id="sequentialreadstring-runtime"></div>
-<div class="xaxis-title">number of entries in hash table</div>
-
-<h3>Random Inserts: Execution Time (integers)</h3>
-<div class="chart" id="random-runtime"></div>
-<div class="xaxis-title">number of entries in hash table</div>
-
-<h3>Random Inserts: Execution Time (strings)</h3>
-<div class="chart" id="randomstring-runtime"></div>
+<h3>Memory Usage (integers)</h3>
+<div class="chart" id="sequential-memory"></div>
 <div class="xaxis-title">number of entries in hash table</div>
 
 
-<h3>Deletes: Execution Time (integers)</h3>
-<div class="chart" id="delete-runtime"></div>
+
+
+
+<h3>Inserts: Execution Time (strings)</h3>
+<div class="chart" id="insertstring-runtime"></div>
 <div class="xaxis-title">number of entries in hash table</div>
 
 <h3>Deletes: Execution Time (strings)</h3>
 <div class="chart" id="deletestring-runtime"></div>
 <div class="xaxis-title">number of entries in hash table</div>
 
-
-<h3>Memory Usage (integers)</h3>
-<div class="chart" id="sequential-memory"></div>
+<h3>Reads: Execution Time (strings)</h3>
+<div class="chart" id="readstring-runtime"></div>
 <div class="xaxis-title">number of entries in hash table</div>
 
 <h3>Memory Usage (strings)</h3>
-<div class="chart" id="sequentialstring-memory"></div>
+<div class="chart" id="insertstring-memory"></div>
 <div class="xaxis-title">number of entries in hash table</div>
 
 
