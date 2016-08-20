@@ -10,7 +10,8 @@
 #include <algorithm>
 #include <random>
 
-static const size_t MIN_STRING_SIZE = 100;
+
+static const size_t MIN_STRING_SIZE = 50;
 
 
 double get_time(void)

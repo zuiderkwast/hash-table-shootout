@@ -6,9 +6,7 @@ programs = [
     'google_sparse_hash_map',
     'google_dense_hash_map',
     'qt_qhash',
-    'hopscotch_map_8',
-    'hopscotch_map_32',
-    'hopscotch_map_64',
+    'hopscotch_map',
 ]
 
 minkeys  =  2*1000*1000
