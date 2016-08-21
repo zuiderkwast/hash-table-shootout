@@ -7,12 +7,21 @@
     <body>
 
 <script>
+    $("<div id='tooltip'></div>").css({
+                                    position: "absolute",
+                                    display: "none",
+                                    border: "1px solid #fdd",
+                                    padding: "2px",
+                                    "background-color": "#fee",
+                                    opacity: 0.80
+                                  }).appendTo("body");
+                
     series_settings = {
         lines: { show: true },
         points: { show: true }
     };
 
-    grid_settings = { tickColor: '#ddd' };
+    grid_settings = { tickColor: '#ddd', hoverable: true };
 
     xaxis_settings = {
         tickFormatter: function(num, obj) { return parseInt(num/1000000) + 'M'; }
@@ -48,37 +57,53 @@
     };
 
     __CHART_DATA_GOES_HERE__
+    
 
     function plot_chart(dataset, chart_container, choices_container, chart_settings) {
+        // Set colors
         var color = 0;
         $.each(dataset, function(key, val) {
             val.color = color;
             color++;
         });
         
-        // insert checkboxes 
+        // Insert checkboxes 
         $.each(dataset, function(key, val) {
-                $(choices_container).append("<br/>" + 
-                        "<input type='checkbox' name='" + key +"' checked='checked' id='id" + key + "'></input>" +
-                        "<label for='id" + key + "'>" + val.label + "</label>");
+            $(choices_container).append("<br/>" + 
+                    "<input type='checkbox' name='" + key +"' checked='checked' id='id" + key + "'></input>" +
+                    "<label for='id" + key + "'>" + val.label + "</label>");
         });
         
         $(choices_container).find("input").click(plot_according_to_choices);
         
         function plot_according_to_choices() {
-                var data = [];
-                $(choices_container).find("input:checked").each(
-                    function () {
-                        var key = $(this).attr("name");
-                        if (key && dataset[key]) {
-                                data.push(dataset[key]);
-                        }
+            var data = [];
+            $(choices_container).find("input:checked").each(
+                function () {
+                    var key = $(this).attr("name");
+                    if (key && dataset[key]) {
+                            data.push(dataset[key]);
                     }
-                );
-
-                if (data.length > 0) {
-                    $.plot(chart_container, data, chart_settings);
                 }
+            );
+
+            if (data.length > 0) {
+                $.plot(chart_container, data, chart_settings);
+                
+    
+                $(chart_container).bind("plothover", function (event, pos, item) {
+                    if (item) {
+                        var x = item.datapoint[0];
+                        var y = item.datapoint[1].toFixed(2);
+
+                        $("#tooltip").html(y + " ; " + x)
+                                     .css({top: item.pageY+5, left: item.pageX+5})
+                                     .fadeIn(200);
+                    } else {
+                        $("#tooltip").hide();
+                    }        
+                });
+            }
         }
 
         plot_according_to_choices()
@@ -95,6 +120,9 @@
         plot_chart(chart_data['deletestring-runtime'], '#deletestring-runtime', '#deletestring-runtime-choices', runtime_settings);
         plot_chart(chart_data['insertstring-memory'], '#insertstring-memory', '#insertstring-memory-choices', memory_settings);
     });
+    
+       
+    
 </script>
 
 <style>
