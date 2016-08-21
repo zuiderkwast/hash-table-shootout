@@ -15,17 +15,14 @@
     grid_settings = { tickColor: '#ddd' };
 
     xaxis_settings = {
-        tickSize: 5000000,
         tickFormatter: function(num, obj) { return parseInt(num/1000000) + 'M'; }
     };
 
     yaxis_runtime_settings = {
-        tickSize: 10,
         tickFormatter: function(num, obj) { return num + ' sec.'; }
     };
 
     yaxis_memory_settings = {
-        tickSize: 200*1024*1024,
         tickFormatter: function(num, obj) { return parseInt(num/1024/1024) + 'MiB'; }
     };
 
@@ -52,24 +49,63 @@
 
     __CHART_DATA_GOES_HERE__
 
+    function plot_chart(dataset, chart_container, choices_container, chart_settings) {
+        var color = 0;
+        $.each(dataset, function(key, val) {
+            val.color = color;
+            color++;
+        });
+        
+        // insert checkboxes 
+        $.each(dataset, function(key, val) {
+                $(choices_container).append("<br/>" + 
+                        "<input type='checkbox' name='" + key +"' checked='checked' id='id" + key + "'></input>" +
+                        "<label for='id" + key + "'>" + val.label + "</label>");
+        });
+        
+        $(choices_container).find("input").click(plot_according_to_choices);
+        
+        function plot_according_to_choices() {
+                var data = [];
+                $(choices_container).find("input:checked").each(
+                    function () {
+                        var key = $(this).attr("name");
+                        if (key && dataset[key]) {
+                                data.push(dataset[key]);
+                        }
+                    }
+                );
+
+                if (data.length > 0) {
+                    $.plot(chart_container, data, chart_settings);
+                }
+        }
+
+        plot_according_to_choices()
+    }
+
     $(function () {
-        $.plot($("#sequential-runtime"), chart_data['sequential-runtime'], runtime_settings);
-        $.plot($("#sequentialread-runtime"), chart_data['sequentialread-runtime'], runtime_settings);
-        $.plot($("#random-runtime"),     chart_data['random-runtime'],     runtime_settings);
-        $.plot($("#delete-runtime"),     chart_data['delete-runtime'],     runtime_settings);
-        $.plot($("#sequential-memory"),  chart_data['sequential-memory'],  memory_settings);
-        $.plot($("#insertstring-runtime"), chart_data['insertstring-runtime'], runtime_settings);
-        $.plot($("#readstring-runtime"), chart_data['readstring-runtime'], runtime_settings);
-        $.plot($("#deletestring-runtime"),     chart_data['deletestring-runtime'],     runtime_settings);
-        $.plot($("#insertstring-memory"),  chart_data['insertstring-memory'],  memory_settings);
+        plot_chart(chart_data['sequential-runtime'], '#sequential-runtime', '#sequential-runtime-choices', runtime_settings);
+        plot_chart(chart_data['sequentialread-runtime'], '#sequentialread-runtime', '#sequentialread-runtime-choices', runtime_settings);
+        plot_chart(chart_data['random-runtime'], '#random-runtime', '#random-runtime-choices', runtime_settings);
+        plot_chart(chart_data['delete-runtime'], '#delete-runtime', '#delete-runtime-choices', runtime_settings);
+        plot_chart(chart_data['sequential-memory'], '#sequential-memory', '#sequential-memory-choices', memory_settings);
+        plot_chart(chart_data['insertstring-runtime'], '#insertstring-runtime', '#insertstring-runtime-choices', runtime_settings);
+        plot_chart(chart_data['readstring-runtime'], '#readstring-runtime', '#readstring-runtime-choices', runtime_settings);
+        plot_chart(chart_data['deletestring-runtime'], '#deletestring-runtime', '#deletestring-runtime-choices', runtime_settings);
+        plot_chart(chart_data['insertstring-memory'], '#insertstring-memory', '#insertstring-memory-choices', memory_settings);
     });
 </script>
 
 <style>
     body, * { font-family: sans-serif; }
     div.chart {
+        float: left;
         width: 700px;
         height: 230px;
+    }
+    div.choices {
+        float: left;
     }
     div.xaxis-title {
         width: 700px;
@@ -83,22 +119,27 @@
 
 <h3>Sequential Inserts: Execution Time (integers)</h3>
 <div class="chart" id="sequential-runtime"></div>
+<div class="choices" id="sequential-runtime-choices"></div>
 <div class="xaxis-title">number of entries in hash table</div>
 
 <h3>Random Inserts: Execution Time (integers)</h3>
 <div class="chart" id="random-runtime"></div>
+<div class="choices" id="random-runtime-choices"></div>
 <div class="xaxis-title">number of entries in hash table</div>
 
 <h3>Deletes: Execution Time (integers)</h3>
 <div class="chart" id="delete-runtime"></div>
+<div class="choices" id="delete-runtime-choices"></div>
 <div class="xaxis-title">number of entries in hash table</div>
 
 <h3>Sequential Reads: Execution Time (integers)</h3>
 <div class="chart" id="sequentialread-runtime"></div>
+<div class="choices" id="sequentialread-runtime-choices"></div>
 <div class="xaxis-title">number of entries in hash table</div>
 
 <h3>Memory Usage (integers)</h3>
 <div class="chart" id="sequential-memory"></div>
+<div class="choices" id="sequential-memory-choices"></div>
 <div class="xaxis-title">number of entries in hash table</div>
 
 
@@ -107,18 +148,22 @@
 
 <h3>Inserts: Execution Time (strings)</h3>
 <div class="chart" id="insertstring-runtime"></div>
+<div class="choices" id="insertstring-runtime-choices"></div>
 <div class="xaxis-title">number of entries in hash table</div>
 
 <h3>Deletes: Execution Time (strings)</h3>
 <div class="chart" id="deletestring-runtime"></div>
+<div class="choices" id="deletestring-runtime-choices"></div>
 <div class="xaxis-title">number of entries in hash table</div>
 
 <h3>Reads: Execution Time (strings)</h3>
 <div class="chart" id="readstring-runtime"></div>
+<div class="choices" id="readstring-runtime-choices"></div>
 <div class="xaxis-title">number of entries in hash table</div>
 
 <h3>Memory Usage (strings)</h3>
 <div class="chart" id="insertstring-memory"></div>
+<div class="choices" id="insertstring-memory-choices"></div>
 <div class="xaxis-title">number of entries in hash table</div>
 
 
