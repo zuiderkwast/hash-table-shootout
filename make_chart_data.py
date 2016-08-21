@@ -38,11 +38,11 @@ for line in lines:
         by_benchtype.setdefault("%s-memory"  % benchtype, {}).setdefault(program, []).append([nkeys, nbytes])
 
 proper_names = {
-    'boost_unordered_map': 'Boost 1.38 unordered_map',
-    'stl_unordered_map': 'GCC 4.4 std::unordered_map',
-    'google_sparse_hash_map': 'Google sparsehash 1.5.2 sparse_hash_map',
-    'google_dense_hash_map': 'Google sparsehash 1.5.2 dense_hash_map',
-    'qt_qhash': 'Qt 4.5 QHash',
+    'boost_unordered_map': 'Boost 1.61 unordered_map',
+    'stl_unordered_map': 'GCC 6.1 std::unordered_map',
+    'google_sparse_hash_map': 'Google sparsehash 2.0.2 sparse_hash_map',
+    'google_dense_hash_map': 'Google sparsehash 2.0.2 dense_hash_map',
+    'qt_qhash': 'Qt 4.8 QHash',
     'hopscotch_map': 'Hopscotch_map with H=62',
 }
 
