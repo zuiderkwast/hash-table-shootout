@@ -28,7 +28,7 @@
     };
 
     yaxis_runtime_settings = {
-        tickFormatter: function(num, obj) { return num + ' sec.'; }
+        tickFormatter: function(num, obj) { return (+num.toFixed(2)) + ' sec.'; }
     };
 
     yaxis_memory_settings = {
