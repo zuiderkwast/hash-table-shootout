@@ -59,6 +59,7 @@ int main(int argc, char ** argv)
     {
         for(i = 0; i < num_keys; i++)
             INSERT_INT_INTO_HASH(i, value);
+        
         before = get_time();
         for(i = 0; i < num_keys; i++) {
             if(FIND_FROM_INT_HASH(i) != value) {
@@ -70,16 +71,32 @@ int main(int argc, char ** argv)
 
     else if(!strcmp(argv[2], "random"))
     {
-        std::vector<int64_t> keys = get_random_ints(num_keys, 1);
+        const std::vector<int64_t> keys = get_random_ints(num_keys, 1);
         before = get_time();
         for(i = 0; i < num_keys; i++)
             INSERT_INT_INTO_HASH(keys[i], value);
+    }
+
+    else if(!strcmp(argv[2], "randomread"))
+    {
+        const std::vector<int64_t> keys = get_random_ints(num_keys, 1);
+        for(i = 0; i < num_keys; i++)
+            INSERT_INT_INTO_HASH(i, value);
+        
+        before = get_time();
+        for(i = 0; i < num_keys; i++) {
+            if(FIND_FROM_INT_HASH(keys[i]) != value) {
+                printf("error");
+                exit(1);
+            }
+        }
     }
 
     else if(!strcmp(argv[2], "delete"))
     {
         for(i = 0; i < num_keys; i++)
             INSERT_INT_INTO_HASH(i, value);
+        
         before = get_time();
         for(i = 0; i < num_keys; i++)
             DELETE_INT_FROM_HASH(i);
@@ -95,6 +112,7 @@ int main(int argc, char ** argv)
     {
         for(i = 0; i < num_keys; i++)
             INSERT_STR_INTO_HASH(get_string_for_key(i), value);
+        
         before = get_time();
         for(i = 0; i < num_keys; i++) {
             if(FIND_FROM_STR_HASH(get_string_for_key(i)) != value) {

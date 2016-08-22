@@ -113,6 +113,7 @@
         plot_chart(chart_data['sequential-runtime'], '#sequential-runtime', '#sequential-runtime-choices', runtime_settings);
         plot_chart(chart_data['sequentialread-runtime'], '#sequentialread-runtime', '#sequentialread-runtime-choices', runtime_settings);
         plot_chart(chart_data['random-runtime'], '#random-runtime', '#random-runtime-choices', runtime_settings);
+        plot_chart(chart_data['randomread-runtime'], '#randomread-runtime', '#randomread-runtime-choices', runtime_settings);
         plot_chart(chart_data['delete-runtime'], '#delete-runtime', '#delete-runtime-choices', runtime_settings);
         plot_chart(chart_data['sequential-memory'], '#sequential-memory', '#sequential-memory-choices', memory_settings);
         plot_chart(chart_data['insertstring-runtime'], '#insertstring-runtime', '#insertstring-runtime-choices', runtime_settings);
@@ -163,6 +164,11 @@
 <h3>Sequential Reads: Execution Time (integers)</h3>
 <div class="chart" id="sequentialread-runtime"></div>
 <div class="choices" id="sequentialread-runtime-choices"></div>
+<div class="xaxis-title">number of entries in hash table</div>
+
+<h3>Random Reads: Execution Time (integers)</h3>
+<div class="chart" id="randomread-runtime"></div>
+<div class="choices" id="randomread-runtime-choices"></div>
 <div class="xaxis-title">number of entries in hash table</div>
 
 <h3>Memory Usage (integers)</h3>
