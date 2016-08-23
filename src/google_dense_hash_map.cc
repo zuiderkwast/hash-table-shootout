@@ -8,6 +8,7 @@ typedef google::dense_hash_map<std::string, int64_t, std::hash<std::string>> str
 #define INSERT_INT_INTO_HASH(key, value) hash.insert(hash_t::value_type(key, value))
 #define DELETE_INT_FROM_HASH(key) hash.erase(key)
 #define FIND_FROM_INT_HASH(key) hash[key]
+#define GET_VALUE_INT_FROM_KEY_VALUE(key_value) key_value.second
 #define INSERT_STR_INTO_HASH(key, value) str_hash.insert(str_hash_t::value_type(key, value))
 #define DELETE_STR_FROM_HASH(key) str_hash.erase(key)
 #define FIND_FROM_STR_HASH(key) str_hash[key]

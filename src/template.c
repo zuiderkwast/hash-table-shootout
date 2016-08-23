@@ -77,6 +77,20 @@ int main(int argc, char ** argv)
             INSERT_INT_INTO_HASH(keys[i], value);
     }
 
+    else if(!strcmp(argv[2], "iteration"))
+    {
+        for(i = 0; i < num_keys; i++)
+            INSERT_INT_INTO_HASH(i, value);
+        
+        before = get_time();
+        for(const auto& key_value : hash) {
+            if(GET_VALUE_INT_FROM_KEY_VALUE(key_value) != value) {
+                printf("error");
+                exit(1);
+            }
+        }
+    }
+
     else if(!strcmp(argv[2], "randomread"))
     {
         const std::vector<int64_t> keys = get_random_ints(num_keys, 1);
