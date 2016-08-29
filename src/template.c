@@ -146,6 +146,8 @@ int main(int argc, char ** argv)
     }
 
     double after = get_time();
+    
+    sleep(1);
     printf("%f\n", after-before);
     fflush(stdout);
     sleep(1000000);
