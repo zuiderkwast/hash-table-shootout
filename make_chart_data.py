@@ -34,7 +34,7 @@ for line in lines:
     runtime = float(runtime)
 
     by_benchtype.setdefault("%s-runtime" % benchtype, {}).setdefault(program, []).append([nkeys, runtime])
-    if benchtype == 'sequential' or benchtype == 'insertstring':
+    if benchtype == 'randomfull' or benchtype == 'insertstring':
         by_benchtype.setdefault("%s-memory"  % benchtype, {}).setdefault(program, []).append([nkeys, nbytes])
 
 proper_names = {
@@ -71,4 +71,6 @@ for i, (benchtype, programs) in enumerate(by_benchtype.items()):
         for k, (nkeys, value) in enumerate(data):
             chart_data[benchtype][-1]['data'].append([nkeys, value])
 
-print 'chart_data = ' + json.dumps(chart_data)
+json_text = json.dumps(chart_data)
+json_text = json_text.replace("}], ", "}], \n")
+print('chart_data = ' + json_text)
