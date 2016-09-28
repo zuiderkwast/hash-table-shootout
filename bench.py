@@ -6,6 +6,7 @@ programs = [
     'google_sparse_hash_map',
     'google_dense_hash_map',
     'qt_qhash',
+    'spp_sparse_hash_map',
     'hopscotch_map',
 ]
 

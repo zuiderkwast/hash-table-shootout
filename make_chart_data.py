@@ -43,6 +43,7 @@ proper_names = {
     'google_sparse_hash_map': 'Google sparsehash 2.0.2 sparse_hash_map',
     'google_dense_hash_map': 'Google sparsehash 2.0.2 dense_hash_map',
     'qt_qhash': 'Qt 4.8 QHash',
+    'spp_sparse_hash_map': 'Sparse hash map',
     'hopscotch_map': 'Hopscotch_map 0.1.0 with H=62',
 }
 
@@ -54,6 +55,7 @@ program_slugs = [
     'stl_unordered_map',
     'boost_unordered_map',
     'qt_qhash',
+    'spp_sparse_hash_map',
     'hopscotch_map',
 ]
 
