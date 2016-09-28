@@ -77,7 +77,7 @@ int main(int argc, char ** argv)
         
         before = get_time();
         for(int64_t i = 0; i < num_keys; i++) {
-            if(FIND_FROM_INT_HASH(i) != value) {
+            if(FIND_EXISTING_FROM_INT_HASH(i) != value) {
                 printf("error");
                 exit(1);
             }
@@ -105,7 +105,7 @@ int main(int argc, char ** argv)
         
         before = get_time();
         for(int64_t i = 0; i < num_keys; i++) {
-            if(FIND_FROM_INT_HASH(keys[i]) != value) {
+            if(FIND_EXISTING_FROM_INT_HASH(keys[i]) != value) {
                 printf("error");
                 exit(1);
             }
@@ -133,7 +133,7 @@ int main(int argc, char ** argv)
         
         before = get_time();
         for(int64_t i = 0; i < num_keys; i++) {
-            if(FIND_FROM_INT_HASH(keys[i]) != value) {
+            if(FIND_EXISTING_FROM_INT_HASH(keys[i]) != value) {
                 printf("error");
                 exit(1);
             }
@@ -188,7 +188,7 @@ int main(int argc, char ** argv)
         
         before = get_time();
         for(int64_t i = 0; i < num_keys; i++) {
-            if(FIND_FROM_STR_HASH(get_string_for_key(keys[i])) != value) {
+            if(FIND_EXISTING_FROM_STR_HASH(get_string_for_key(keys[i])) != value) {
                 printf("error");
                 exit(1);
             }
