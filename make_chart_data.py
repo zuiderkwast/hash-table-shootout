@@ -44,7 +44,7 @@ proper_names = {
     'google_dense_hash_map': 'Google sparsehash 2.0.2 dense_hash_map',
     'qt_qhash': 'Qt 4.8 QHash',
     'spp_sparse_hash_map': 'Sparse hash map',
-    'hopscotch_map': 'Hopscotch_map 0.1.0 with H=62',
+    'hopscotch_map': 'Hopscotch_map 0.3.0 with H=62',
 }
 
 # do them in the desired order to make the legend not overlap the chart data
@@ -55,8 +55,8 @@ program_slugs = [
     'stl_unordered_map',
     'boost_unordered_map',
     'qt_qhash',
-    'spp_sparse_hash_map',
     'hopscotch_map',
+    'spp_sparse_hash_map',
 ]
 
 chart_data = {}
