@@ -12,7 +12,7 @@
 
 
 static const size_t MIN_STRING_SIZE = 50;
-static const int64_t seed = 1;
+static const int64_t seed = 42;
 static std::mt19937_64 generator(seed);
 
 double get_time(void)
@@ -39,7 +39,7 @@ std::vector<int64_t> get_random_shuffle_range_ints(size_t range_end)
 
 std::vector<int64_t> get_random_full_ints(size_t nb_ints) 
 {
-    std::uniform_int_distribution<int64_t> rd_uniform(0, std::numeric_limits<int64_t>::max());
+    std::uniform_int_distribution<int64_t> rd_uniform(std::numeric_limits<int64_t>::min(), std::numeric_limits<int64_t>::max());
     
     std::vector<int64_t> random_ints(nb_ints);
     for(size_t i=0; i < random_ints.size(); i++) {
