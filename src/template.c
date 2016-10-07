@@ -22,9 +22,14 @@ double get_time(void)
     return tv.tv_sec + (tv.tv_usec / 1000000.0);
 }
 
-std::string get_string_for_key(int key) 
+std::string get_string_for_key(int64_t key) 
 {
     return std::string(MIN_STRING_SIZE, 'a') + std::to_string(key);
+}
+
+std::string get_small_string_for_key(int64_t key) 
+{
+    return std::to_string(key);
 }
 
 // Range start at 0
@@ -140,7 +145,6 @@ int main(int argc, char ** argv)
         }
     }
 
-
     else if(!strcmp(argv[2], "iteration"))
     {
         const std::vector<int64_t> keys = get_random_full_ints(num_keys);
@@ -156,6 +160,7 @@ int main(int argc, char ** argv)
             }
         }
     }
+    
     else if(!strcmp(argv[2], "delete"))
     {
         std::vector<int64_t> keys = get_random_full_ints(num_keys);
@@ -171,6 +176,44 @@ int main(int argc, char ** argv)
         }
     }
 
+    else if(!strcmp(argv[2], "insertsmallstring"))
+    {
+        for(int64_t i = 0; i < num_keys; i++) {
+            INSERT_STR_INTO_HASH(get_small_string_for_key(i), value);
+        }
+    }
+
+    else if(!strcmp(argv[2], "readsmallstring"))
+    {
+        for(int64_t i = 0; i < num_keys; i++) {
+            INSERT_STR_INTO_HASH(get_small_string_for_key(i), value);
+        }
+        
+        const std::vector<int64_t> keys = get_random_shuffle_range_ints(num_keys);        
+        
+        before = get_time();
+        for(int64_t i = 0; i < num_keys; i++) {
+            if(FIND_EXISTING_FROM_STR_HASH(get_small_string_for_key(keys[i])) != value) {
+                printf("error");
+                exit(1);
+            }
+        }
+    }
+
+    else if(!strcmp(argv[2], "deletesmallstring"))
+    {
+        for(int64_t i = 0; i < num_keys; i++) {
+            INSERT_STR_INTO_HASH(get_small_string_for_key(i), value);
+        }
+        
+        const std::vector<int64_t> keys = get_random_shuffle_range_ints(num_keys);  
+        
+        before = get_time();
+        for(int64_t i = 0; i < num_keys; i++) {
+            DELETE_STR_FROM_HASH(get_small_string_for_key(keys[i]));
+        }
+    }
+    
     else if(!strcmp(argv[2], "insertstring"))
     {
         for(int64_t i = 0; i < num_keys; i++) {
@@ -208,6 +251,8 @@ int main(int argc, char ** argv)
             DELETE_STR_FROM_HASH(get_string_for_key(keys[i]));
         }
     }
+    
+    
     double after = get_time();
     
     sleep(1);

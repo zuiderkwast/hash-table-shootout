@@ -33,6 +33,7 @@ else:
                   'randomshufflerange', 'randomshufflerangeread', 
                   'randomfull', 'randomfullread',
                   'iteration', 'delete', 
+                  'insertsmallstring', 'readsmallstring', 'deletesmallstring', 
                   'insertstring', 'readstring', 'deletestring')
 
 for benchtype in benchtypes:

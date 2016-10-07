@@ -119,6 +119,10 @@
         plot_chart(chart_data['iteration-runtime'], '#iteration-runtime', '#iteration-runtime-choices', runtime_settings);
         plot_chart(chart_data['delete-runtime'], '#delete-runtime', '#delete-runtime-choices', runtime_settings);
         plot_chart(chart_data['randomfull-memory'], '#randomfull-memory', '#randomfull-memory-choices', memory_settings);
+        plot_chart(chart_data['insertsmallstring-runtime'], '#insertsmallstring-runtime', '#insertsmallstring-runtime-choices', runtime_settings);
+        plot_chart(chart_data['readsmallstring-runtime'], '#readsmallstring-runtime', '#readsmallstring-runtime-choices', runtime_settings);
+        plot_chart(chart_data['deletesmallstring-runtime'], '#deletesmallstring-runtime', '#deletesmallstring-runtime-choices', runtime_settings);
+        plot_chart(chart_data['insertsmallstring-memory'], '#insertsmallstring-memory', '#insertsmallstring-memory-choices', memory_settings);
         plot_chart(chart_data['insertstring-runtime'], '#insertstring-runtime', '#insertstring-runtime-choices', runtime_settings);
         plot_chart(chart_data['readstring-runtime'], '#readstring-runtime', '#readstring-runtime-choices', runtime_settings);
         plot_chart(chart_data['deletestring-runtime'], '#deletestring-runtime', '#deletestring-runtime-choices', runtime_settings);
@@ -204,6 +208,28 @@
 
 
 
+
+
+
+<h3>Inserts: execution time (small strings)</h3>
+<div class="chart" id="insertsmallstring-runtime"></div>
+<div class="choices" id="insertsmallstring-runtime-choices"></div>
+<div class="xaxis-title">number of entries in hash table</div>
+
+<h3>Deletes: execution time (small strings)</h3>
+<div class="chart" id="deletesmallstring-runtime"></div>
+<div class="choices" id="deletesmallstring-runtime-choices"></div>
+<div class="xaxis-title">number of entries in hash table</div>
+
+<h3>Reads: execution time (small strings)</h3>
+<div class="chart" id="readsmallstring-runtime"></div>
+<div class="choices" id="readsmallstring-runtime-choices"></div>
+<div class="xaxis-title">number of entries in hash table</div>
+
+<h3>Memory usage of inserts (small strings)</h3>
+<div class="chart" id="insertsmallstring-memory"></div>
+<div class="choices" id="insertsmallstring-memory-choices"></div>
+<div class="xaxis-title">number of entries in hash table</div>
 
 
 
