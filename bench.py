@@ -31,7 +31,7 @@ if len(sys.argv) > 1:
 else:
     benchtypes = ('sequential', 'sequentialread', 
                   'randomshufflerange', 'randomshufflerangeread', 
-                  'randomfull', 'randomfullread',
+                  'randomfull', 'randomfullread', 'randomfullmissread',
                   'iteration', 'delete', 
                   'insertsmallstring', 'readsmallstring', 'deletesmallstring', 
                   'insertstring', 'readstring', 'deletestring')

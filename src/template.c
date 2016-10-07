@@ -42,9 +42,11 @@ std::vector<int64_t> get_random_shuffle_range_ints(size_t range_end)
     return random_ints;
 }
 
-std::vector<int64_t> get_random_full_ints(size_t nb_ints) 
+std::vector<int64_t> get_random_full_ints(size_t nb_ints, 
+                                          int64_t min = 1, 
+                                          int64_t max = std::numeric_limits<int64_t>::max()) 
 {
-    std::uniform_int_distribution<int64_t> rd_uniform(std::numeric_limits<int64_t>::min(), std::numeric_limits<int64_t>::max());
+    std::uniform_int_distribution<int64_t> rd_uniform(min, max);
     
     std::vector<int64_t> random_ints(nb_ints);
     for(size_t i=0; i < random_ints.size(); i++) {
@@ -82,10 +84,7 @@ int main(int argc, char ** argv)
         
         before = get_time();
         for(int64_t i = 0; i < num_keys; i++) {
-            if(FIND_EXISTING_FROM_INT_HASH(i) != value) {
-                printf("error");
-                exit(1);
-            }
+            FIND_INT_EXISTING_FROM_HASH(i);
         }
     }
 
@@ -110,10 +109,7 @@ int main(int argc, char ** argv)
         
         before = get_time();
         for(int64_t i = 0; i < num_keys; i++) {
-            if(FIND_EXISTING_FROM_INT_HASH(keys[i]) != value) {
-                printf("error");
-                exit(1);
-            }
+            FIND_INT_EXISTING_FROM_HASH(keys[i]);
         }
     }
 
@@ -138,10 +134,22 @@ int main(int argc, char ** argv)
         
         before = get_time();
         for(int64_t i = 0; i < num_keys; i++) {
-            if(FIND_EXISTING_FROM_INT_HASH(keys[i]) != value) {
-                printf("error");
-                exit(1);
-            }
+            FIND_INT_EXISTING_FROM_HASH(keys[i]);
+        }
+    }
+
+    else if(!strcmp(argv[2], "randomfullmissread"))
+    {
+        const std::vector<int64_t> keys_insert = get_random_full_ints(num_keys, 1, std::numeric_limits<int64_t>::max());
+        const std::vector<int64_t> keys_read = get_random_full_ints(num_keys, std::numeric_limits<int64_t>::min(), -3);
+        
+        for(int64_t i = 0; i < num_keys; i++) {
+            INSERT_INT_INTO_HASH(keys_insert[i], value);
+        }
+        
+        before = get_time();
+        for(int64_t i = 0; i < num_keys; i++) {
+            FIND_INT_MISSING_FROM_HASH(keys_read[i]);
         }
     }
 
@@ -153,11 +161,8 @@ int main(int argc, char ** argv)
         }
         
         before = get_time();
-        for(const auto& key_value : hash) {
-            if(GET_VALUE_INT_FROM_KEY_VALUE(key_value) != value) {
-                printf("error");
-                exit(1);
-            }
+        for(auto it = hash.begin(); it != hash.end(); ++it) {
+            CHECK_INT_ITERATOR_VALUE(it, value);
         }
     }
     
@@ -193,10 +198,7 @@ int main(int argc, char ** argv)
         
         before = get_time();
         for(int64_t i = 0; i < num_keys; i++) {
-            if(FIND_EXISTING_FROM_STR_HASH(get_small_string_for_key(keys[i])) != value) {
-                printf("error");
-                exit(1);
-            }
+            FIND_STR_EXISTING_FROM_HASH(get_small_string_for_key(keys[i]));
         }
     }
 
@@ -231,10 +233,7 @@ int main(int argc, char ** argv)
         
         before = get_time();
         for(int64_t i = 0; i < num_keys; i++) {
-            if(FIND_EXISTING_FROM_STR_HASH(get_string_for_key(keys[i])) != value) {
-                printf("error");
-                exit(1);
-            }
+            FIND_STR_EXISTING_FROM_HASH(get_string_for_key(keys[i]));
         }
     }
 

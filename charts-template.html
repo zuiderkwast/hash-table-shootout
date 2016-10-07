@@ -116,6 +116,7 @@
         plot_chart(chart_data['randomshufflerangeread-runtime'], '#randomshufflerangeread-runtime', '#randomshufflerangeread-runtime-choices', runtime_settings);
         plot_chart(chart_data['randomfull-runtime'], '#randomfull-runtime', '#randomfull-runtime-choices', runtime_settings);
         plot_chart(chart_data['randomfullread-runtime'], '#randomfullread-runtime', '#randomfullread-runtime-choices', runtime_settings);
+        plot_chart(chart_data['randomfullmissread-runtime'], '#randomfullmissread-runtime', '#randomfullmissread-runtime-choices', runtime_settings);
         plot_chart(chart_data['iteration-runtime'], '#iteration-runtime', '#iteration-runtime-choices', runtime_settings);
         plot_chart(chart_data['delete-runtime'], '#delete-runtime', '#delete-runtime-choices', runtime_settings);
         plot_chart(chart_data['randomfull-memory'], '#randomfull-memory', '#randomfull-memory-choices', memory_settings);
@@ -191,6 +192,11 @@
 <h3>Random full reads: execution time (integers)</h3>
 <div class="chart" id="randomfullread-runtime"></div>
 <div class="choices" id="randomfullread-runtime-choices"></div>
+<div class="xaxis-title">number of entries in hash table</div>
+
+<h3>Random full miss reads: execution time (integers)</h3>
+<div class="chart" id="randomfullmissread-runtime"></div>
+<div class="choices" id="randomfullmissread-runtime-choices"></div>
 <div class="xaxis-title">number of entries in hash table</div>
 
 <h3>Iteration: execution time (integers)</h3>
