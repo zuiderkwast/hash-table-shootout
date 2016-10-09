@@ -2,8 +2,8 @@
 #include <string>
 #include "hopscotch_map.h"
 
-typedef hopscotch_map<int64_t, int64_t, std::hash<int64_t>, std::equal_to<int64_t>> hash_t;
-typedef hopscotch_map<std::string, int64_t, std::hash<std::string>, std::equal_to<std::string>> str_hash_t;
+typedef hopscotch_map<int64_t, int64_t, std::hash<int64_t>> hash_t;
+typedef hopscotch_map<std::string, int64_t, std::hash<std::string>> str_hash_t;
 
 #define SETUP hash_t hash; str_hash_t str_hash;
 

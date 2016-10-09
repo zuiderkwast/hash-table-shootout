@@ -12,7 +12,7 @@
 
 
 static const size_t MIN_STRING_SIZE = 50;
-static const int64_t seed = 42;
+static const int64_t seed = 0;
 static std::mt19937_64 generator(seed);
 
 double get_time(void)
@@ -32,7 +32,7 @@ std::string get_small_string_for_key(int64_t key)
     return std::to_string(key);
 }
 
-// Range start at 0
+// Range starts at 0
 std::vector<int64_t> get_random_shuffle_range_ints(size_t range_end) 
 {
     std::vector<int64_t> random_ints(range_end);
@@ -43,7 +43,7 @@ std::vector<int64_t> get_random_shuffle_range_ints(size_t range_end)
 }
 
 std::vector<int64_t> get_random_full_ints(size_t nb_ints, 
-                                          int64_t min = 1, 
+                                          int64_t min = 0, 
                                           int64_t max = std::numeric_limits<int64_t>::max()) 
 {
     std::uniform_int_distribution<int64_t> rd_uniform(min, max);
@@ -140,7 +140,7 @@ int main(int argc, char ** argv)
 
     else if(!strcmp(argv[2], "randomfullmissread"))
     {
-        const std::vector<int64_t> keys_insert = get_random_full_ints(num_keys, 1, std::numeric_limits<int64_t>::max());
+        const std::vector<int64_t> keys_insert = get_random_full_ints(num_keys, 0, std::numeric_limits<int64_t>::max());
         const std::vector<int64_t> keys_read = get_random_full_ints(num_keys, std::numeric_limits<int64_t>::min(), -3);
         
         for(int64_t i = 0; i < num_keys; i++) {
