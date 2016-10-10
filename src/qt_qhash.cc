@@ -21,6 +21,7 @@ typedef QHash<std::string, int64_t> str_hash_t;
 #define INSERT_STR_INTO_HASH(key, value) str_hash.insert(key, value)
 #define DELETE_STR_FROM_HASH(key) str_hash.remove(key);
 #define FIND_STR_EXISTING_FROM_HASH(key) if(str_hash.find(key) == str_hash.end()) { printf("error"); exit(4); }
+#define FIND_STR_MISSING_FROM_HASH(key) if(str_hash.find(key) != str_hash.end()) { printf("error"); exit(5); }
 
 
 #include "template.c"

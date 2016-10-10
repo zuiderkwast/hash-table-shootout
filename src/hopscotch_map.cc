@@ -16,6 +16,7 @@ typedef hopscotch_map<std::string, int64_t, std::hash<std::string>> str_hash_t;
 #define INSERT_STR_INTO_HASH(key, value) str_hash.insert(str_hash_t::value_type(key, value))
 #define DELETE_STR_FROM_HASH(key) str_hash.erase(key);
 #define FIND_STR_EXISTING_FROM_HASH(key) if(str_hash.find(key) == str_hash.end()) { printf("error"); exit(4); }
+#define FIND_STR_MISSING_FROM_HASH(key) if(str_hash.find(key) != str_hash.end()) { printf("error"); exit(5); }
 
 #include "template.c"
 

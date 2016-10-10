@@ -33,11 +33,11 @@ if len(sys.argv) > 1:
     benchtypes = sys.argv[1:]
 else:
     benchtypes = ('sequential', 'sequentialread', 
-                  'randomshufflerange', 'randomshufflerangeread', 
+                  'randomshufflerange', 'randomshufflerangeread',
                   'randomfull', 'randomfullread', 'randomfullmissread',
                   'iteration', 'delete', 
-                  'insertsmallstring', 'readsmallstring', 'deletesmallstring', 
-                  'insertstring', 'readstring', 'deletestring')
+                  'insertsmallstring', 'readsmallstring', 'missreadsmallstring', 'deletesmallstring', 
+                  'insertstring', 'readstring', 'missreadstring', 'deletestring',)
 
 for benchtype in benchtypes:
     nkeys = minkeys
