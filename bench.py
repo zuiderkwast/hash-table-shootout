@@ -8,6 +8,9 @@ programs = [
     'qt_qhash',
     'spp_sparse_hash_map',
     'hopscotch_map',
+    'sherwood_map',
+    'emilib_hash_map',
+    'rabbit_unordered_map'
 ]
 
 minkeys  =  2*1000*1000
