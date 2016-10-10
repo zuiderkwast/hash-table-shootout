@@ -11,7 +11,6 @@
 #include <random>
 
 
-static const size_t MIN_STRING_SIZE = 50;
 static const int64_t SEED = 0;
 static std::mt19937_64 generator(SEED);
 
@@ -24,7 +23,7 @@ double get_time()
 
 std::string get_string_for_key(int64_t key) 
 {
-    return std::string(MIN_STRING_SIZE, 'a') + std::to_string(key);
+    return "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa" + std::to_string(key);
 }
 
 std::string get_small_string_for_key(int64_t key) 
