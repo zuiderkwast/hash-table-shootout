@@ -48,6 +48,7 @@ proper_names = {
     'sherwood_map': 'Sherwood map',
     'emilib_hash_map': 'Emilib hash map',
     'rabbit_unordered_map': 'Rabbit unordered map',
+    'rabbit_sparse_unordered_map': 'Rabbit sparse unordered map',
 }
 
 # do them in the desired order to make the legend not overlap the chart data
@@ -63,6 +64,7 @@ program_slugs = [
     'sherwood_map',
     'emilib_hash_map',
     'rabbit_unordered_map',
+    'rabbit_sparse_unordered_map',
 ]
 
 chart_data = {}
