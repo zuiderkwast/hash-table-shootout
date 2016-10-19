@@ -14,10 +14,10 @@ programs = [
     'rabbit_sparse_unordered_map',
 ]
 
-minkeys  =  2*1000*1000
-maxkeys  = 40*1000*1000
-interval =  2*1000*1000
-best_out_of = 2
+minkeys  =  18*1000*1000
+maxkeys  =  40*1000*1000
+interval =   2*1000*1000
+best_out_of = 1
 
 # for the final run, use this:
 #minkeys  =  2*1000*1000
@@ -35,18 +35,26 @@ if len(sys.argv) > 1:
 else:
     benchtypes = ('sequential', 'sequentialread', 
                   'randomshufflerange', 'randomshufflerangeread',
-                  'randomfull', 'randomfullread', 'randomfullmissread',
+                  'randomfull', 'randomfullread', 'randomfullreadmiss',
                   'iteration', 'delete', 
-                  'insertsmallstring', 'readsmallstring', 'missreadsmallstring', 'deletesmallstring', 
-                  'insertstring', 'readstring', 'missreadstring', 'deletestring',)
+                  'insertsmallstring', 'readsmallstring', 'readsmallstringmiss', 'deletesmallstring', 
+                  'insertstring', 'readstring', 'readstringmiss', 'deletestring',
+                  )
 
 for benchtype in benchtypes:
     nkeys = minkeys
+    
+    if benchtype.endswith("string") == True and maxkeys > 24*1000*1000:
+        maxkeys = 24*1000*1000
+        
     while nkeys <= maxkeys:
         for program in programs:
             fastest_attempt = 1000000
             fastest_attempt_data = ''
-
+            
+            if program == "sherwood_map" and nkeys >= 6000000:
+                continue
+            
             for attempt in range(best_out_of):
                 proc = subprocess.Popen(['./build/'+program, str(nkeys), benchtype], stdout=subprocess.PIPE)
 
@@ -54,22 +62,29 @@ for benchtype in benchtypes:
                 try:
                     runtime = float(proc.stdout.readline().strip())
                 except:
-                    runtime = 0
+                    print("Error with %s" % str(['./build/'+program, str(nkeys), benchtype]))
+                    break
 
                 ps_proc = subprocess.Popen(['ps up %d | tail -n1' % proc.pid], shell=True, stdout=subprocess.PIPE)
-                nbytes = int(ps_proc.stdout.read().split()[4]) * 1024
+                ps_line = ps_proc.stdout.read().split()
+                nbytes_vsz = int(ps_line[4]) * 1024
+                nbytes_rss = int(ps_line[5]) * 1024
                 ps_proc.wait()
 
                 os.kill(proc.pid, signal.SIGKILL)
                 proc.wait()
 
-                if nbytes and runtime: # otherwise it crashed
-                    line = ','.join(map(str, [benchtype, nkeys, program, nbytes, "%0.6f" % runtime]))
+                if nbytes_vsz and nbytes_rss and runtime: # otherwise it crashed
+                    line = ','.join(map(str, [benchtype, nkeys, program, nbytes_vsz, nbytes_rss, "%0.6f" % runtime]))
 
                     if runtime < fastest_attempt:
                         fastest_attempt = runtime
                         fastest_attempt_data = line
-
+                
+                #if (benchtype == "randomshufflerange" or benchtype == "randomshufflerangeread") and (program == "google_sparse_hash_map"):
+                    #break
+                
+                
             if fastest_attempt != 1000000:
                 print >> outfile, fastest_attempt_data
                 print fastest_attempt_data

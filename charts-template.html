@@ -116,18 +116,18 @@
         plot_chart(chart_data['randomshufflerangeread-runtime'], '#randomshufflerangeread-runtime', '#randomshufflerangeread-runtime-choices', runtime_settings);
         plot_chart(chart_data['randomfull-runtime'], '#randomfull-runtime', '#randomfull-runtime-choices', runtime_settings);
         plot_chart(chart_data['randomfullread-runtime'], '#randomfullread-runtime', '#randomfullread-runtime-choices', runtime_settings);
-        plot_chart(chart_data['randomfullmissread-runtime'], '#randomfullmissread-runtime', '#randomfullmissread-runtime-choices', runtime_settings);
+        plot_chart(chart_data['randomfullreadmiss-runtime'], '#randomfullreadmiss-runtime', '#randomfullreadmiss-runtime-choices', runtime_settings);
         plot_chart(chart_data['iteration-runtime'], '#iteration-runtime', '#iteration-runtime-choices', runtime_settings);
         plot_chart(chart_data['delete-runtime'], '#delete-runtime', '#delete-runtime-choices', runtime_settings);
         plot_chart(chart_data['randomfull-memory'], '#randomfull-memory', '#randomfull-memory-choices', memory_settings);
         plot_chart(chart_data['insertsmallstring-runtime'], '#insertsmallstring-runtime', '#insertsmallstring-runtime-choices', runtime_settings);
         plot_chart(chart_data['readsmallstring-runtime'], '#readsmallstring-runtime', '#readsmallstring-runtime-choices', runtime_settings);
-        plot_chart(chart_data['missreadsmallstring-runtime'], '#missreadsmallstring-runtime', '#missreadsmallstring-runtime-choices', runtime_settings);
+        plot_chart(chart_data['readsmallstringmiss-runtime'], '#readsmallstringmiss-runtime', '#readsmallstringmiss-runtime-choices', runtime_settings);
         plot_chart(chart_data['deletesmallstring-runtime'], '#deletesmallstring-runtime', '#deletesmallstring-runtime-choices', runtime_settings);
         plot_chart(chart_data['insertsmallstring-memory'], '#insertsmallstring-memory', '#insertsmallstring-memory-choices', memory_settings);
         plot_chart(chart_data['insertstring-runtime'], '#insertstring-runtime', '#insertstring-runtime-choices', runtime_settings);
         plot_chart(chart_data['readstring-runtime'], '#readstring-runtime', '#readstring-runtime-choices', runtime_settings);
-        plot_chart(chart_data['missreadstring-runtime'], '#missreadstring-runtime', '#missreadstring-runtime-choices', runtime_settings);
+        plot_chart(chart_data['readstringmiss-runtime'], '#readstringmiss-runtime', '#readstringmiss-runtime-choices', runtime_settings);
         plot_chart(chart_data['deletestring-runtime'], '#deletestring-runtime', '#deletestring-runtime-choices', runtime_settings);
         plot_chart(chart_data['insertstring-memory'], '#insertstring-memory', '#insertstring-memory-choices', memory_settings);
     });
@@ -215,10 +215,10 @@
 <ul class="choices" id="randomfullread-runtime-choices"></ul>
 <div class="chart-after-space"></div>
 
-<h3>Random full miss reads: execution time (integers)</h3>
-<div class="chart" id="randomfullmissread-runtime"></div>
+<h3>Random full reads miss: execution time (integers)</h3>
+<div class="chart" id="randomfullreadmiss-runtime"></div>
 <div class="xaxis-title">number of entries in hash table</div>
-<ul class="choices" id="randomfullmissread-runtime-choices"></ul>
+<ul class="choices" id="randomfullreadmiss-runtime-choices"></ul>
 <div class="chart-after-space"></div>
 
 <h3>Iteration: execution time (integers)</h3>
@@ -259,10 +259,10 @@
 <ul class="choices" id="readsmallstring-runtime-choices"></ul>
 <div class="chart-after-space"></div>
 
-<h3>Miss reads: execution time (small strings)</h3>
-<div class="chart" id="missreadsmallstring-runtime"></div>
+<h3>Reads miss: execution time (small strings)</h3>
+<div class="chart" id="readsmallstringmiss-runtime"></div>
 <div class="xaxis-title">number of entries in hash table</div>
-<ul class="choices" id="missreadsmallstring-runtime-choices"></ul>
+<ul class="choices" id="readsmallstringmiss-runtime-choices"></ul>
 <div class="chart-after-space"></div>
 
 <h3>Memory usage of inserts (small strings)</h3>
@@ -291,10 +291,10 @@
 <ul class="choices" id="readstring-runtime-choices"></ul>
 <div class="chart-after-space"></div>
 
-<h3>Miss reads: execution time (strings)</h3>
-<div class="chart" id="missreadstring-runtime"></div>
+<h3>Reads miss: execution time (strings)</h3>
+<div class="chart" id="readstringmiss-runtime"></div>
 <div class="xaxis-title">number of entries in hash table</div>
-<ul class="choices" id="missreadstring-runtime-choices"></ul>
+<ul class="choices" id="readstringmiss-runtime-choices"></ul>
 <div class="chart-after-space"></div>
 
 <h3>Memory usage of inserts (strings)</h3>
