@@ -150,7 +150,7 @@ int main(int argc, char ** argv)
         }
     }
 
-    else if(test_type == "randomfullreadmiss")
+    else if(test_type == "randomfullmissread")
     {
         const std::vector<int64_t> keys_insert = get_random_full_ints(num_keys, 0, std::numeric_limits<int64_t>::max());
         const std::vector<int64_t> keys_read = get_random_full_ints(num_keys, std::numeric_limits<int64_t>::min(), -3);
@@ -223,7 +223,7 @@ int main(int argc, char ** argv)
         }
     }
 
-    else if(test_type == "readsmallstringmiss")
+    else if(test_type == "missreadsmallstring")
     {
         for(int64_t i = 0; i < num_keys; i++) 
         {
@@ -277,7 +277,7 @@ int main(int argc, char ** argv)
         }
     }
 
-    else if(test_type == "readstringmiss")
+    else if(test_type == "missreadstring")
     {
         for(int64_t i = 0; i < num_keys; i++) 
         {
