@@ -38,17 +38,18 @@ for line in lines:
         by_benchtype.setdefault("%s-memory"  % benchtype, {}).setdefault(program, []).append([nkeys, nbytes])
 
 proper_names = {
-    'boost_unordered_map': 'Boost 1.61 unordered_map',
-    'stl_unordered_map': 'GCC 6.1 std::unordered_map',
-    'google_sparse_hash_map': 'Google sparsehash 2.0.2 sparse_hash_map',
-    'google_dense_hash_map': 'Google sparsehash 2.0.2 dense_hash_map',
-    'qt_qhash': 'Qt 4.8 QHash',
-    'hopscotch_map': 'Hopscotch map 0.4.1 with H=62',
-    'spp_sparse_hash_map': 'Sparse hash map',
-    'sherwood_map': 'Sherwood map',
-    'emilib_hash_map': 'Emilib hash map',
-    'rabbit_unordered_map': 'Rabbit unordered map',
-    'rabbit_sparse_unordered_map': 'Rabbit sparse unordered map',
+    'boost_unordered_map': 'boost::unordered_map 1.61',
+    'stl_unordered_map': 'std::unordered_map GCC 6.1',
+    'google_sparse_hash_map': 'google::sparse_hash_map 2.0.2',
+    'google_dense_hash_map': 'google::dense_hash_map 2.0.2',
+    'qt_qhash': 'QHash 4.8',
+    'hopscotch_map': 'tsl::hopscotch_map 1.2.0',
+    'hopscotch_map_store_hash': 'tsl::hopscotch_map 1.2.0<br/>StoreHash=true',
+    'spp_sparse_hash_map': 'spp::sparse_hash_map',
+    'sherwood_map': 'sherwood_map',
+    'emilib_hash_map': 'emilib::HashMap',
+    'rabbit_unordered_map': 'rabbit::unordered_map',
+    'rabbit_sparse_unordered_map': 'rabbit::sparse_unordered_map',
 }
 
 # do them in the desired order to make the legend not overlap the chart data
@@ -61,6 +62,7 @@ program_slugs = [
     'qt_qhash',
     'hopscotch_map',
     'spp_sparse_hash_map',
+    'hopscotch_map_store_hash',
     'sherwood_map',
     'emilib_hash_map',
     'rabbit_unordered_map',
@@ -72,6 +74,9 @@ chart_data = {}
 for i, (benchtype, programs) in enumerate(by_benchtype.items()):
     chart_data[benchtype] = []
     for j, program in enumerate(program_slugs):
+        if program not in programs:
+            continue
+        
         data = programs[program]
         chart_data[benchtype].append({
             'label': proper_names[program],
