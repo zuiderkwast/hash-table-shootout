@@ -8,6 +8,7 @@ programs = [
     'qt_qhash',
     'spp_sparse_hash_map',
     'hopscotch_map',
+    'hopscotch_map_store_hash',
     'sherwood_map',
     'emilib_hash_map',
     'rabbit_unordered_map',
@@ -38,8 +39,7 @@ else:
                   'randomfull', 'randomfullread', 'randomfullreadmiss',
                   'iteration', 'delete', 
                   'insertsmallstring', 'readsmallstring', 'readsmallstringmiss', 'deletesmallstring', 
-                  'insertstring', 'readstring', 'readstringmiss', 'deletestring',
-                  )
+                  'insertstring', 'readstring', 'readstringmiss', 'deletestring')
 
 for benchtype in benchtypes:
     nkeys = minkeys
@@ -55,7 +55,8 @@ for benchtype in benchtypes:
                 try:
                     runtime = float(proc.stdout.readline().strip())
                 except:
-                    runtime = 0
+                    print("Error with %s" % str(['./build/'+program, str(nkeys), benchtype]))
+                    break
 
                 ps_proc = subprocess.Popen(['ps up %d | tail -n1' % proc.pid], shell=True, stdout=subprocess.PIPE)
                 nbytes = int(ps_proc.stdout.read().split()[4]) * 1024
