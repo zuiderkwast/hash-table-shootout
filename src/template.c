@@ -21,9 +21,16 @@ double get_time()
     return tv.tv_sec + (tv.tv_usec / 1000000.0);
 }
 
-std::string get_string_for_key(int64_t key) 
+const std::string& get_string_for_key(int64_t key) 
 {
-    return "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa" + std::to_string(key);
+    // TODO pass buffer in parameter
+    static std::string str(50, 'a');
+    
+    const std::string key_str = std::to_string(key);
+    str.replace(0, key_str.size(), key_str);
+    str.replace(key_str.size(), str.size(), str.size() - key_str.size(), 'a');
+    
+    return str;
 }
 
 std::string get_small_string_for_key(int64_t key) 
