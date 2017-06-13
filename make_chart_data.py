@@ -44,12 +44,12 @@ proper_names = {
     'google_dense_hash_map': 'google::dense_hash_map 2.0.2',
     'qt_qhash': 'QHash 4.8',
     'hopscotch_map': 'tsl::hopscotch_map 1.2.0',
-    'hopscotch_map_store_hash': 'tsl::hopscotch_map 1.2.0<br/>StoreHash=true',
     'spp_sparse_hash_map': 'spp::sparse_hash_map',
     'sherwood_map': 'sherwood_map',
     'emilib_hash_map': 'emilib::HashMap',
     'rabbit_unordered_map': 'rabbit::unordered_map',
     'rabbit_sparse_unordered_map': 'rabbit::sparse_unordered_map',
+    'hopscotch_map_store_hash': 'tsl::hopscotch_map 1.2.0<br/>StoreHash=true',
 }
 
 # do them in the desired order to make the legend not overlap the chart data
@@ -62,11 +62,11 @@ program_slugs = [
     'qt_qhash',
     'hopscotch_map',
     'spp_sparse_hash_map',
-    'hopscotch_map_store_hash',
     'sherwood_map',
     'emilib_hash_map',
     'rabbit_unordered_map',
     'rabbit_sparse_unordered_map',
+    'hopscotch_map_store_hash',
 ]
 
 chart_data = {}
