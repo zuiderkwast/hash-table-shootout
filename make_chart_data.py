@@ -1,73 +1,78 @@
-# random,1310720,google_dense_hash_map,45621248,0.344362020493
-# random,2621440,glib_hash_table,109867008,1.01163601875
-# random,2621440,stl_unordered_map,130715648,1.73484396935
-# random,2621440,boost_unordered_map,108380160,1.11585187912
-# random,2621440,google_sparse_hash_map,37015552,1.76031804085
-# random,2621440,google_dense_hash_map,79175680,0.504401922226
-# random,5242880,glib_hash_table,210530304,1.86031603813
-# random,5242880,stl_unordered_map,250298368,3.81597208977
-# random,5242880,boost_unordered_map,192184320,2.63760495186
-# random,5242880,google_sparse_hash_map,62066688,3.93570995331
-# random,5242880,google_dense_hash_map,146284544,1.22620105743
-# random,10485760,glib_hash_table,411856896,4.16937494278
-# random,10485760,stl_unordered_map,490430464,7.91806197166
-# random,10485760,boost_unordered_map,359251968,7.52085900307
-# random,10485760,google_sparse_hash_map,111902720,8.11318516731
-# random,10485760,google_dense_hash_map,280502272,2.32930994034
-# random,20971520,glib_hash_table,814510080,8.32456207275
-# random,20971520,stl_unordered_map,971583488,16.1606841087
-# random,20971520,boost_unordered_map,692441088,24.5845990181
-# random,20971520,google_sparse_hash_map,211435520,16.2772600651
-# random,20971520,google_dense_hash_map,548937728,4.85360789299
-# random,41943040,glib_hash_table,1619816448,90.6313672066
-
 import sys, json
+from collections import OrderedDict
 
 lines = [ line.strip() for line in sys.stdin if line.strip() ]
 
 by_benchtype = {}
 
 for line in lines:
-    benchtype, nkeys, program, nbytes, runtime = line.split(',')
+    benchtype, nkeys, program, load_factor, nbytes, runtime = line.split(',')
     nkeys = int(nkeys)
     nbytes = int(nbytes)
     runtime = float(runtime)
+    load_factor = float(load_factor)
 
-    by_benchtype.setdefault("%s-runtime" % benchtype, {}).setdefault(program, []).append([nkeys, runtime])
-    if benchtype in ('randomfull', 'insertstring', 'insertsmallstring'):
-        by_benchtype.setdefault("%s-memory"  % benchtype, {}).setdefault(program, []).append([nkeys, nbytes])
+    by_benchtype.setdefault("%s_runtime" % benchtype, {}).setdefault(program, []).append([nkeys, runtime, load_factor])
+    if benchtype in ('insert_random_full', 'insert_small_string', 'insert_string',
+                     'insert_random_full_reserve', 'insert_small_string_reserve', 'insert_string_reserve'):
+        by_benchtype.setdefault("%s_memory"  % benchtype, {}).setdefault(program, []).append([nkeys, nbytes, load_factor])
 
-proper_names = {
-    'boost_unordered_map': 'boost::unordered_map 1.61',
-    'stl_unordered_map': 'std::unordered_map GCC 6.1',
-    'google_sparse_hash_map': 'google::sparse_hash_map 2.0.2',
-    'google_dense_hash_map': 'google::dense_hash_map 2.0.2',
-    'qt_qhash': 'QHash 4.8',
-    'hopscotch_map': 'tsl::hopscotch_map 1.2.0',
-    'spp_sparse_hash_map': 'spp::sparse_hash_map',
-    'sherwood_map': 'sherwood_map',
-    'emilib_hash_map': 'emilib::HashMap',
-    'rabbit_unordered_map': 'rabbit::unordered_map',
-    'rabbit_sparse_unordered_map': 'rabbit::sparse_unordered_map',
-    'hopscotch_map_store_hash': 'tsl::hopscotch_map 1.2.0<br/>StoreHash=true',
-}
+proper_names = OrderedDict([
+    ('std_unordered_map', 'std::unordered_map'),
+    ('google_dense_hash_map', 'google::dense_hash_map'),
+    ('qt_qhash', 'QHash'),
+    ('spp_sparse_hash_map', 'spp::sparse_hash_map'),
+    ('tsl_hopscotch_map', 'tsl::hopscotch_map'),
+    ('tsl_robin_map', 'tsl::robin_map'),
+    ('tsl_hopscotch_map_store_hash', 'tsl::hopscotch_map (with StoreHash)'),
+    ('tsl_robin_map_store_hash', 'tsl::robin_map (with StoreHash)'),
+    ('tsl_hopscotch_map_mlf_0_5', 'tsl::hopscotch_map (0.5 mlf)'),
+    ('tsl_robin_map_mlf_0_9', 'tsl::robin_map (0.9 mlf)'),
+    ('tsl_ordered_map', 'tsl::ordered_map'),
+    ('ska_flat_hash_map', 'ska::flat_hash_map'),
+    ('google_dense_hash_map_mlf_0_9', 'google::dense_hash_map (0.9 mlf)'),
+    ('ska_flat_hash_map_power_of_two', 'ska::flat_hash_map (power of two)'),
+    ('google_sparse_hash_map', 'google::sparse_hash_map'),
+    ('boost_unordered_map', 'boost::unordered_map'),
+    ('emilib_hash_map', 'emilib::HashMap'),
+    ('tsl_array_map', 'tsl::array_map'),
+    ('tsl_array_map_mlf_1_0', 'tsl::array_map (1.0 mlf)'),
+])
 
 # do them in the desired order to make the legend not overlap the chart data
 # too much
 program_slugs = [
-    'google_sparse_hash_map',
+    'std_unordered_map',
     'google_dense_hash_map',
-    'stl_unordered_map',
-    'boost_unordered_map',
     'qt_qhash',
-    'hopscotch_map',
     'spp_sparse_hash_map',
-    'sherwood_map',
+    'tsl_hopscotch_map',
+    'tsl_robin_map',
+    'tsl_hopscotch_map_store_hash',
+    'tsl_robin_map_store_hash',
+    'tsl_hopscotch_map_mlf_0_5',
+    'tsl_robin_map_mlf_0_9',
+    'tsl_ordered_map',
+    'ska_flat_hash_map',
+    'google_dense_hash_map_mlf_0_9',
+    'ska_flat_hash_map_power_of_two',
+    'google_sparse_hash_map',
+    'boost_unordered_map',
     'emilib_hash_map',
-    'rabbit_unordered_map',
-    'rabbit_sparse_unordered_map',
-    'hopscotch_map_store_hash',
+    'tsl_array_map',
+    'tsl_array_map_mlf_1_0'
 ]
+
+# hashmap which will be shown (checkbox checked)
+default_programs_show = [
+    'std_unordered_map',
+    'google_dense_hash_map',
+    'qt_qhash',
+    'spp_sparse_hash_map',
+    'tsl_hopscotch_map',
+    'tsl_robin_map',
+    'tsl_hopscotch_map_store_hash',
+    'tsl_robin_map_store_hash']
 
 chart_data = {}
 
@@ -79,13 +84,16 @@ for i, (benchtype, programs) in enumerate(by_benchtype.items()):
         
         data = programs[program]
         chart_data[benchtype].append({
+            'program': program,
             'label': proper_names[program],
             'data': [],
         })
 
-        for k, (nkeys, value) in enumerate(data):
-            chart_data[benchtype][-1]['data'].append([nkeys, value])
+        for k, (nkeys, value, load_factor) in enumerate(data):
+            chart_data[benchtype][-1]['data'].append([nkeys, value, load_factor])
 
 json_text = json.dumps(chart_data)
 json_text = json_text.replace("}], ", "}], \n")
-print('chart_data = ' + json_text)
+print('chart_data = ' + json_text + ';')
+print('\nprograms = ' + json.dumps(proper_names, indent=1) + ';')
+print('\ndefault_programs_show = ' + str(default_programs_show) + ';')

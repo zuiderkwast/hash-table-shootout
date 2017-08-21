@@ -9,316 +9,457 @@
 #include <vector>
 #include <algorithm>
 #include <random>
+#include <iostream>
+#include <chrono>
+#include <fstream>
+#include <unistd.h>
 
 
-static const int64_t SEED = 0;
+static const std::int64_t SEED = 0;
 static std::mt19937_64 generator(SEED);
 
-double get_time()
-{
-    struct timeval tv;
-    gettimeofday(&tv, NULL);
-    return tv.tv_sec + (tv.tv_usec / 1000000.0);
-}
 
-const std::string& get_string_for_key(int64_t key) 
-{
-    // TODO pass buffer in parameter
-    static std::string str(50, 'a');
+std::size_t get_memory_usage_bytes() {
+    std::ifstream file("/proc/self/statm");
     
-    const std::string key_str = std::to_string(key);
-    str.replace(0, key_str.size(), key_str);
-    str.replace(key_str.size(), str.size(), str.size() - key_str.size(), 'a');
+    std::size_t memory;
+    file >> memory; // Ignore first
+    file >> memory;
     
-    return str;
+    return memory * getpagesize();
 }
 
-std::string get_small_string_for_key(int64_t key) 
-{
-    return std::to_string(key);
-}
 
-// Range starts at 0
-std::vector<int64_t> get_random_shuffle_range_ints(size_t range_end) 
-{
-    std::vector<int64_t> random_ints(range_end);
+/*
+ * Generate a vector [0, range_end) and shuffle it
+ */
+std::vector<std::int64_t> get_random_shuffle_range_ints(std::size_t range_end) {
+    std::vector<std::int64_t> random_ints(range_end);
     std::iota(random_ints.begin(), random_ints.end(), 0);
     std::shuffle(random_ints.begin(), random_ints.end(), generator);
     
     return random_ints;
 }
 
-std::vector<int64_t> get_random_full_ints(size_t nb_ints, 
-                                          int64_t min = 0, 
-                                          int64_t max = std::numeric_limits<int64_t>::max()) 
+std::vector<std::int64_t> get_random_full_ints(std::size_t nb_ints, 
+                                          std::int64_t min = 0, 
+                                          std::int64_t max = std::numeric_limits<std::int64_t>::max()) 
 {
-    std::uniform_int_distribution<int64_t> rd_uniform(min, max);
+    std::uniform_int_distribution<std::int64_t> rd_uniform(min, max);
     
-    std::vector<int64_t> random_ints(nb_ints);
-    for(size_t i=0; i < random_ints.size(); i++) 
-    {
+    std::vector<std::int64_t> random_ints(nb_ints);
+    for(std::size_t i = 0; i < random_ints.size(); i++) {
         random_ints[i] = rd_uniform(generator);
     }
     
     return random_ints;
 }
 
-int main(int argc, char ** argv)
+std::vector<std::string> get_random_small_strings(std::size_t nb_strings, 
+                                                  std::int64_t min = 0, 
+                                                  std::int64_t max = std::numeric_limits<std::int64_t>::max()) 
 {
-    if(argc != 3) 
+    std::uniform_int_distribution<std::int64_t> rd_uniform(min, max);
+    
+    std::vector<std::string> random_small_strings(nb_strings);
+    for(std::size_t i = 0; i < random_small_strings.size(); i++) {
+        random_small_strings[i] = std::to_string(rd_uniform(generator));
+    }
+    
+    return random_small_strings;
+}
+
+std::vector<std::string> get_random_strings(std::size_t nb_strings, 
+                                            std::int64_t min = 0, 
+                                            std::int64_t max = std::numeric_limits<std::int64_t>::max()) 
+{
+    std::uniform_int_distribution<std::int64_t> rd_uniform(min, max);
+    
+    std::vector<std::string> random_strings(nb_strings);
+    for(std::size_t i = 0; i < random_strings.size(); i++) {
+        std::string str(50, 'a');
+        std::string istr = std::to_string(rd_uniform(generator));
+        str.replace(str.size() - istr.size(), istr.size(), istr);
+        
+        random_strings[i] = std::move(str);
+    }
+    
+    return random_strings;
+}
+
+
+
+class measurements {
+public:    
+    measurements(): m_memory_usage_bytes_start(get_memory_usage_bytes()),
+                    m_chrono_start(std::chrono::high_resolution_clock::now())
+                    
     {
+    }
+    
+    ~measurements() {
+        auto chrono_end = std::chrono::high_resolution_clock::now();
+        std::size_t memory_usage_bytes_end = get_memory_usage_bytes();
+        
+        const double nb_seconds = std::chrono::duration<double>(chrono_end - m_chrono_start).count();
+        const std::size_t used_memory_bytes = (memory_usage_bytes_end > m_memory_usage_bytes_start)?
+                                                    memory_usage_bytes_end - m_memory_usage_bytes_start:0;
+
+        std::cout << nb_seconds << " " << used_memory_bytes << " ";
+    }
+    
+private:    
+    std::size_t m_memory_usage_bytes_start;
+    std::chrono::time_point<std::chrono::high_resolution_clock> m_chrono_start;
+};
+
+
+int main(int argc, char ** argv) {
+    if(argc != 3) {
+        std::cout << argv[0] << " num_keys test_type" << std::endl;
         return 1;
     }
     
-    const int64_t num_keys = std::stoll(argv[1]);
+    const std::int64_t num_keys = std::stoll(argv[1]);
     const std::string test_type = argv[2];
-    const int64_t value = 1;
+    const std::int64_t value = 1;
 
 
     SETUP
 
-    double before = get_time();
 
-    if(test_type == "sequential")
-    {
-        for(int64_t i = 0; i < num_keys; i++) 
-        {
-            INSERT_INT_INTO_HASH(i, value);
-        }
-    }
-
-    else if(test_type == "sequentialread")
-    {
-        for(int64_t i = 0; i < num_keys; i++) 
-        {
-            INSERT_INT_INTO_HASH(i, value);
-        }
+    /**
+     * Integers
+     */
+    if(test_type == "insert_random_shuffle_range") {
+        const std::vector<std::int64_t> keys = get_random_shuffle_range_ints(num_keys);
         
-        before = get_time();
-        for(int64_t i = 0; i < num_keys; i++) 
-        {
-            FIND_INT_EXISTING_FROM_HASH(i);
-        }
-    }
-
-    else if(test_type == "randomshufflerange")
-    {
-        const std::vector<int64_t> keys = get_random_shuffle_range_ints(num_keys);
-        before = get_time();
         
-        for(int64_t i = 0; i < num_keys; i++) 
-        {
+        measurements m;
+        for(std::int64_t i = 0; i < num_keys; i++) {
             INSERT_INT_INTO_HASH(keys[i], value);
         }
     }
 
-    else if(test_type == "randomshufflerangeread")
-    {
-        std::vector<int64_t> keys = get_random_shuffle_range_ints(num_keys);
-        for(int64_t i = 0; i < num_keys; i++) 
-        {
+    else if(test_type == "read_random_shuffle_range") {
+        std::vector<std::int64_t> keys = get_random_shuffle_range_ints(num_keys);
+        for(std::int64_t i = 0; i < num_keys; i++) {
             INSERT_INT_INTO_HASH(keys[i], value);
         }
         
         std::shuffle(keys.begin(), keys.end(), generator);
         
-        before = get_time();
-        for(int64_t i = 0; i < num_keys; i++) 
-        {
+        
+        measurements m;
+        for(std::int64_t i = 0; i < num_keys; i++) {
             FIND_INT_EXISTING_FROM_HASH(keys[i]);
         }
     }
 
-    else if(test_type == "randomfull")
-    {
-        const std::vector<int64_t> keys = get_random_full_ints(num_keys);
-        before = get_time();
+    else if(test_type == "insert_random_full") {
+        const std::vector<std::int64_t> keys = get_random_full_ints(num_keys);
         
-        for(int64_t i = 0; i < num_keys; i++) 
-        {
+        
+        measurements m;
+        for(std::int64_t i = 0; i < num_keys; i++) {
             INSERT_INT_INTO_HASH(keys[i], value);
         }
     }
 
-    else if(test_type == "randomfullread")
-    {
-        std::vector<int64_t> keys = get_random_full_ints(num_keys);
-        for(int64_t i = 0; i < num_keys; i++) 
-        {
+    else if(test_type == "insert_random_full_reserve") {
+        const std::vector<std::int64_t> keys = get_random_full_ints(num_keys);
+        
+        
+        measurements m;
+        RESERVE_INT(num_keys);
+        for(std::int64_t i = 0; i < num_keys; i++) {
+            INSERT_INT_INTO_HASH(keys[i], value);
+        }
+    }
+
+    else if(test_type == "read_random_full") {
+        std::vector<std::int64_t> keys = get_random_full_ints(num_keys);
+        for(std::int64_t i = 0; i < num_keys; i++) {
             INSERT_INT_INTO_HASH(keys[i], value);
         }
         
         std::shuffle(keys.begin(), keys.end(), generator);
         
-        before = get_time();
-        for(int64_t i = 0; i < num_keys; i++) 
-        {
+        
+        measurements m;
+        for(std::int64_t i = 0; i < num_keys; i++) {
             FIND_INT_EXISTING_FROM_HASH(keys[i]);
         }
     }
 
-    else if(test_type == "randomfullreadmiss")
-    {
-        const std::vector<int64_t> keys_insert = get_random_full_ints(num_keys, 0, std::numeric_limits<int64_t>::max());
-        const std::vector<int64_t> keys_read = get_random_full_ints(num_keys, std::numeric_limits<int64_t>::min(), -3);
+    else if(test_type == "read_miss_random_full") {
+        const std::vector<std::int64_t> keys_insert = get_random_full_ints(num_keys, 0, std::numeric_limits<std::int64_t>::max());
+        const std::vector<std::int64_t> keys_read = get_random_full_ints(num_keys, std::numeric_limits<std::int64_t>::min(), -3);
         
-        for(int64_t i = 0; i < num_keys; i++) 
-        {
+        for(std::int64_t i = 0; i < num_keys; i++) {
             INSERT_INT_INTO_HASH(keys_insert[i], value);
         }
         
-        before = get_time();
-        for(int64_t i = 0; i < num_keys; i++) 
-        {
+        
+        measurements m;
+        for(std::int64_t i = 0; i < num_keys; i++) {
             FIND_INT_MISSING_FROM_HASH(keys_read[i]);
         }
     }
 
-    else if(test_type == "iteration")
-    {
-        const std::vector<int64_t> keys = get_random_full_ints(num_keys);
-        for(int64_t i = 0; i < num_keys; i++) 
-        {
+    else if(test_type == "read_random_full_after_delete") {
+        std::vector<std::int64_t> keys = get_random_full_ints(num_keys);
+        for(std::int64_t i = 0; i < num_keys; i++) {
             INSERT_INT_INTO_HASH(keys[i], value);
         }
         
-        before = get_time();
-        for(auto it = hash.begin(); it != hash.end(); ++it) 
-        {
+        std::shuffle(keys.begin(), keys.end(), generator);
+        for(std::int64_t i = 0; i < num_keys / 2; i++) {
+            DELETE_INT_FROM_HASH(keys[i]);
+        }
+        
+        std::shuffle(keys.begin(), keys.end(), generator);
+        
+        
+        measurements m;
+        std::int64_t nb_found = 0;
+        for(std::int64_t i = 0; i < num_keys; i++) {
+            FIND_INT_EXISTING_FROM_HASH_COUNT(keys[i], nb_found);
+        }
+        
+        if(nb_found != num_keys / 2) {
+            printf("error");
+            exit(6);
+        }
+    }
+
+    else if(test_type == "iteration_random_full") {
+        const std::vector<std::int64_t> keys = get_random_full_ints(num_keys);
+        for(std::int64_t i = 0; i < num_keys; i++) {
+            INSERT_INT_INTO_HASH(keys[i], value);
+        }
+        
+        
+        measurements m;
+        for(auto it = hash.begin(); it != hash.end(); ++it) {
             CHECK_INT_ITERATOR_VALUE(it, value);
         }
     }
     
-    else if(test_type == "delete")
-    {
-        std::vector<int64_t> keys = get_random_full_ints(num_keys);
-        for(int64_t i = 0; i < num_keys; i++) 
-        {
+    else if(test_type == "delete_random_full") {
+        std::vector<std::int64_t> keys = get_random_full_ints(num_keys);
+        for(std::int64_t i = 0; i < num_keys; i++) {
             INSERT_INT_INTO_HASH(keys[i], value);
         }
         
         std::shuffle(keys.begin(), keys.end(), generator);
         
-        before = get_time();
-        for(int64_t i = 0; i < num_keys; i++) 
-        {
+        
+        measurements m;
+        for(std::int64_t i = 0; i < num_keys; i++) {
             DELETE_INT_FROM_HASH(keys[i]);
         }
     }
-
-    else if(test_type == "insertsmallstring")
-    {
-        for(int64_t i = 0; i < num_keys; i++) 
-        {
-            INSERT_STR_INTO_HASH(get_small_string_for_key(i), value);
-        }
-    }
-
-    else if(test_type == "readsmallstring")
-    {
-        for(int64_t i = 0; i < num_keys; i++) 
-        {
-            INSERT_STR_INTO_HASH(get_small_string_for_key(i), value);
-        }
-        
-        const std::vector<int64_t> keys = get_random_shuffle_range_ints(num_keys);        
-        
-        before = get_time();
-        for(int64_t i = 0; i < num_keys; i++) 
-        {
-            FIND_STR_EXISTING_FROM_HASH(get_small_string_for_key(keys[i]));
-        }
-    }
-
-    else if(test_type == "readsmallstringmiss")
-    {
-        for(int64_t i = 0; i < num_keys; i++) 
-        {
-            INSERT_STR_INTO_HASH(get_small_string_for_key(i), value);
-        }
-        
-        before = get_time();
-        for(int64_t i = num_keys; i < num_keys*2; i++) 
-        {
-            FIND_STR_MISSING_FROM_HASH(get_small_string_for_key(i));
-        }
-    }
-
-    else if(test_type == "deletesmallstring")
-    {
-        for(int64_t i = 0; i < num_keys; i++) 
-        {
-            INSERT_STR_INTO_HASH(get_small_string_for_key(i), value);
-        }
-        
-        const std::vector<int64_t> keys = get_random_shuffle_range_ints(num_keys);  
-        
-        before = get_time();
-        for(int64_t i = 0; i < num_keys; i++) 
-        {
-            DELETE_STR_FROM_HASH(get_small_string_for_key(keys[i]));
-        }
-    }
     
-    else if(test_type == "insertstring")
-    {
-        for(int64_t i = 0; i < num_keys; i++) 
-        {
-            INSERT_STR_INTO_HASH(get_string_for_key(i), value);
+    
+    /**
+     * Small strings
+     */
+    else if(test_type == "insert_small_string") {
+        const std::vector<std::string> keys = get_random_small_strings(num_keys);
+        
+        
+        measurements m;
+        for(std::int64_t i = 0; i < num_keys; i++) {
+            INSERT_STR_INTO_HASH(keys[i], value);
         }
     }
 
-    else if(test_type == "readstring")
-    {
-        for(int64_t i = 0; i < num_keys; i++) 
-        {
-            INSERT_STR_INTO_HASH(get_string_for_key(i), value);
-        }
+    else if(test_type == "insert_small_string_reserve") {
+        const std::vector<std::string> keys = get_random_small_strings(num_keys);
         
-        const std::vector<int64_t> keys = get_random_shuffle_range_ints(num_keys);        
         
-        before = get_time();
-        for(int64_t i = 0; i < num_keys; i++) 
-        {
-            FIND_STR_EXISTING_FROM_HASH(get_string_for_key(keys[i]));
+        measurements m;
+        RESERVE_STR(num_keys);
+        for(std::int64_t i = 0; i < num_keys; i++) {
+            INSERT_STR_INTO_HASH(keys[i], value);
         }
     }
 
-    else if(test_type == "readstringmiss")
-    {
-        for(int64_t i = 0; i < num_keys; i++) 
-        {
-            INSERT_STR_INTO_HASH(get_string_for_key(i), value);
+    else if(test_type == "read_small_string") {
+        std::vector<std::string> keys = get_random_small_strings(num_keys);
+        for(std::int64_t i = 0; i < num_keys; i++) {
+            INSERT_STR_INTO_HASH(keys[i], value);
         }
         
-        before = get_time();
-        for(int64_t i = num_keys; i < num_keys*2; i++) 
-        {
-            FIND_STR_MISSING_FROM_HASH(get_string_for_key(i));
+        std::shuffle(keys.begin(), keys.end(), generator);
+        
+        
+        measurements m;
+        for(std::int64_t i = 0; i < num_keys; i++) {
+            FIND_STR_EXISTING_FROM_HASH(keys[i]);
         }
     }
 
-    else if(test_type == "deletestring")
-    {
-        for(int64_t i = 0; i < num_keys; i++) 
-        {
-            INSERT_STR_INTO_HASH(get_string_for_key(i), value);
+    else if(test_type == "read_miss_small_string") {
+        const std::vector<std::string> keys_insert = get_random_small_strings(num_keys, 0, std::numeric_limits<std::int64_t>::max());
+        const std::vector<std::string> keys_read = get_random_small_strings(num_keys, std::numeric_limits<std::int64_t>::min(), -3);
+
+        for(std::int64_t i = 0; i < num_keys; i++) {
+            INSERT_STR_INTO_HASH(keys_insert[i], value);
         }
         
-        const std::vector<int64_t> keys = get_random_shuffle_range_ints(num_keys);  
         
-        before = get_time();
-        for(int64_t i = 0; i < num_keys; i++) 
-        {
-            DELETE_STR_FROM_HASH(get_string_for_key(keys[i]));
+        measurements m;
+        for(std::int64_t i = 0; i < num_keys; i++) {
+            FIND_STR_MISSING_FROM_HASH(keys_read[i]);
+        }
+    }
+
+    else if(test_type == "read_small_string_after_delete") {
+        std::vector<std::string> keys = get_random_small_strings(num_keys);
+        for(std::int64_t i = 0; i < num_keys; i++) {
+            INSERT_STR_INTO_HASH(keys[i], value);
+        }
+        
+        std::shuffle(keys.begin(), keys.end(), generator); 
+        for(std::int64_t i = 0; i < num_keys / 2; i++) {
+            DELETE_STR_FROM_HASH(keys[i]);
+        }
+        
+        std::shuffle(keys.begin(), keys.end(), generator);
+        
+        
+        measurements m;
+        std::int64_t nb_found = 0;
+        for(std::int64_t i = 0; i < num_keys; i++) {
+            FIND_STR_EXISTING_FROM_HASH_COUNT(keys[i], nb_found);
+        }
+        
+        if(nb_found != num_keys / 2) {
+            printf("error");
+            exit(6);
+        }
+    }
+
+    else if(test_type == "delete_small_string") {
+        std::vector<std::string> keys = get_random_small_strings(num_keys);
+        for(std::int64_t i = 0; i < num_keys; i++) {
+            INSERT_STR_INTO_HASH(keys[i], value);
+        }
+        
+        std::shuffle(keys.begin(), keys.end(), generator); 
+        
+        
+        measurements m;
+        for(std::int64_t i = 0; i < num_keys; i++) {
+            DELETE_STR_FROM_HASH(keys[i]);
         }
     }
     
     
-    double after = get_time();
     
-    sleep(1);
-    printf("%f\n", after-before);
-    fflush(stdout);
-    sleep(20);
+    /**
+     * Strings
+     */
+    else if(test_type == "insert_string") {
+        const std::vector<std::string> keys = get_random_strings(num_keys);
+        
+        
+        measurements m;
+        for(std::int64_t i = 0; i < num_keys; i++) {
+            INSERT_STR_INTO_HASH(keys[i], value);
+        }
+    }
+    
+    else if(test_type == "insert_string_reserve") {
+        const std::vector<std::string> keys = get_random_strings(num_keys);
+        
+        
+        measurements m;
+        RESERVE_STR(num_keys);
+        for(std::int64_t i = 0; i < num_keys; i++) {
+            INSERT_STR_INTO_HASH(keys[i], value);
+        }
+    }
+
+    else if(test_type == "read_string") {
+        std::vector<std::string> keys = get_random_strings(num_keys); 
+        for(std::int64_t i = 0; i < num_keys; i++) {
+            INSERT_STR_INTO_HASH(keys[i], value);
+        }
+        
+        std::shuffle(keys.begin(), keys.end(), generator);   
+        
+        
+        measurements m;
+        for(std::int64_t i = 0; i < num_keys; i++) {
+            FIND_STR_EXISTING_FROM_HASH(keys[i]);
+        }
+    }
+
+    else if(test_type == "read_miss_string") {
+        const std::vector<std::string> keys_insert = get_random_strings(num_keys, 0, std::numeric_limits<std::int64_t>::max());
+        const std::vector<std::string> keys_read = get_random_strings(num_keys, std::numeric_limits<std::int64_t>::min(), -3);
+
+        for(std::int64_t i = 0; i < num_keys; i++) {
+            INSERT_STR_INTO_HASH(keys_insert[i], value);
+        }
+        
+        
+        measurements m;
+        for(std::int64_t i = 0; i < num_keys; i++) {
+            FIND_STR_MISSING_FROM_HASH(keys_read[i]);
+        }
+    }
+
+    else if(test_type == "read_string_after_delete") {
+        std::vector<std::string> keys = get_random_strings(num_keys);
+        for(std::int64_t i = 0; i < num_keys; i++) {
+            INSERT_STR_INTO_HASH(keys[i], value);
+        }
+        
+        std::shuffle(keys.begin(), keys.end(), generator); 
+        for(std::int64_t i = 0; i < num_keys / 2; i++) {
+            DELETE_STR_FROM_HASH(keys[i]);
+        }
+        
+        std::shuffle(keys.begin(), keys.end(), generator);
+        
+        
+        measurements m;
+        std::int64_t nb_found = 0;
+        for(std::int64_t i = 0; i < num_keys; i++) {
+            FIND_STR_EXISTING_FROM_HASH_COUNT(keys[i], nb_found);
+        }
+        
+        if(nb_found != num_keys / 2) {
+            printf("error");
+            exit(6);
+        }
+    }
+
+    else if(test_type == "delete_string") {
+        std::vector<std::string> keys = get_random_strings(num_keys);
+        for(std::int64_t i = 0; i < num_keys; i++) {
+            INSERT_STR_INTO_HASH(keys[i], value);
+        }
+        
+        std::shuffle(keys.begin(), keys.end(), generator); 
+        
+        
+        measurements m;
+        for(std::int64_t i = 0; i < num_keys; i++) {
+            DELETE_STR_FROM_HASH(keys[i]);
+        }
+    }
+    
+    else {
+        std::cout << "Unknown test type: " << test_type << "." << std::endl;
+        exit(1);
+    }
+    
+    
+    const float load_factor = std::max(LOAD_FACTOR(hash), LOAD_FACTOR(str_hash));
+    std::cout << load_factor << std::endl;
 }
