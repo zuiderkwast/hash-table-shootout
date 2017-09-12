@@ -17,6 +17,7 @@ programs = [
     'tsl_robin_map',
     'tsl_robin_map_mlf_0_9',
     'tsl_robin_map_store_hash',
+    'tsl_robin_pg_map',
     'tsl_ordered_map',
     #'tsl_array_map',
     #'tsl_array_map_mlf_1_0'

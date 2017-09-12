@@ -1,7 +1,7 @@
 CXX=clang++
 CXX_FLAGS=-O3 -march=native -std=c++14 -DNDEBUG
 
-all: build/std_unordered_map build/boost_unordered_map build/google_sparse_hash_map build/google_dense_hash_map build/google_dense_hash_map_mlf_0_9 build/qt_qhash build/spp_sparse_hash_map build/emilib_hash_map build/ska_flat_hash_map build/ska_flat_hash_map_power_of_two build/tsl_hopscotch_map build/tsl_hopscotch_map_mlf_0_5 build/tsl_hopscotch_map_store_hash build/tsl_robin_map build/tsl_robin_map_mlf_0_9 build/tsl_robin_map_store_hash build/tsl_ordered_map
+all: build/std_unordered_map build/boost_unordered_map build/google_sparse_hash_map build/google_dense_hash_map build/google_dense_hash_map_mlf_0_9 build/qt_qhash build/spp_sparse_hash_map build/emilib_hash_map build/ska_flat_hash_map build/ska_flat_hash_map_power_of_two build/tsl_hopscotch_map build/tsl_hopscotch_map_mlf_0_5 build/tsl_hopscotch_map_store_hash build/tsl_robin_map build/tsl_robin_map_mlf_0_9 build/tsl_robin_map_store_hash build/tsl_robin_pg_map build/tsl_ordered_map
 
 build/std_unordered_map: src/std_unordered_map.cc src/template.c
 	$(CXX) $(CXX_FLAGS) -lm -o build/std_unordered_map src/std_unordered_map.cc
@@ -54,6 +54,9 @@ build/tsl_robin_map_mlf_0_9: src/tsl_robin_map_mlf_0_9.cc src/template.c
 
 build/tsl_robin_map_store_hash: src/tsl_robin_map_store_hash.cc src/template.c
 	$(CXX) $(CXX_FLAGS) -Irobin-map -o build/tsl_robin_map_store_hash src/tsl_robin_map_store_hash.cc
+
+build/tsl_robin_pg_map: src/tsl_robin_pg_map.cc src/template.c
+	$(CXX) $(CXX_FLAGS) -Irobin-map -o build/tsl_robin_pg_map src/tsl_robin_pg_map.cc
 
 
 

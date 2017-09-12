@@ -5,7 +5,7 @@
 typedef ska::flat_hash_map<int64_t, int64_t, ska::power_of_two_std_hash<int64_t>> hash_t;
 typedef ska::flat_hash_map<std::string, int64_t, ska::power_of_two_std_hash<std::string>> str_hash_t;
 
-#define SETUP hash_t hash; hash; str_hash_t str_hash;
+#define SETUP hash_t hash; str_hash_t str_hash;
 
 #define RESERVE_INT(size) hash.reserve(size);
 #define RESERVE_STR(size) str_hash.reserve(size); 
