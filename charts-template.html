@@ -358,9 +358,8 @@ may cause.</p>
 
 <h2>Small strings</h2>
 <p>For the small string tests, we use hash maps with std::string as key and int64_t as value.</p>
-<p>When we generate a string key, we first generate a random positive int32_t from an uniform random number generator. 
-We then stringify this value. This result in a small string (usually 9 to 11 characters, including the null terminator, 
-but can be less depending on the generated number).</p>
+
+<p>Each string is a random generated string of 15 alphanumeric characters (+1 for the null terminator). A generated key may look like "ju1AOoeWT3LdJxL".<p>
 
 <h3>Inserts: execution time (small strings)</h3>
 
@@ -449,9 +448,7 @@ may cause.</p>
 <h2>Strings</h2>
 <p>For the string tests, we use hash maps with std::string as key and int64_t as value.</p>
 
-<p>When we generate a string key, we first generate a random positive int64_t from an uniform random number generator. 
-We then stringify this value and we prepend the letter 'a' until we reach 50 characters. 
-For example, we will get a string that may look like "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa2947667278772165694" as key.</p>
+<p>Each string is a random generated string of 50 alphanumeric characters (+1 for the null terminator). A generated key may look like "nv46iTRp7ur6UMbdgEkCHpoq7Qx7UU9Ta0u1ETdAvUb4LG6Xu6".<p>
 
 <h3>Inserts: execution time (strings)</h3>
 
