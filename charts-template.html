@@ -26,7 +26,7 @@
     xaxis_settings = {
         tickFormatter: function(num, obj) { 
                            if(num >= 1000*1000) {
-                               return parseFloat(num/(1000*1000)).toFixed(1) + 'M'; 
+                               return parseFloat(num/(1000*1000)).toFixed(2) + 'M'; 
                            }
                            else {
                                return parseInt(num/1000) + 'k'; 
@@ -232,14 +232,14 @@
 
 <h2>Integers</h2>
 
-<p>For the integers tests, we use hashmaps with int64_t as key and int64_t as value.</p>
+<p>For the integers tests, we use hash maps with int64_t as key and int64_t as value.</p>
 
 
 
 <h3>Random shuffle inserts: execution time (integers)</h3>
 
 <p>Before the test, we generate a vector with the values [0, nb_entries) and shuffle this vector. 
-Then for each value k in the vector, we insert the key-value pair (k, 1) in the hashmap.</p>
+Then for each value k in the vector, we insert the key-value pair (k, 1) in the hash map.</p>
 
 <div class="chart" id="insert_random_shuffle_range_runtime"></div>
 <div class="xaxis-title">number of entries in hash table</div>
@@ -249,7 +249,7 @@ Then for each value k in the vector, we insert the key-value pair (k, 1) in the 
 <h3>Random full inserts: execution time (integers)</h3>
 
 <p>Before the test, we generate a vector of nb_entries size where each value is randomly taken from an uniform random number generator from all possible positive values an int64_t can hold. 
-Then for each value k in the vector, we insert the key-value pair (k, 1) in the hashmap.</p>
+Then for each value k in the vector, we insert the key-value pair (k, 1) in the hash map.</p>
 
 <div class="chart" id="insert_random_full_runtime"></div>
 <div class="xaxis-title">number of entries in hash table</div>
@@ -258,8 +258,8 @@ Then for each value k in the vector, we insert the key-value pair (k, 1) in the 
 
 <h3>Random full inserts with reserve: execution time (integers)</h3>
 
-<p>Same as the random full inserts test but the reserve method of the hashmap is called beforehand to avoid any rehash during the insertion. 
-It provides a fair comparison even if the growth factor of each hashmap is different.</p>
+<p>Same as the random full inserts test but the reserve method of the hash map is called beforehand to avoid any rehash during the insertion. 
+It provides a fair comparison even if the growth factor of each hash map is different.</p>
 
 <div class="chart" id="insert_random_full_reserve_runtime"></div>
 <div class="xaxis-title">number of entries in hash table</div>
@@ -295,11 +295,11 @@ We then read each key-value pair in a different and random order than the one th
 <div class="xaxis-title">number of entries in hash table</div>
 <ul class="choices" id="read_random_full_runtime_choices"></ul>
 
-<h3>Random full reads miss: execution time (integers)</h3>
+<h3>Random full reads misses: execution time (integers)</h3>
 
 <p>Before the test, we insert nb_entries elements in the same way as in the random full inserts test. 
 We then generate another vector of nb_entries random elements different from the inserted elements and 
-we try to search for these unknown elements in the hashmap.</p>
+we try to search for these unknown elements in the hash map.</p>
 
 <div class="chart" id="read_miss_random_full_runtime"></div>
 <div class="xaxis-title">number of entries in hash table</div>
@@ -308,7 +308,7 @@ we try to search for these unknown elements in the hashmap.</p>
 
 <h3>Random full reads after deleting half: execution time (integers)</h3>
 
-<p>Before the test, we insert nb_entries in the same way as in the random full inserts test 
+<p>Before the test, we insert nb_entries elements in the same way as in the random full inserts test 
 before deleting half of these values randomly. We then try to read all the original values in a 
 different order which will lead to 50% hits and 50% misses.</p>
 
@@ -321,7 +321,7 @@ different order which will lead to 50% hits and 50% misses.</p>
 <h3>Random full iteration: execution time (integers)</h3>
 
 <p>Before the test, we insert nb_entries elements in the same way as in the random full inserts test. 
-We then use the hashmap iterators to read all the key-value pairs.</p>
+We then use the hash map iterators to read all the key-value pairs.</p>
 
 <div class="chart" id="iteration_random_full_runtime"></div>
 <div class="xaxis-title">number of entries in hash table</div>
@@ -331,7 +331,7 @@ We then use the hashmap iterators to read all the key-value pairs.</p>
 
 <h3>Memory usage of random full inserts (integers)</h3>
 
-<p>Before the random full inserts benchmark finishes, we measure the memory that the hashmap is using.</p>
+<p>Before the random full inserts benchmark finishes, we measure the memory that the hash map is using.</p>
 
 <div class="chart" id="insert_random_full_memory"></div>
 <div class="xaxis-title">number of entries in hash table</div>
@@ -340,7 +340,7 @@ We then use the hashmap iterators to read all the key-value pairs.</p>
 
 <h3>Memory usage of random full inserts with reserve (integers)</h3>
 
-<p>Before the random full inserts with reserve benchmark finishes, we measure the memory that the hashmap is using. 
+<p>Before the random full inserts with reserve benchmark finishes, we measure the memory that the hash map is using. 
 The benchmark is similar to the one above but without measuring the memory fragmentation that the rehash process
 may cause.</p>
 
@@ -357,8 +357,10 @@ may cause.</p>
 
 
 <h2>Small strings</h2>
-<p>For the small string tests, we use hashmaps with std::string as key and int64_t as value.</p>
-<p>When we generate a string key, we stringify the entry number for each entry in the range [0, nb_entries). </p>
+<p>For the small string tests, we use hash maps with std::string as key and int64_t as value.</p>
+<p>When we generate a string key, we first generate a random positive int32_t from an uniform random number generator. 
+We then stringify this value. This result in a small string (usually 9 to 11 characters, including the null terminator, 
+but can be less depending on the generated number).</p>
 
 <h3>Inserts: execution time (small strings)</h3>
 
@@ -371,8 +373,8 @@ may cause.</p>
 
 <h3>Inserts with reserve: execution time (small strings)</h3>
 
-<p>Same as the inserts test but the reserve method of the hashmap is called beforehand to avoid any rehash during the insertion. 
-It provides a fair comparison even if the growth factor of each hashmap is different.</p>
+<p>Same as the inserts test but the reserve method of the hash map is called beforehand to avoid any rehash during the insertion. 
+It provides a fair comparison even if the growth factor of each hash map is different.</p>
 
 <div class="chart" id="insert_small_string_reserve_runtime"></div>
 <div class="xaxis-title">number of entries in hash table</div>
@@ -381,7 +383,7 @@ It provides a fair comparison even if the growth factor of each hashmap is diffe
 
 <h3>Deletes: execution time (small strings)</h3>
 
-<p>Before the test, we insert nb_entries elements in the hashmap as in the inserts test. 
+<p>Before the test, we insert nb_entries elements in the hash map as in the inserts test. 
 We then delete each key one by one in a different and random order than the one they were inserted.</p>
 
 <div class="chart" id="delete_small_string_runtime"></div>
@@ -391,7 +393,7 @@ We then delete each key one by one in a different and random order than the one 
 
 <h3>Reads: execution time (small strings)</h3>
 
-<p>Before the test, we insert nb_entries elements in the hashmap as in the inserts test. 
+<p>Before the test, we insert nb_entries elements in the hash map as in the inserts test. 
 We then read each key-value pair in a different and random order than the one they were inserted.</p>
 
 <div class="chart" id="read_small_string_runtime"></div>
@@ -399,11 +401,11 @@ We then read each key-value pair in a different and random order than the one th
 <ul class="choices" id="read_small_string_runtime_choices"></ul>
 
 
-<h3>Reads miss: execution time (small strings)</h3>
+<h3>Reads misses: execution time (small strings)</h3>
 
 <p>Before the test, we insert nb_entries elements in the same way as in the inserts test. 
 We then generate nb_entries strings different from the inserted elements and 
-we try to search for these unknown elements in the hashmap.</p>
+we try to search for these unknown elements in the hash map.</p>
 
 <div class="chart" id="read_miss_small_string_runtime"></div>
 <div class="xaxis-title">number of entries in hash table</div>
@@ -412,7 +414,7 @@ we try to search for these unknown elements in the hashmap.</p>
 
 <h3>Reads after deleting half: execution time (small strings)</h3>
 
-<p>Before the test, we insert nb_entries in the same way as in the inserts test before 
+<p>Before the test, we insert nb_entries elements in the same way as in the inserts test before 
 deleting half of these values randomly. We then try to read all the original values in a 
 different order which will lead to 50% hits and 50% misses.</p>
 
@@ -423,7 +425,7 @@ different order which will lead to 50% hits and 50% misses.</p>
 
 <h3>Memory usage of inserts (small strings)</h3>
 
-<p>Before the inserts benchmark finishes, we measure the memory that the hashmap is using.</p>
+<p>Before the inserts benchmark finishes, we measure the memory that the hash map is using.</p>
 
 <div class="chart" id="insert_small_string_memory"></div>
 <div class="xaxis-title">number of entries in hash table</div>
@@ -432,7 +434,7 @@ different order which will lead to 50% hits and 50% misses.</p>
 
 <h3>Memory usage of inserts with reserve (small strings)</h3>
 
-<p>Before the inserts with reserve benchmark finishes, we measure the memory that the hashmap is using.
+<p>Before the inserts with reserve benchmark finishes, we measure the memory that the hash map is using.
 The benchmark is similar to the one above but without measuring the memory fragmentation that the rehash process
 may cause.</p>
 
@@ -445,7 +447,7 @@ may cause.</p>
 
 
 <h2>Strings</h2>
-<p>For the string tests, we use hashmaps with std::string as key and int64_t as value.</p>
+<p>For the string tests, we use hash maps with std::string as key and int64_t as value.</p>
 
 <p>When we generate a string key, we first generate a random positive int64_t from an uniform random number generator. 
 We then stringify this value and we prepend the letter 'a' until we reach 50 characters. 
@@ -462,8 +464,8 @@ For example, we will get a string that may look like "aaaaaaaaaaaaaaaaaaaaaaaaaa
 
 <h3>Inserts with reserve: execution time (strings)</h3>
 
-<p>Same as the inserts test but the reserve method of the hashmap is called beforehand to avoid any rehash during the insertion. 
-It provides a fair comparison even if the growth factor of each hashmap is different.</p>
+<p>Same as the inserts test but the reserve method of the hash map is called beforehand to avoid any rehash during the insertion. 
+It provides a fair comparison even if the growth factor of each hash map is different.</p>
 
 <div class="chart" id="insert_string_reserve_runtime"></div>
 <div class="xaxis-title">number of entries in hash table</div>
@@ -472,7 +474,7 @@ It provides a fair comparison even if the growth factor of each hashmap is diffe
 
 <h3>Deletes: execution time (strings)</h3>
 
-<p>Before the test, we insert nb_entries elements in the hashmap as in the inserts test. 
+<p>Before the test, we insert nb_entries elements in the hash map as in the inserts test. 
 We then delete each key one by one in a different and random order than the one they were inserted.</p>
 
 <div class="chart" id="delete_string_runtime"></div>
@@ -482,7 +484,7 @@ We then delete each key one by one in a different and random order than the one 
 
 <h3>Reads: execution time (strings)</h3>
 
-<p>Before the test, we insert nb_entries elements in the hashmap as in the inserts test. 
+<p>Before the test, we insert nb_entries elements in the hash map as in the inserts test. 
 We then read each key-value pair in a different and random order than the one they were inserted.</p>
 
 <div class="chart" id="read_string_runtime"></div>
@@ -490,11 +492,11 @@ We then read each key-value pair in a different and random order than the one th
 <ul class="choices" id="read_string_runtime_choices"></ul>
 
 
-<h3>Reads miss: execution time (strings)</h3>
+<h3>Reads misses: execution time (strings)</h3>
 
 <p>Before the test, we insert nb_entries elements in the same way as in the inserts test. 
 We then generate nb_entries strings different from the inserted elements and 
-we try to search for these unknown elements in the hashmap.</p>
+we try to search for these unknown elements in the hash map.</p>
 
 <div class="chart" id="read_miss_string_runtime"></div>
 <div class="xaxis-title">number of entries in hash table</div>
@@ -503,7 +505,7 @@ we try to search for these unknown elements in the hashmap.</p>
 
 <h3>Reads after deleting half: execution time (strings)</h3>
 
-<p>Before the test, we insert nb_entries in the same way as in the inserts test before deleting half of these values randomly. 
+<p>Before the test, we insert nb_entries elements in the same way as in the inserts test before deleting half of these values randomly. 
 We then try to read all the original values in a different order which will lead to 50% hits and 50% misses.</p>
 
 <div class="chart" id="read_string_after_delete_runtime"></div>
@@ -513,7 +515,7 @@ We then try to read all the original values in a different order which will lead
 
 <h3>Memory usage of inserts (strings)</h3>
 
-<p>Before the inserts benchmark finishes, we measure the memory that the hashmap is using.</p>
+<p>Before the inserts benchmark finishes, we measure the memory that the hash map is using.</p>
 
 <div class="chart" id="insert_string_memory"></div>
 <div class="xaxis-title">number of entries in hash table</div>
@@ -522,7 +524,7 @@ We then try to read all the original values in a different order which will lead
 
 <h3>Memory usage of inserts with reserve (strings)</h3>
 
-<p>Before the inserts with reserve benchmark finishes, we measure the memory that the hashmap is using.
+<p>Before the inserts with reserve benchmark finishes, we measure the memory that the hash map is using.
 The benchmark is similar to the one above but without measuring the memory fragmentation that the rehash process
 may cause.</p>
 

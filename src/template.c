@@ -31,10 +31,10 @@ std::size_t get_memory_usage_bytes() {
 
 
 /*
- * Generate a vector [0, range_end) and shuffle it
+ * Generate a vector [0, nb_ints) and shuffle it
  */
-std::vector<std::int64_t> get_random_shuffle_range_ints(std::size_t range_end) {
-    std::vector<std::int64_t> random_ints(range_end);
+std::vector<std::int64_t> get_random_shuffle_range_ints(std::size_t nb_ints) {
+    std::vector<std::int64_t> random_ints(nb_ints);
     std::iota(random_ints.begin(), random_ints.end(), 0);
     std::shuffle(random_ints.begin(), random_ints.end(), generator);
     
@@ -42,8 +42,8 @@ std::vector<std::int64_t> get_random_shuffle_range_ints(std::size_t range_end) {
 }
 
 std::vector<std::int64_t> get_random_full_ints(std::size_t nb_ints, 
-                                          std::int64_t min = 0, 
-                                          std::int64_t max = std::numeric_limits<std::int64_t>::max()) 
+                                               std::int64_t min = 0, 
+                                               std::int64_t max = std::numeric_limits<std::int64_t>::max()) 
 {
     std::uniform_int_distribution<std::int64_t> rd_uniform(min, max);
     
@@ -55,11 +55,16 @@ std::vector<std::int64_t> get_random_full_ints(std::size_t nb_ints,
     return random_ints;
 }
 
+/**
+ * A stringify int32_t will have up to 10 characters (+1 for the '\0').
+ * Most compiler are able to store a 11 characters string on the stack with the
+ * small string optimization.
+ */
 std::vector<std::string> get_random_small_strings(std::size_t nb_strings, 
-                                                  std::int64_t min = 0, 
-                                                  std::int64_t max = std::numeric_limits<std::int64_t>::max()) 
+                                                  std::int32_t min = 0, 
+                                                  std::int32_t max = std::numeric_limits<std::int32_t>::max()) 
 {
-    std::uniform_int_distribution<std::int64_t> rd_uniform(min, max);
+    std::uniform_int_distribution<std::int32_t> rd_uniform(min, max);
     
     std::vector<std::string> random_small_strings(nb_strings);
     for(std::size_t i = 0; i < random_small_strings.size(); i++) {
@@ -98,8 +103,8 @@ public:
     }
     
     ~measurements() {
-        auto chrono_end = std::chrono::high_resolution_clock::now();
-        std::size_t memory_usage_bytes_end = get_memory_usage_bytes();
+        const auto chrono_end = std::chrono::high_resolution_clock::now();
+        const std::size_t memory_usage_bytes_end = get_memory_usage_bytes();
         
         const double nb_seconds = std::chrono::duration<double>(chrono_end - m_chrono_start).count();
         const std::size_t used_memory_bytes = (memory_usage_bytes_end > m_memory_usage_bytes_start)?
@@ -226,11 +231,6 @@ int main(int argc, char ** argv) {
         for(std::int64_t i = 0; i < num_keys; i++) {
             FIND_INT_EXISTING_FROM_HASH_COUNT(keys[i], nb_found);
         }
-        
-        if(nb_found != num_keys / 2) {
-            printf("error");
-            exit(6);
-        }
     }
 
     else if(test_type == "iteration_random_full") {
@@ -302,8 +302,8 @@ int main(int argc, char ** argv) {
     }
 
     else if(test_type == "read_miss_small_string") {
-        const std::vector<std::string> keys_insert = get_random_small_strings(num_keys, 0, std::numeric_limits<std::int64_t>::max());
-        const std::vector<std::string> keys_read = get_random_small_strings(num_keys, std::numeric_limits<std::int64_t>::min(), -3);
+        const std::vector<std::string> keys_insert = get_random_small_strings(num_keys, 0, std::numeric_limits<std::int32_t>::max());
+        const std::vector<std::string> keys_read = get_random_small_strings(num_keys, std::numeric_limits<std::int32_t>::min(), -3);
 
         for(std::int64_t i = 0; i < num_keys; i++) {
             INSERT_STR_INTO_HASH(keys_insert[i], value);
@@ -334,11 +334,6 @@ int main(int argc, char ** argv) {
         std::int64_t nb_found = 0;
         for(std::int64_t i = 0; i < num_keys; i++) {
             FIND_STR_EXISTING_FROM_HASH_COUNT(keys[i], nb_found);
-        }
-        
-        if(nb_found != num_keys / 2) {
-            printf("error");
-            exit(6);
         }
     }
 
@@ -432,11 +427,6 @@ int main(int argc, char ** argv) {
         for(std::int64_t i = 0; i < num_keys; i++) {
             FIND_STR_EXISTING_FROM_HASH_COUNT(keys[i], nb_found);
         }
-        
-        if(nb_found != num_keys / 2) {
-            printf("error");
-            exit(6);
-        }
     }
 
     else if(test_type == "delete_string") {
@@ -456,7 +446,7 @@ int main(int argc, char ** argv) {
     
     else {
         std::cout << "Unknown test type: " << test_type << "." << std::endl;
-        exit(1);
+        std::exit(1);
     }
     
     
