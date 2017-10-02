@@ -106,7 +106,10 @@
             $(chart_container).bind("plothover", function (event, pos, item) {
                 if (item) {
                     var x = item.datapoint[0];
-                    var y = item.datapoint[1].toFixed(4);
+                    var y = item.datapoint[1].toFixed(4) + "s";
+                    if(chart_settings == memory_settings) {
+                        y = (item.datapoint[1]/1024/1024).toFixed(2) + " MiB";
+                    }
 
                     var load_factor = item.series.data[item.dataIndex][2]
                     if(load_factor == 0.0) {
