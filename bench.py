@@ -11,6 +11,7 @@ programs = [
     'emilib_hash_map',
     'ska_flat_hash_map',
     'ska_flat_hash_map_power_of_two',
+    'tsl_sparse_map'
     'tsl_hopscotch_map',
     'tsl_hopscotch_map_mlf_0_5',
     'tsl_hopscotch_map_store_hash',
@@ -23,9 +24,9 @@ programs = [
     #'tsl_array_map_mlf_1_0'
 ]
 
-minkeys  =  1*100000
-maxkeys  = 26*100000
-interval =  1*100000
+minkeys  =  2*100*1000
+maxkeys  = 30*100*1000
+interval =  2*100*1000
 best_out_of = 5
 
 outfile = open('output', 'w')

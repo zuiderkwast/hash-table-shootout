@@ -21,7 +21,7 @@ proper_names = OrderedDict([
     ('std_unordered_map', 'std::unordered_map'),
     ('google_dense_hash_map', 'google::dense_hash_map'),
     ('qt_qhash', 'QHash'),
-    ('spp_sparse_hash_map', 'spp::sparse_hash_map'),
+    ('tsl_sparse_map', 'tsl::sparse_map'),
     ('tsl_hopscotch_map', 'tsl::hopscotch_map'),
     ('tsl_robin_map', 'tsl::robin_map'),
     ('tsl_hopscotch_map_store_hash', 'tsl::hopscotch_map (with StoreHash)'),
@@ -35,6 +35,7 @@ proper_names = OrderedDict([
     ('ska_flat_hash_map_power_of_two', 'ska::flat_hash_map (power of two)'),
     ('google_sparse_hash_map', 'google::sparse_hash_map'),
     ('boost_unordered_map', 'boost::unordered_map'),
+    ('spp_sparse_hash_map', 'spp::sparse_hash_map'),
     ('emilib_hash_map', 'emilib::HashMap'),
     ('tsl_array_map', 'tsl::array_map'),
     ('tsl_array_map_mlf_1_0', 'tsl::array_map (1.0 mlf)'),
@@ -46,7 +47,7 @@ program_slugs = [
     'std_unordered_map',
     'google_dense_hash_map',
     'qt_qhash',
-    'spp_sparse_hash_map',
+    'tsl_sparse_map',
     'tsl_hopscotch_map',
     'tsl_robin_map',
     'tsl_hopscotch_map_store_hash',
@@ -60,9 +61,10 @@ program_slugs = [
     'ska_flat_hash_map_power_of_two',
     'google_sparse_hash_map',
     'boost_unordered_map',
+    'spp_sparse_hash_map',
     'emilib_hash_map',
     'tsl_array_map',
-    'tsl_array_map_mlf_1_0'
+    'tsl_array_map_mlf_1_0',
 ]
 
 # hashmap which will be shown (checkbox checked)
@@ -70,7 +72,7 @@ default_programs_show = [
     'std_unordered_map',
     'google_dense_hash_map',
     'qt_qhash',
-    'spp_sparse_hash_map',
+    'tsl_sparse_map',
     'tsl_hopscotch_map',
     'tsl_robin_map',
     'tsl_hopscotch_map_store_hash',
