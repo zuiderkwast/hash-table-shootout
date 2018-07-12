@@ -1,6 +1,6 @@
 #include <inttypes.h>
 #include <string>
-#include <src/hopscotch_map.h>
+#include <include/tsl/hopscotch_map.h>
 
 typedef tsl::hopscotch_map<int64_t, int64_t, std::hash<int64_t>, 
                            std::equal_to<int64_t>, std::allocator<std::pair<int64_t, int64_t>>,
