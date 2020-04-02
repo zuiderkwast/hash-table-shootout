@@ -469,6 +469,6 @@ int main(int argc, char ** argv) {
     }
     
     
-    const float load_factor = std::max(LOAD_FACTOR(hash), LOAD_FACTOR(str_hash));
+    const float load_factor = std::max(LOAD_FACTOR_INT_HASH(hash), LOAD_FACTOR_STR_HASH(str_hash));
     std::cout << load_factor << std::endl;
 }
