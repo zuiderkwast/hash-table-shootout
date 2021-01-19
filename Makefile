@@ -47,24 +47,24 @@ build/tsl_hopscotch_map_store_hash: src/tsl_hopscotch_map_store_hash.cc src/temp
 
 
 build/tsl_robin_map: src/tsl_robin_map.cc src/template.c
-	$(CXX) $(CXX_FLAGS) -Irobin-map -o build/tsl_robin_map src/tsl_robin_map.cc
+	$(CXX) $(CXX_FLAGS) -Irobin-map/include -o build/tsl_robin_map src/tsl_robin_map.cc
 
 build/tsl_robin_map_mlf_0_9: src/tsl_robin_map_mlf_0_9.cc src/template.c
-	$(CXX) $(CXX_FLAGS) -Irobin-map -o build/tsl_robin_map_mlf_0_9 src/tsl_robin_map_mlf_0_9.cc
+	$(CXX) $(CXX_FLAGS) -Irobin-map/include -o build/tsl_robin_map_mlf_0_9 src/tsl_robin_map_mlf_0_9.cc
 
 build/tsl_robin_map_store_hash: src/tsl_robin_map_store_hash.cc src/template.c
-	$(CXX) $(CXX_FLAGS) -Irobin-map -o build/tsl_robin_map_store_hash src/tsl_robin_map_store_hash.cc
+	$(CXX) $(CXX_FLAGS) -Irobin-map/include -o build/tsl_robin_map_store_hash src/tsl_robin_map_store_hash.cc
 
 build/tsl_robin_pg_map: src/tsl_robin_pg_map.cc src/template.c
-	$(CXX) $(CXX_FLAGS) -Irobin-map -o build/tsl_robin_pg_map src/tsl_robin_pg_map.cc
+	$(CXX) $(CXX_FLAGS) -Irobin-map/include -o build/tsl_robin_pg_map src/tsl_robin_pg_map.cc
 
 
 
 build/tsl_sparse_map: src/tsl_sparse_map.cc src/template.c
-	$(CXX) $(CXX_FLAGS) -Isparse-map -o build/tsl_sparse_map src/tsl_sparse_map.cc
+	$(CXX) $(CXX_FLAGS) -Isparse-map/include -o build/tsl_sparse_map src/tsl_sparse_map.cc
 
 build/tsl_ordered_map: src/tsl_ordered_map.cc src/template.c
-	$(CXX) $(CXX_FLAGS) -Iordered-map -o build/tsl_ordered_map src/tsl_ordered_map.cc
+	$(CXX) $(CXX_FLAGS) -Iordered-map/include -o build/tsl_ordered_map src/tsl_ordered_map.cc
 
 # Array map need C++17 as it needs std::string_view for the hash part. Not part of the 'all' build
 build/tsl_array_map: src/tsl_array_map.cc src/template.c
