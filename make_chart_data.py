@@ -10,8 +10,8 @@ by_benchtype = {}
 for line in lines:
     benchtype, nkeys, program, load_factor, nbytes, runtime = line.split(',')
     nkeys = int(nkeys)
-    nbytes = int(nbytes)
-    runtime = float(runtime)
+    nbytes = float(nbytes) / nkeys # bytes per (key,value) pair
+    runtime = float(runtime) * 1000000000 / nkeys # microseconds per operation
     load_factor = float(load_factor)
 
     by_benchtype.setdefault("%s_runtime" % benchtype, {}).setdefault(program, []).append([nkeys, runtime, load_factor])
