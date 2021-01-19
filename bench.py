@@ -1,3 +1,5 @@
+#!/usr/bin/env python3
+
 import sys, os, subprocess, signal
 
 programs = [
@@ -81,9 +83,8 @@ for nkeys in range(minkeys, maxkeys + 1, interval):
                     fastest_attempt_data = line
 
             if fastest_attempt != 1000000:
-                print >> outfile, fastest_attempt_data
-                print fastest_attempt_data
+                print(fastest_attempt_data, file=outfile)
+                print(fastest_attempt_data)
         
         # Print blank line
-        print >> outfile
-        print 
+        print()

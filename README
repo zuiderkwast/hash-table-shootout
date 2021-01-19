@@ -11,8 +11,8 @@ First, some prerequisites are:
 Now, run:
 
 $ make
-$ python bench.py
-$ python make_chart_data.py < output | python make_html.py
+$ python3 bench.py
+$ python3 make_chart_data.py < output | python make_html.py
 
 Your charts are now in charts.html.
 
