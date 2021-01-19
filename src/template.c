@@ -33,6 +33,9 @@ static const std::size_t STRING_SIZE = 50;
 static const std::int64_t SEED = 0;
 static std::mt19937_64 generator(SEED);
 
+#ifndef ITERATE_HASH
+#define ITERATE_HASH(it) for(auto it = hash.begin(); it != hash.end(); ++it) {
+#endif
 
 std::size_t get_memory_usage_bytes() {
     std::ifstream file("/proc/self/statm");
@@ -247,7 +250,7 @@ int main(int argc, char ** argv) {
         
         
         measurements m;
-        for(auto it = hash.begin(); it != hash.end(); ++it) {
+        ITERATE_HASH(it) {
             CHECK_INT_ITERATOR_VALUE(it, value);
         }
     }

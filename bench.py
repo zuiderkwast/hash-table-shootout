@@ -23,7 +23,8 @@ programs = [
     'tsl_robin_pg_map',
     'tsl_ordered_map',
     #'tsl_array_map',
-    #'tsl_array_map_mlf_1_0'
+    #'tsl_array_map_mlf_1_0',
+    #'judy'
 ]
 
 minkeys  =  2*100*1000
