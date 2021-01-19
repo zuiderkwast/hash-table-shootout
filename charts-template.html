@@ -35,11 +35,11 @@
     };
 
     yaxis_runtime_settings = {
-        tickFormatter: function(num, obj) { return (+num.toFixed(2)) + ' sec.'; }
+        tickFormatter: function(num, obj) { return (+num.toFixed(2)) + ' nsec.'; }
     };
 
     yaxis_memory_settings = {
-        tickFormatter: function(num, obj) { return parseInt(num/1024/1024) + 'MiB'; }
+        tickFormatter: function(num, obj) { return parseInt(num) + 'B'; }
     };
 
     legend_settings = {
