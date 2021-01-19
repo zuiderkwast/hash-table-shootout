@@ -10,6 +10,7 @@ First, some prerequisites are:
 
 Now, run:
 
+$ git submodule update --init --recursive
 $ make
 $ python bench.py
 $ python make_chart_data.py < output | python make_html.py
