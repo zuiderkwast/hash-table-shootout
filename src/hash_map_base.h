@@ -12,7 +12,7 @@
 #define FIND_INT_EXISTING_FROM_HASH(key) if(hash.find(key) == hash.end()) { printf("error"); exit(1); }
 #define FIND_INT_MISSING_FROM_HASH(key) if(hash.find(key) != hash.end()) { printf("error"); exit(1); }
 #define FIND_INT_EXISTING_FROM_HASH_COUNT(key, count) if(hash.find(key) != hash.end()) { count++; }
-#define CHECK_INT_ITERATOR_VALUE(iterator, value) if(iterator.second != value) { printf("error"); exit(1); }
+#define CHECK_INT_ITERATOR_VALUE(iterator, value) if(iterator->second != value) { printf("error"); exit(1); }
 
 #define RESERVE_STR(size) str_hash.reserve(size) 
 #define LOAD_FACTOR_STR_HASH(src_hash) str_hash.load_factor()
