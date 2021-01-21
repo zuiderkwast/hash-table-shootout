@@ -15,7 +15,8 @@ APPS ?= std_unordered_map boost_unordered_map google_sparse_hash_map \
    tsl_hopscotch_map_mlf_0_5 tsl_hopscotch_map_store_hash tsl_robin_map \
    tsl_robin_map_mlf_0_9 tsl_robin_map_store_hash tsl_robin_pg_map \
    tsl_sparse_map tsl_ordered_map tsl_array_map tsl_array_map_mlf_1_0 qt_qhash
-#APPS += judy
+#APPS += judyL
+#APPS += judyHS
 
 LDFLAGS ?= -lm
 LDFLAGS += ${LDFLAGS_MALLOC}
@@ -38,9 +39,11 @@ CXXFLAGS_tsl_sparse_map                 ?= -Isparse-map/include
 CXXFLAGS_tsl_ordered_map                ?= -Iordered-map/include
 CXXFLAGS_tsl_array_map                  ?= -Iarray-hash/include -std=c++17
 CXXFLAGS_tsl_array_map_mlf_1_0          ?= ${CXXFLAGS_tsl_array_map}
-CXXFLAGS_judy                           ?=
+CXXFLAGS_judyL                          ?=
+CXXFLAGS_judyHS                         ?=
 
-LDFLAGS_judy                            ?= -lJudy
+LDFLAGS_judyL                           ?= -lJudy
+LDFLAGS_judyHS                          ?= ${LDFLAGS_judyL}
 
 BUILD_DIR ?= ./build
 

@@ -24,7 +24,8 @@ programs = [
     'tsl_ordered_map',
     #'tsl_array_map',
     #'tsl_array_map_mlf_1_0',
-    #'judy'
+    #'judyL',
+    #'judyHS'
 ]
 
 minkeys  =  2*100*1000
