@@ -6,7 +6,7 @@ CXXFLAGS ?= -O3 -march=native -std=c++14 -DNDEBUG
 
 # LDFLAGS_MALLOC ?=
 # LDFLAGS_MALLOC ?= -ljemalloc # much better that glibc's malloc on some workloads
-LDFLAGS_MALLOC ?= -ltcmalloc_minimal # often evemnt better than jemalloc
+LDFLAGS_MALLOC ?= -ltcmalloc_minimal # often even better than jemalloc
 
 APPS ?= std_unordered_map boost_unordered_map google_sparse_hash_map \
    google_dense_hash_map google_dense_hash_map_mlf_0_9 \
