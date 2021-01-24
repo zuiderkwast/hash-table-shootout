@@ -8,6 +8,8 @@ lines = [ line.strip() for line in sys.stdin if line.strip() ]
 by_benchtype = {}
 
 for line in lines:
+    if len(line) == 0:
+        next
     benchtype, nkeys, program, load_factor, nbytes, runtime = line.split(',')
     nkeys = int(nkeys)
     nbytes = float(nbytes) / nkeys # bytes per (key,value) pair
