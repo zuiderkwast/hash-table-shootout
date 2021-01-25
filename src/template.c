@@ -103,7 +103,12 @@ public:
                     
     {
     }
-    
+
+    void set_chrono_start()
+    {
+        m_chrono_start = std::chrono::high_resolution_clock::now();
+    }
+
     ~measurements() {
         const auto chrono_end = std::chrono::high_resolution_clock::now();
         const std::size_t memory_usage_bytes_end = get_memory_usage_bytes();
@@ -160,14 +165,14 @@ int main(int argc, char ** argv) {
 
     else if(test_type == "read_random_shuffle_range") {
         std::vector<std::int64_t> keys = get_random_shuffle_range_ints(num_keys);
+        measurements m;
         for(std::int64_t i = 0; i < num_keys; i++) {
             INSERT_INT_INTO_HASH(keys[i], value);
         }
         
         std::shuffle(keys.begin(), keys.end(), generator);
         
-        
-        measurements m;
+        m.set_chrono_start();
         for(std::int64_t i = 0; i < num_keys; i++) {
             FIND_INT_EXISTING_FROM_HASH(keys[i]);
         }
@@ -196,14 +201,16 @@ int main(int argc, char ** argv) {
 
     else if(test_type == "read_random_full") {
         std::vector<std::int64_t> keys = get_random_full_ints(num_keys);
+
+        measurements m;
         for(std::int64_t i = 0; i < num_keys; i++) {
             INSERT_INT_INTO_HASH(keys[i], value);
         }
         
         std::shuffle(keys.begin(), keys.end(), generator);
         
-        
-        measurements m;
+
+        m.set_chrono_start();
         for(std::int64_t i = 0; i < num_keys; i++) {
             FIND_INT_EXISTING_FROM_HASH(keys[i]);
         }
@@ -213,12 +220,13 @@ int main(int argc, char ** argv) {
         const std::vector<std::int64_t> keys_insert = get_random_full_ints(num_keys, 0, std::numeric_limits<std::int64_t>::max());
         const std::vector<std::int64_t> keys_read = get_random_full_ints(num_keys, std::numeric_limits<std::int64_t>::min(), -3);
         
+        measurements m;
         for(std::int64_t i = 0; i < num_keys; i++) {
             INSERT_INT_INTO_HASH(keys_insert[i], value);
         }
         
         
-        measurements m;
+        m.set_chrono_start();
         for(std::int64_t i = 0; i < num_keys; i++) {
             FIND_INT_MISSING_FROM_HASH(keys_read[i]);
         }
@@ -226,6 +234,7 @@ int main(int argc, char ** argv) {
 
     else if(test_type == "read_random_full_after_delete") {
         std::vector<std::int64_t> keys = get_random_full_ints(num_keys);
+        measurements m;
         for(std::int64_t i = 0; i < num_keys; i++) {
             INSERT_INT_INTO_HASH(keys[i], value);
         }
@@ -238,8 +247,8 @@ int main(int argc, char ** argv) {
         std::shuffle(keys.begin(), keys.end(), generator);
         
         
-        measurements m;
         std::int64_t nb_found = 0;
+        m.set_chrono_start();
         for(std::int64_t i = 0; i < num_keys; i++) {
             FIND_INT_EXISTING_FROM_HASH_COUNT(keys[i], nb_found);
         }
@@ -252,12 +261,13 @@ int main(int argc, char ** argv) {
 
     else if(test_type == "iteration_random_full") {
         const std::vector<std::int64_t> keys = get_random_full_ints(num_keys);
+        measurements m;
         for(std::int64_t i = 0; i < num_keys; i++) {
             INSERT_INT_INTO_HASH(keys[i], value);
         }
         
         
-        measurements m;
+        m.set_chrono_start();
         ITERATE_HASH(it) {
             CHECK_INT_ITERATOR_VALUE(it, value);
         }
@@ -265,6 +275,7 @@ int main(int argc, char ** argv) {
     
     else if(test_type == "delete_random_full") {
         std::vector<std::int64_t> keys = get_random_full_ints(num_keys);
+        measurements m;
         for(std::int64_t i = 0; i < num_keys; i++) {
             INSERT_INT_INTO_HASH(keys[i], value);
         }
@@ -272,7 +283,7 @@ int main(int argc, char ** argv) {
         std::shuffle(keys.begin(), keys.end(), generator);
         
         
-        measurements m;
+        m.set_chrono_start();
         for(std::int64_t i = 0; i < num_keys; i++) {
             DELETE_INT_FROM_HASH(keys[i]);
         }
@@ -307,6 +318,7 @@ int main(int argc, char ** argv) {
 
     else if(test_type == "read_small_string") {
         std::vector<std::string> keys = get_random_alphanum_strings(num_keys, SMALL_STRING_SIZE);
+        measurements m;
         for(std::int64_t i = 0; i < num_keys; i++) {
             INSERT_STR_INTO_HASH(keys[i], value);
         }
@@ -314,7 +326,7 @@ int main(int argc, char ** argv) {
         std::shuffle(keys.begin(), keys.end(), generator);
         
         
-        measurements m;
+        m.set_chrono_start();
         for(std::int64_t i = 0; i < num_keys; i++) {
             FIND_STR_EXISTING_FROM_HASH(keys[i]);
         }
@@ -324,12 +336,13 @@ int main(int argc, char ** argv) {
         const std::vector<std::string> keys_insert = get_random_alphanum_strings(num_keys, SMALL_STRING_SIZE);
         const std::vector<std::string> keys_read = get_random_alphanum_strings(num_keys, SMALL_STRING_SIZE);
 
+        measurements m;
         for(std::int64_t i = 0; i < num_keys; i++) {
             INSERT_STR_INTO_HASH(keys_insert[i], value);
         }
         
         
-        measurements m;
+        m.set_chrono_start();
         for(std::int64_t i = 0; i < num_keys; i++) {
             FIND_STR_MISSING_FROM_HASH(keys_read[i]);
         }
@@ -337,6 +350,7 @@ int main(int argc, char ** argv) {
 
     else if(test_type == "read_small_string_after_delete") {
         std::vector<std::string> keys = get_random_alphanum_strings(num_keys, SMALL_STRING_SIZE);
+        measurements m;
         for(std::int64_t i = 0; i < num_keys; i++) {
             INSERT_STR_INTO_HASH(keys[i], value);
         }
@@ -349,8 +363,8 @@ int main(int argc, char ** argv) {
         std::shuffle(keys.begin(), keys.end(), generator);
         
         
-        measurements m;
         std::int64_t nb_found = 0;
+        m.set_chrono_start();
         for(std::int64_t i = 0; i < num_keys; i++) {
             FIND_STR_EXISTING_FROM_HASH_COUNT(keys[i], nb_found);
         }
@@ -363,6 +377,7 @@ int main(int argc, char ** argv) {
 
     else if(test_type == "delete_small_string") {
         std::vector<std::string> keys = get_random_alphanum_strings(num_keys, SMALL_STRING_SIZE);
+        measurements m;
         for(std::int64_t i = 0; i < num_keys; i++) {
             INSERT_STR_INTO_HASH(keys[i], value);
         }
@@ -370,7 +385,7 @@ int main(int argc, char ** argv) {
         std::shuffle(keys.begin(), keys.end(), generator); 
         
         
-        measurements m;
+        m.set_chrono_start();
         for(std::int64_t i = 0; i < num_keys; i++) {
             DELETE_STR_FROM_HASH(keys[i]);
         }
@@ -404,6 +419,7 @@ int main(int argc, char ** argv) {
 
     else if(test_type == "read_string") {
         std::vector<std::string> keys = get_random_alphanum_strings(num_keys, STRING_SIZE); 
+        measurements m;
         for(std::int64_t i = 0; i < num_keys; i++) {
             INSERT_STR_INTO_HASH(keys[i], value);
         }
@@ -411,7 +427,7 @@ int main(int argc, char ** argv) {
         std::shuffle(keys.begin(), keys.end(), generator);   
         
         
-        measurements m;
+        m.set_chrono_start();
         for(std::int64_t i = 0; i < num_keys; i++) {
             FIND_STR_EXISTING_FROM_HASH(keys[i]);
         }
@@ -421,12 +437,13 @@ int main(int argc, char ** argv) {
         const std::vector<std::string> keys_insert = get_random_alphanum_strings(num_keys, STRING_SIZE);
         const std::vector<std::string> keys_read = get_random_alphanum_strings(num_keys, STRING_SIZE);
 
+        measurements m;
         for(std::int64_t i = 0; i < num_keys; i++) {
             INSERT_STR_INTO_HASH(keys_insert[i], value);
         }
         
         
-        measurements m;
+        m.set_chrono_start();
         for(std::int64_t i = 0; i < num_keys; i++) {
             FIND_STR_MISSING_FROM_HASH(keys_read[i]);
         }
@@ -434,6 +451,7 @@ int main(int argc, char ** argv) {
 
     else if(test_type == "read_string_after_delete") {
         std::vector<std::string> keys = get_random_alphanum_strings(num_keys, STRING_SIZE);
+        measurements m;
         for(std::int64_t i = 0; i < num_keys; i++) {
             INSERT_STR_INTO_HASH(keys[i], value);
         }
@@ -446,8 +464,8 @@ int main(int argc, char ** argv) {
         std::shuffle(keys.begin(), keys.end(), generator);
         
         
-        measurements m;
         std::int64_t nb_found = 0;
+        m.set_chrono_start();
         for(std::int64_t i = 0; i < num_keys; i++) {
             FIND_STR_EXISTING_FROM_HASH_COUNT(keys[i], nb_found);
         }
@@ -460,6 +478,7 @@ int main(int argc, char ** argv) {
 
     else if(test_type == "delete_string") {
         std::vector<std::string> keys = get_random_alphanum_strings(num_keys, STRING_SIZE);
+        measurements m;
         for(std::int64_t i = 0; i < num_keys; i++) {
             INSERT_STR_INTO_HASH(keys[i], value);
         }
@@ -467,7 +486,7 @@ int main(int argc, char ** argv) {
         std::shuffle(keys.begin(), keys.end(), generator); 
         
         
-        measurements m;
+        m.set_chrono_start();
         for(std::int64_t i = 0; i < num_keys; i++) {
             DELETE_STR_FROM_HASH(keys[i]);
         }
