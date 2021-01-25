@@ -68,7 +68,9 @@ program_slugs = [
     'tsl_array_map',
     'tsl_array_map_mlf_1_0',
     'judyL',
-    'judyHS'
+    'judyHS',
+    'nata88',
+    'nataF8'
 ]
 
 # hashmap which will be shown (checkbox checked)

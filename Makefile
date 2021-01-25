@@ -41,9 +41,13 @@ CXXFLAGS_tsl_array_map                  ?= -Iarray-hash/include -std=c++17
 CXXFLAGS_tsl_array_map_mlf_1_0          ?= ${CXXFLAGS_tsl_array_map}
 CXXFLAGS_judyL                          ?=
 CXXFLAGS_judyHS                         ?=
+CXXFLAGS_nata88                         ?=
+CXXFLAGS_nataF8                         ?= ${CXXFLAGS_nata88}
 
 LDFLAGS_judyL                           ?= -lJudy
 LDFLAGS_judyHS                          ?= ${LDFLAGS_judyL}
+LDFLAGS_nata88                          ?= -lnata
+LDFLAGS_nataF8                          ?= ${LDFLAGS_nata88}
 
 BUILD_DIR ?= ./build
 
