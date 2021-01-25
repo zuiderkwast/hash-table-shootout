@@ -60,4 +60,4 @@ clean:
 	rm -rf $(BUILD_DIR)
 
 $(EXECUTABLES): $(BUILD_DIR)/%: src/%.cc src/template.c
-	$(CXX) $(CXXFLAGS) ${CXXFLAGS_${notdir $@}} -o $@ ${LDFLAGS} ${LDFLAGS_${notdir $@}} $<
+	$(CXX) $(CXXFLAGS) ${CXXFLAGS_${notdir $@}} -o $@ $< ${LDFLAGS} ${LDFLAGS_${notdir $@}}
