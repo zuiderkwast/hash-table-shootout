@@ -95,7 +95,7 @@ for i, (benchtype, programs) in enumerate(by_benchtype.items()):
         data = programs[program]
         chart_data[benchtype].append({
             'program': program,
-            'label': proper_names[program],
+            'label': proper_names.get(program,program),
             'data': [],
         })
 
