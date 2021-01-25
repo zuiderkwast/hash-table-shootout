@@ -40,9 +40,7 @@ proper_names = OrderedDict([
     ('spp_sparse_hash_map', 'spp::sparse_hash_map'),
     ('emilib_hash_map', 'emilib::HashMap'),
     ('tsl_array_map', 'tsl::array_map'),
-    ('tsl_array_map_mlf_1_0', 'tsl::array_map (1.0 mlf)'),
-    ('judyL', 'JudyL'),
-    ('judyHS', 'JudyHS'),
+    ('tsl_array_map_mlf_1_0', 'tsl::array_map (1.0 mlf)')
 ])
 
 # do them in the desired order to make the legend not overlap the chart data
