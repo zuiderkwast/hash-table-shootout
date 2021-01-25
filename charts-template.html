@@ -110,7 +110,7 @@
             $(chart_container).bind("plothover", function (event, pos, item) {
                 if (item) {
                     var x = item.datapoint[0];
-                    var y = item.datapoint[1].toFixed(4) + "s";
+                    var y = item.datapoint[1].toFixed(4) + "nsec";
                     if(chart_settings == memory_settings) {
                         y = (item.datapoint[1]/1024/1024).toFixed(2) + " MiB";
                     }
