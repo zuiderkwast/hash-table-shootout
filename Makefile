@@ -6,7 +6,7 @@ CXXFLAGS ?= -O3 -march=native -std=c++14 -DNDEBUG
 
 # LDFLAGS_MALLOC ?=
 # LDFLAGS_MALLOC ?= -ljemalloc # much better that glibc's malloc on some workloads
-LDFLAGS_MALLOC ?= -ltcmalloc_minimal # often evemnt better than jemalloc
+LDFLAGS_MALLOC ?= -ltcmalloc_minimal # often even better than jemalloc
 
 APPS ?= std_unordered_map boost_unordered_map google_sparse_hash_map \
    google_dense_hash_map google_dense_hash_map_mlf_0_9 \
@@ -41,9 +41,13 @@ CXXFLAGS_tsl_array_map                  ?= -Iarray-hash/include -std=c++17
 CXXFLAGS_tsl_array_map_mlf_1_0          ?= ${CXXFLAGS_tsl_array_map}
 CXXFLAGS_judyL                          ?=
 CXXFLAGS_judyHS                         ?=
+CXXFLAGS_nata88                         ?=
+CXXFLAGS_nataF8                         ?= ${CXXFLAGS_nata88}
 
 LDFLAGS_judyL                           ?= -lJudy
 LDFLAGS_judyHS                          ?= ${LDFLAGS_judyL}
+LDFLAGS_nata88                          ?= -lnata
+LDFLAGS_nataF8                          ?= ${LDFLAGS_nata88}
 
 BUILD_DIR ?= ./build
 
@@ -60,4 +64,4 @@ clean:
 	rm -rf $(BUILD_DIR)
 
 $(EXECUTABLES): $(BUILD_DIR)/%: src/%.cc src/template.c
-	$(CXX) $(CXXFLAGS) ${CXXFLAGS_${notdir $@}} -o $@ ${LDFLAGS} ${LDFLAGS_${notdir $@}} $<
+	$(CXX) $(CXXFLAGS) ${CXXFLAGS_${notdir $@}} -o $@ $< ${LDFLAGS} ${LDFLAGS_${notdir $@}}
