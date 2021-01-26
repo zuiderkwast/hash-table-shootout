@@ -35,14 +35,17 @@
                            else {
                                return parseInt(num/1000) + 'k'; 
                            }
-                       }
+        },
+        //transform: function(v) { return Math.log10(v+0.000001); }
     };
 
     yaxis_runtime_settings = {
+        min: 0,
         tickFormatter: function(num, obj) { return (+num.toFixed(2)) + ' nsec.'; }
     };
 
     yaxis_memory_settings = {
+        min: 0,
         tickFormatter: function(num, obj) { return parseInt(num) + 'B'; }
     };
 
