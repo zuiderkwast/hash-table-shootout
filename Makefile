@@ -8,15 +8,32 @@ CXXFLAGS ?= -O3 -march=native -std=c++14 -DNDEBUG
 # LDFLAGS_MALLOC ?= -ljemalloc # much better that glibc's malloc on some workloads
 LDFLAGS_MALLOC ?= -ltcmalloc_minimal # often even better than jemalloc
 
-APPS ?= std_unordered_map boost_unordered_map google_sparse_hash_map \
-   google_dense_hash_map google_dense_hash_map_mlf_0_9 \
-   spp_sparse_hash_map emilib_hash_map ska_flat_hash_map \
-   ska_flat_hash_map_power_of_two tsl_hopscotch_map \
-   tsl_hopscotch_map_mlf_0_5 tsl_hopscotch_map_store_hash tsl_robin_map \
-   tsl_robin_map_mlf_0_9 tsl_robin_map_store_hash tsl_robin_pg_map \
-   tsl_sparse_map tsl_ordered_map tsl_array_map tsl_array_map_mlf_1_0 qt_qhash
-#APPS += judyL
+ifndef APPS
+APPS += boost_unordered_map
+APPS += emilib_hash_map ska_flat_hash_map
+APPS += google_sparse_hash_map
+APPS += google_dense_hash_map
+APPS += google_dense_hash_map_mlf_0_9
 #APPS += judyHS
+#APPS += judyL
+#APPS += nata88
+#APPS += nataF8
+APPS += tsl_hopscotch_map
+APPS += tsl_hopscotch_map_mlf_0_5
+APPS += tsl_hopscotch_map_store_hash
+APPS += tsl_robin_map
+APPS += tsl_robin_map_mlf_0_9
+APPS += tsl_robin_map_store_hash
+APPS += tsl_robin_pg_map
+APPS += tsl_sparse_map
+APPS += tsl_ordered_map
+APPS += tsl_array_map
+APPS += tsl_array_map_mlf_1_0
+APPS += ska_flat_hash_map_power_of_two
+APPS += spp_sparse_hash_map
+APPS += std_unordered_map
+APPS += qt_qhash
+endif # APPS
 
 LDFLAGS ?= -lm
 LDFLAGS += ${LDFLAGS_MALLOC}
