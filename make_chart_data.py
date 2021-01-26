@@ -75,29 +75,38 @@ program_slugs = [
     'nataF8'
 ]
 
-# hashmap which will be shown (checkbox checked)
-default_programs_show = [
-    'std_unordered_map',
-    'google_dense_hash_map',
-    'qt_qhash',
-    'tsl_sparse_map',
-    'tsl_hopscotch_map',
-    'tsl_robin_map',
-    'tsl_hopscotch_map_store_hash',
-    'tsl_robin_map_store_hash']
+# hashmap which will be shown (checkbox checked),
+# by default all hashmaps are enabled.
+#default_programs_show = [
+#    'std_unordered_map',
+#    'google_dense_hash_map',
+#    'qt_qhash',
+#    'tsl_sparse_map',
+#    'tsl_hopscotch_map',
+#    'tsl_robin_map',
+#    'tsl_hopscotch_map_store_hash',
+#    'tsl_robin_map_store_hash']
+
+for program in program_slugs:
+    proper_names.setdefault(program, program)
 
 chart_data = {}
+existing_proper_names = {}
+real_default_programs_show = set()
 
 for i, (benchtype, programs) in enumerate(by_benchtype.items()):
     chart_data[benchtype] = []
     for j, program in enumerate(program_slugs):
         if program not in programs:
             continue
-        
+
+        existing_proper_names[program] = proper_names[program]
+        if "default_programs_show" not in dir() or (program in default_programs_show):
+            real_default_programs_show.add(program);
         data = programs[program]
         chart_data[benchtype].append({
             'program': program,
-            'label': proper_names.get(program,program),
+            'label': proper_names[program],
             'data': [],
         })
 
@@ -107,5 +116,5 @@ for i, (benchtype, programs) in enumerate(by_benchtype.items()):
 json_text = json.dumps(chart_data)
 json_text = json_text.replace("}], ", "}], \n")
 print('chart_data = ' + json_text + ';')
-print('\nprograms = ' + json.dumps(proper_names, indent=1) + ';')
-print('\ndefault_programs_show = ' + str(default_programs_show) + ';')
+print('\nprograms = ' + json.dumps(existing_proper_names, indent=1) + ';')
+print('\ndefault_programs_show = ' + str(list(real_default_programs_show)) + ';')
