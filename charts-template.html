@@ -334,6 +334,20 @@ Then for each value k in the vector, we insert the key-value pair (k, 1) in the 
 <ul class="choices" id="insert_random_shuffle_range_bopsnsec_choices"></ul>
 
 
+<h3>Random shuffle reads: execution time (integers)</h3>
+
+<p>Before the test, we insert nb_entries elements in the same way as in the random shuffle inserts test. 
+We then read each key-value pair in a different and random order than the one they were inserted.</p>
+
+<div class="chart" id="read_random_shuffle_range_runtime"></div>
+<div class="xaxis-title">number of entries in hash table</div>
+<ul class="choices" id="read_random_shuffle_range_runtime_choices"></ul>
+
+<div class="chart" id="read_random_shuffle_range_bopsnsec"></div>
+<div class="xaxis-title">number of entries in hash table</div>
+<ul class="choices" id="read_random_shuffle_range_bopsnsec_choices"></ul>
+
+
 <h3>Random full inserts: memory footprint and execution time (integers)</h3>
 
 <p>Before the test, we generate a vector of nb_entries size where each value is randomly taken from an uniform random number generator from all possible positive values an int64_t can hold. 
@@ -370,33 +384,6 @@ It provides a fair comparison even if the growth factor of each hash map is diff
 <ul class="choices" id="insert_random_full_reserve_bopsnsec_choices"></ul>
 
 
-<h3>Random full deletes: execution time (integers)</h3>
-
-<p>Before the test, we insert nb_entries elements in the same way as in the random full insert test. 
-We then delete each key one by one in a different and random order than the one they were inserted.</p>
-
-<div class="chart" id="delete_random_full_runtime"></div>
-<div class="xaxis-title">number of entries in hash table</div>
-<ul class="choices" id="delete_random_full_runtime_choices"></ul>
-
-<div class="chart" id="delete_random_full_bopsnsec"></div>
-<div class="xaxis-title">number of entries in hash table</div>
-<ul class="choices" id="delete_random_full_bopsnsec_choices"></ul>
-
-<h3>Random shuffle reads: execution time (integers)</h3>
-
-<p>Before the test, we insert nb_entries elements in the same way as in the random shuffle inserts test. 
-We then read each key-value pair in a different and random order than the one they were inserted.</p>
-
-<div class="chart" id="read_random_shuffle_range_runtime"></div>
-<div class="xaxis-title">number of entries in hash table</div>
-<ul class="choices" id="read_random_shuffle_range_runtime_choices"></ul>
-
-<div class="chart" id="read_random_shuffle_range_bopsnsec"></div>
-<div class="xaxis-title">number of entries in hash table</div>
-<ul class="choices" id="read_random_shuffle_range_bopsnsec_choices"></ul>
-
-
 <h3>Random full reads: execution time (integers)</h3>
 
 <p>Before the test, we insert nb_entries elements in the same way as in the random full inserts test. 
@@ -423,6 +410,19 @@ we try to search for these unknown elements in the hash map.</p>
 <div class="chart" id="read_miss_random_full_bopsnsec"></div>
 <div class="xaxis-title">number of entries in hash table</div>
 <ul class="choices" id="read_miss_random_full_bopsnsec_choices"></ul>
+
+<h3>Random full deletes: execution time (integers)</h3>
+
+<p>Before the test, we insert nb_entries elements in the same way as in the random full insert test. 
+We then delete each key one by one in a different and random order than the one they were inserted.</p>
+
+<div class="chart" id="delete_random_full_runtime"></div>
+<div class="xaxis-title">number of entries in hash table</div>
+<ul class="choices" id="delete_random_full_runtime_choices"></ul>
+
+<div class="chart" id="delete_random_full_bopsnsec"></div>
+<div class="xaxis-title">number of entries in hash table</div>
+<ul class="choices" id="delete_random_full_bopsnsec_choices"></ul>
 
 <h3>Random full reads after deleting half: execution time (integers)</h3>
 
@@ -504,19 +504,6 @@ It provides a fair comparison even if the growth factor of each hash map is diff
 <ul class="choices" id="insert_small_string_reserve_bopsnsec_choices"></ul>
 
 
-<h3>Deletes: execution time (small strings)</h3>
-
-<p>Before the test, we insert nb_entries elements in the hash map as in the inserts test. 
-We then delete each key one by one in a different and random order than the one they were inserted.</p>
-
-<div class="chart" id="delete_small_string_runtime"></div>
-<div class="xaxis-title">number of entries in hash table</div>
-<ul class="choices" id="delete_small_string_runtime_choices"></ul>
-
-<div class="chart" id="delete_small_string_bopsnsec"></div>
-<div class="xaxis-title">number of entries in hash table</div>
-<ul class="choices" id="delete_small_string_bopsnsec_choices"></ul>
-
 <h3>Reads: execution time (small strings)</h3>
 
 <p>Before the test, we insert nb_entries elements in the hash map as in the inserts test. 
@@ -545,6 +532,19 @@ we try to search for these unknown elements in the hash map.</p>
 <div class="xaxis-title">number of entries in hash table</div>
 <ul class="choices" id="read_miss_small_string_bopsnsec_choices"></ul>
 
+
+<h3>Deletes: execution time (small strings)</h3>
+
+<p>Before the test, we insert nb_entries elements in the hash map as in the inserts test. 
+We then delete each key one by one in a different and random order than the one they were inserted.</p>
+
+<div class="chart" id="delete_small_string_runtime"></div>
+<div class="xaxis-title">number of entries in hash table</div>
+<ul class="choices" id="delete_small_string_runtime_choices"></ul>
+
+<div class="chart" id="delete_small_string_bopsnsec"></div>
+<div class="xaxis-title">number of entries in hash table</div>
+<ul class="choices" id="delete_small_string_bopsnsec_choices"></ul>
 
 <h3>Reads after deleting half: execution time (small strings)</h3>
 
@@ -605,20 +605,6 @@ It provides a fair comparison even if the growth factor of each hash map is diff
 <ul class="choices" id="insert_string_reserve_bopsnsec_choices"></ul>
 
 
-<h3>Deletes: execution time (strings)</h3>
-
-<p>Before the test, we insert nb_entries elements in the hash map as in the inserts test. 
-We then delete each key one by one in a different and random order than the one they were inserted.</p>
-
-<div class="chart" id="delete_string_runtime"></div>
-<div class="xaxis-title">number of entries in hash table</div>
-<ul class="choices" id="delete_string_runtime_choices"></ul>
-
-<div class="chart" id="delete_string_bopsnsec"></div>
-<div class="xaxis-title">number of entries in hash table</div>
-<ul class="choices" id="delete_string_bopsnsec_choices"></ul>
-
-
 <h3>Reads: execution time (strings)</h3>
 
 <p>Before the test, we insert nb_entries elements in the hash map as in the inserts test. 
@@ -646,6 +632,20 @@ we try to search for these unknown elements in the hash map.</p>
 <div class="chart" id="read_miss_string_bopsnsec"></div>
 <div class="xaxis-title">number of entries in hash table</div>
 <ul class="choices" id="read_miss_string_bopsnsec_choices"></ul>
+
+
+<h3>Deletes: execution time (strings)</h3>
+
+<p>Before the test, we insert nb_entries elements in the hash map as in the inserts test. 
+We then delete each key one by one in a different and random order than the one they were inserted.</p>
+
+<div class="chart" id="delete_string_runtime"></div>
+<div class="xaxis-title">number of entries in hash table</div>
+<ul class="choices" id="delete_string_runtime_choices"></ul>
+
+<div class="chart" id="delete_string_bopsnsec"></div>
+<div class="xaxis-title">number of entries in hash table</div>
+<ul class="choices" id="delete_string_bopsnsec_choices"></ul>
 
 
 <h3>Reads after deleting half: execution time (strings)</h3>
