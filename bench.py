@@ -107,4 +107,5 @@ for nkeys in range(minkeys, maxkeys + 1, interval):
                 print(fastest_attempt_data)
         
         # Print blank line
+        print(file=outfile)
         print()
