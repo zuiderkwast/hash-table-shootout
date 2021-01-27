@@ -16,11 +16,12 @@ for line in lines:
     runtime = float(runtime) * 1000000000 / nkeys # microseconds per operation
     load_factor = float(load_factor)
 
-    by_benchtype.setdefault("%s_runtime" % benchtype, {}).setdefault(program, []).append([nkeys, runtime, load_factor])
-    by_benchtype.setdefault("%s_bopsnsec" % benchtype, {}).setdefault(program, []).append([nkeys, runtime * nbytes, load_factor])
-    if benchtype in ('insert_random_shuffle_range', 'insert_random_full', 'insert_small_string', 'insert_string',
-                     'insert_random_full_reserve', 'insert_small_string_reserve', 'insert_string_reserve'):
-        by_benchtype.setdefault("%s_memory"  % benchtype, {}).setdefault(program, []).append([nkeys, nbytes, load_factor])
+    if runtime > 0 and nbytes > 0:
+        by_benchtype.setdefault("%s_runtime" % benchtype, {}).setdefault(program, []).append([nkeys, runtime, load_factor])
+        by_benchtype.setdefault("%s_bopsnsec" % benchtype, {}).setdefault(program, []).append([nkeys, runtime * nbytes, load_factor])
+        if benchtype in ('insert_random_shuffle_range', 'insert_random_full', 'insert_small_string', 'insert_string',
+                         'insert_random_full_reserve', 'insert_small_string_reserve', 'insert_string_reserve'):
+            by_benchtype.setdefault("%s_memory"  % benchtype, {}).setdefault(program, []).append([nkeys, nbytes, load_factor])
 
 proper_names = OrderedDict([
     ('std_unordered_map', 'std::unordered_map'),
