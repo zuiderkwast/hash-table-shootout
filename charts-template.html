@@ -49,6 +49,11 @@
         tickFormatter: function(num, obj) { return parseInt(num) + 'B'; }
     };
 
+    yaxis_bopsnsec_settings = {
+        min: 0,
+        tickFormatter: function(num, obj) { return (+num.toFixed(2)) + ' bytes/(ops/nsec.)'; }
+    };
+
     legend_settings = {
         position: 'nw',
         backgroundOpacity: 0
@@ -67,6 +72,14 @@
         grid: grid_settings,
         xaxis: xaxis_settings,
         yaxis: yaxis_memory_settings,
+        legend: legend_settings
+    };
+
+    bopsnsec_settings = {
+        series: series_settings,
+        grid: grid_settings,
+        xaxis: xaxis_settings,
+        yaxis: yaxis_bopsnsec_settings,
         legend: legend_settings
     };
 
@@ -141,33 +154,82 @@
     function plot_all_charts(redraw_only = false) {
         plot_chart(chart_data['insert_random_shuffle_range_runtime'], '#insert_random_shuffle_range_runtime', '#insert_random_shuffle_range_runtime_choices', runtime_settings, redraw_only);
         plot_chart(chart_data['insert_random_shuffle_range_memory'], '#insert_random_shuffle_range_memory', '#insert_random_shuffle_range_memory_choices', memory_settings, redraw_only);
+        plot_chart(chart_data['insert_random_shuffle_range_bopsnsec'], '#insert_random_shuffle_range_bopsnsec', '#insert_random_shuffle_range_bopsnsec_choices', bopsnsec_settings, redraw_only);
+
         plot_chart(chart_data['read_random_shuffle_range_runtime'], '#read_random_shuffle_range_runtime', '#read_random_shuffle_range_runtime_choices', runtime_settings, redraw_only);
+        plot_chart(chart_data['read_random_shuffle_range_bopsnsec'], '#read_random_shuffle_range_bopsnsec', '#read_random_shuffle_range_bopsnsec_choices', bopsnsec_settings, redraw_only);
+
+	
 
         plot_chart(chart_data['insert_random_full_runtime'], '#insert_random_full_runtime', '#insert_random_full_runtime_choices', runtime_settings, redraw_only);
+        plot_chart(chart_data['insert_random_full_bopsnsec'], '#insert_random_full_bopsnsec', '#insert_random_full_bopsnsec_choices', bopsnsec_settings, redraw_only);
+
         plot_chart(chart_data['insert_random_full_reserve_runtime'], '#insert_random_full_reserve_runtime', '#insert_random_full_reserve_runtime_choices', runtime_settings, redraw_only);
+        plot_chart(chart_data['insert_random_full_reserve_bopsnsec'], '#insert_random_full_reserve_bopsnsec', '#insert_random_full_reserve_bopsnsec_choices', bopsnsec_settings, redraw_only);
+
         plot_chart(chart_data['read_random_full_runtime'], '#read_random_full_runtime', '#read_random_full_runtime_choices', runtime_settings, redraw_only);
+        plot_chart(chart_data['read_random_full_bopsnsec'], '#read_random_full_bopsnsec', '#read_random_full_bopsnsec_choices', bopsnsec_settings, redraw_only);
+
         plot_chart(chart_data['read_miss_random_full_runtime'], '#read_miss_random_full_runtime', '#read_miss_random_full_runtime_choices', runtime_settings, redraw_only);
+        plot_chart(chart_data['read_miss_random_full_bopsnsec'], '#read_miss_random_full_bopsnsec', '#read_miss_random_full_bopsnsec_choices', bopsnsec_settings, redraw_only);
+
         plot_chart(chart_data['read_random_full_after_delete_runtime'], '#read_random_full_after_delete_runtime', '#read_random_full_after_delete_runtime_choices', runtime_settings, redraw_only);
+        plot_chart(chart_data['read_random_full_after_delete_bopsnsec'], '#read_random_full_after_delete_bopsnsec', '#read_random_full_after_delete_bopsnsec_choices', bopsnsec_settings, redraw_only);
+	
         plot_chart(chart_data['iteration_random_full_runtime'], '#iteration_random_full_runtime', '#iteration_random_full_runtime_choices', runtime_settings, redraw_only);
+        plot_chart(chart_data['iteration_random_full_bopsnsec'], '#iteration_random_full_bopsnsec', '#iteration_random_full_bopsnsec_choices', bopsnsec_settings, redraw_only);
+
         plot_chart(chart_data['delete_random_full_runtime'], '#delete_random_full_runtime', '#delete_random_full_runtime_choices', runtime_settings, redraw_only);
+        plot_chart(chart_data['delete_random_full_bopsnsec'], '#delete_random_full_bopsnsec', '#delete_random_full_bopsnsec_choices', bopsnsec_settings, redraw_only);
+
         plot_chart(chart_data['insert_random_full_memory'], '#insert_random_full_memory', '#insert_random_full_memory_choices', memory_settings, redraw_only);
+	
         plot_chart(chart_data['insert_random_full_reserve_memory'], '#insert_random_full_reserve_memory', '#insert_random_full_reserve_memory_choices', memory_settings, redraw_only);
-        
+
+
+	
         plot_chart(chart_data['insert_small_string_runtime'], '#insert_small_string_runtime', '#insert_small_string_runtime_choices', runtime_settings, redraw_only);
+        plot_chart(chart_data['insert_small_string_bopsnsec'], '#insert_small_string_bopsnsec', '#insert_small_string_bopsnsec_choices', bopsnsec_settings, redraw_only);
+
         plot_chart(chart_data['insert_small_string_reserve_runtime'], '#insert_small_string_reserve_runtime', '#insert_small_string_reserve_runtime_choices', runtime_settings, redraw_only);
+        plot_chart(chart_data['insert_small_string_reserve_bopsnsec'], '#insert_small_string_reserve_bopsnsec', '#insert_small_string_reserve_bopsnsec_choices', bopsnsec_settings, redraw_only);
+
         plot_chart(chart_data['read_small_string_runtime'], '#read_small_string_runtime', '#read_small_string_runtime_choices', runtime_settings, redraw_only);
+        plot_chart(chart_data['read_small_string_bopsnsec'], '#read_small_string_bopsnsec', '#read_small_string_bopsnsec_choices', bopsnsec_settings, redraw_only);
+
         plot_chart(chart_data['read_miss_small_string_runtime'], '#read_miss_small_string_runtime', '#read_miss_small_string_runtime_choices', runtime_settings, redraw_only);
+        plot_chart(chart_data['read_miss_small_string_bopsnsec'], '#read_miss_small_string_bopsnsec', '#read_miss_small_string_bopsnsec_choices', bopsnsec_settings, redraw_only);
+
         plot_chart(chart_data['read_small_string_after_delete_runtime'], '#read_small_string_after_delete_runtime', '#read_small_string_after_delete_runtime_choices', runtime_settings, redraw_only);
+        plot_chart(chart_data['read_small_string_after_delete_bopsnsec'], '#read_small_string_after_delete_bopsnsec', '#read_small_string_after_delete_bopsnsec_choices', bopsnsec_settings, redraw_only);
+
         plot_chart(chart_data['delete_small_string_runtime'], '#delete_small_string_runtime', '#delete_small_string_runtime_choices', runtime_settings, redraw_only);
+        plot_chart(chart_data['delete_small_string_bopsnsec'], '#delete_small_string_bopsnsec', '#delete_small_string_bopsnsec_choices', bopsnsec_settings, redraw_only);
+
         plot_chart(chart_data['insert_small_string_memory'], '#insert_small_string_memory', '#insert_small_string_memory_choices', memory_settings, redraw_only);
+
         plot_chart(chart_data['insert_small_string_reserve_memory'], '#insert_small_string_reserve_memory', '#insert_small_string_reserve_memory_choices', memory_settings, redraw_only);
 
-        plot_chart(chart_data['insert_string_runtime'], '#insert_string_runtime', '#insert_string_runtime_choices', runtime_settings, redraw_only);
+
+
+	plot_chart(chart_data['insert_string_runtime'], '#insert_string_runtime', '#insert_string_runtime_choices', runtime_settings, redraw_only);
+	plot_chart(chart_data['insert_string_bopsnsec'], '#insert_string_bopsnsec', '#insert_string_bopsnsec_choices', bopsnsec_settings, redraw_only);
+
         plot_chart(chart_data['insert_string_reserve_runtime'], '#insert_string_reserve_runtime', '#insert_string_reserve_runtime_choices', runtime_settings, redraw_only);
+        plot_chart(chart_data['insert_string_reserve_bopsnsec'], '#insert_string_reserve_bopsnsec', '#insert_string_reserve_bopsnsec_choices', bopsnsec_settings, redraw_only);
+
         plot_chart(chart_data['read_string_runtime'], '#read_string_runtime', '#read_string_runtime_choices', runtime_settings, redraw_only);
+        plot_chart(chart_data['read_string_bopsnsec'], '#read_string_bopsnsec', '#read_string_bopsnsec_choices', bopsnsec_settings, redraw_only);
+
         plot_chart(chart_data['read_miss_string_runtime'], '#read_miss_string_runtime', '#read_miss_string_runtime_choices', runtime_settings, redraw_only);
+        plot_chart(chart_data['read_miss_string_bopsnsec'], '#read_miss_string_bopsnsec', '#read_miss_string_bopsnsec_choices', bopsnsec_settings, redraw_only);
+
         plot_chart(chart_data['read_string_after_delete_runtime'], '#read_string_after_delete_runtime', '#read_string_after_delete_runtime_choices', runtime_settings, redraw_only);
+        plot_chart(chart_data['read_string_after_delete_bopsnsec'], '#read_string_after_delete_bopsnsec', '#read_string_after_delete_bopsnsec_choices', bopsnsec_settings, redraw_only);
+
         plot_chart(chart_data['delete_string_runtime'], '#delete_string_runtime', '#delete_string_runtime_choices', runtime_settings, redraw_only);
+        plot_chart(chart_data['delete_string_bopsnsec'], '#delete_string_bopsnsec', '#delete_string_bopsnsec_choices', bopsnsec_settings, redraw_only);
+
         plot_chart(chart_data['insert_string_memory'], '#insert_string_memory', '#insert_string_memory_choices', memory_settings, redraw_only);
         plot_chart(chart_data['insert_string_reserve_memory'], '#insert_string_reserve_memory', '#insert_string_reserve_memory_choices', memory_settings, redraw_only);
     }
@@ -242,6 +304,12 @@
 <ul class="choices" id="global_choices"></ul>
 <div class="global_select_all_none" id="global_select_all_none"></div>
 
+<p>In order to avoid comparing different algorithms by two
+  characteristics, memory footprint and performance, I introduce
+  a <b>new metrics: how many bytes does one operation per second
+  cost</b>. As you can see this combines both memory footprint and
+  performance and, in my opinion, shows us overall efficiency of
+  algorithm.</p>
 <h2>Integers</h2>
 
 <p>For the integers tests, we use hash maps with int64_t as key and int64_t as value.</p>
@@ -261,6 +329,10 @@ Then for each value k in the vector, we insert the key-value pair (k, 1) in the 
 <div class="xaxis-title">number of entries in hash table</div>
 <ul class="choices" id="insert_random_shuffle_range_runtime_choices"></ul>
 
+<div class="chart" id="insert_random_shuffle_range_bopsnsec"></div>
+<div class="xaxis-title">number of entries in hash table</div>
+<ul class="choices" id="insert_random_shuffle_range_bopsnsec_choices"></ul>
+
 
 <h3>Random full inserts: memory footprint and execution time (integers)</h3>
 
@@ -274,6 +346,10 @@ Then for each value k in the vector, we insert the key-value pair (k, 1) in the 
 <div class="chart" id="insert_random_full_runtime"></div>
 <div class="xaxis-title">number of entries in hash table</div>
 <ul class="choices" id="insert_random_full_runtime_choices"></ul>
+
+<div class="chart" id="insert_random_full_bopsnsec"></div>
+<div class="xaxis-title">number of entries in hash table</div>
+<ul class="choices" id="insert_random_full_bopsnsec_choices"></ul>
 
 
 <h3>Random full inserts with reserve: execution time (integers)</h3>
@@ -289,6 +365,10 @@ It provides a fair comparison even if the growth factor of each hash map is diff
 <div class="xaxis-title">number of entries in hash table</div>
 <ul class="choices" id="insert_random_full_reserve_runtime_choices"></ul>
 
+<div class="chart" id="insert_random_full_reserve_bopsnsec"></div>
+<div class="xaxis-title">number of entries in hash table</div>
+<ul class="choices" id="insert_random_full_reserve_bopsnsec_choices"></ul>
+
 
 <h3>Random full deletes: execution time (integers)</h3>
 
@@ -299,6 +379,9 @@ We then delete each key one by one in a different and random order than the one 
 <div class="xaxis-title">number of entries in hash table</div>
 <ul class="choices" id="delete_random_full_runtime_choices"></ul>
 
+<div class="chart" id="delete_random_full_bopsnsec"></div>
+<div class="xaxis-title">number of entries in hash table</div>
+<ul class="choices" id="delete_random_full_bopsnsec_choices"></ul>
 
 <h3>Random shuffle reads: execution time (integers)</h3>
 
@@ -308,6 +391,10 @@ We then read each key-value pair in a different and random order than the one th
 <div class="chart" id="read_random_shuffle_range_runtime"></div>
 <div class="xaxis-title">number of entries in hash table</div>
 <ul class="choices" id="read_random_shuffle_range_runtime_choices"></ul>
+
+<div class="chart" id="read_random_shuffle_range_bopsnsec"></div>
+<div class="xaxis-title">number of entries in hash table</div>
+<ul class="choices" id="read_random_shuffle_range_bopsnsec_choices"></ul>
 
 
 <h3>Random full reads: execution time (integers)</h3>
@@ -319,6 +406,10 @@ We then read each key-value pair in a different and random order than the one th
 <div class="xaxis-title">number of entries in hash table</div>
 <ul class="choices" id="read_random_full_runtime_choices"></ul>
 
+<div class="chart" id="read_random_full_bopsnsec"></div>
+<div class="xaxis-title">number of entries in hash table</div>
+<ul class="choices" id="read_random_full_bopsnsec_choices"></ul>
+
 <h3>Random full reads misses: execution time (integers)</h3>
 
 <p>Before the test, we insert nb_entries elements in the same way as in the random full inserts test. 
@@ -329,6 +420,9 @@ we try to search for these unknown elements in the hash map.</p>
 <div class="xaxis-title">number of entries in hash table</div>
 <ul class="choices" id="read_miss_random_full_runtime_choices"></ul>
 
+<div class="chart" id="read_miss_random_full_bopsnsec"></div>
+<div class="xaxis-title">number of entries in hash table</div>
+<ul class="choices" id="read_miss_random_full_bopsnsec_choices"></ul>
 
 <h3>Random full reads after deleting half: execution time (integers)</h3>
 
@@ -340,6 +434,9 @@ different order which will lead to 50% hits and 50% misses.</p>
 <div class="xaxis-title">number of entries in hash table</div>
 <ul class="choices" id="read_random_full_after_delete_runtime_choices"></ul>
 
+<div class="chart" id="read_random_full_after_delete_bopsnsec"></div>
+<div class="xaxis-title">number of entries in hash table</div>
+<ul class="choices" id="read_random_full_after_delete_bopsnsec_choices"></ul>
 
 
 <h3>Random full iteration: execution time (integers)</h3>
@@ -350,6 +447,10 @@ We then use the hash map iterators to read all the key-value pairs.</p>
 <div class="chart" id="iteration_random_full_runtime"></div>
 <div class="xaxis-title">number of entries in hash table</div>
 <ul class="choices" id="iteration_random_full_runtime_choices"></ul>
+
+<div class="chart" id="iteration_random_full_bopsnsec"></div>
+<div class="xaxis-title">number of entries in hash table</div>
+<ul class="choices" id="iteration_random_full_bopsnsec_choices"></ul>
 
 
 
@@ -380,6 +481,10 @@ We then use the hash map iterators to read all the key-value pairs.</p>
 <div class="xaxis-title">number of entries in hash table</div>
 <ul class="choices" id="insert_small_string_runtime_choices"></ul>
 
+<div class="chart" id="insert_small_string_bopsnsec"></div>
+<div class="xaxis-title">number of entries in hash table</div>
+<ul class="choices" id="insert_small_string_bopsnsec_choices"></ul>
+
 
 <h3>Inserts with reserve: memory footprint and execution time (small strings)</h3>
 
@@ -394,6 +499,10 @@ It provides a fair comparison even if the growth factor of each hash map is diff
 <div class="xaxis-title">number of entries in hash table</div>
 <ul class="choices" id="insert_small_string_reserve_runtime_choices"></ul>
 
+<div class="chart" id="insert_small_string_reserve_bopsnsec"></div>
+<div class="xaxis-title">number of entries in hash table</div>
+<ul class="choices" id="insert_small_string_reserve_bopsnsec_choices"></ul>
+
 
 <h3>Deletes: execution time (small strings)</h3>
 
@@ -404,6 +513,9 @@ We then delete each key one by one in a different and random order than the one 
 <div class="xaxis-title">number of entries in hash table</div>
 <ul class="choices" id="delete_small_string_runtime_choices"></ul>
 
+<div class="chart" id="delete_small_string_bopsnsec"></div>
+<div class="xaxis-title">number of entries in hash table</div>
+<ul class="choices" id="delete_small_string_bopsnsec_choices"></ul>
 
 <h3>Reads: execution time (small strings)</h3>
 
@@ -413,6 +525,10 @@ We then read each key-value pair in a different and random order than the one th
 <div class="chart" id="read_small_string_runtime"></div>
 <div class="xaxis-title">number of entries in hash table</div>
 <ul class="choices" id="read_small_string_runtime_choices"></ul>
+
+<div class="chart" id="read_small_string_bopsnsec"></div>
+<div class="xaxis-title">number of entries in hash table</div>
+<ul class="choices" id="read_small_string_bopsnsec_choices"></ul>
 
 
 <h3>Reads misses: execution time (small strings)</h3>
@@ -425,6 +541,10 @@ we try to search for these unknown elements in the hash map.</p>
 <div class="xaxis-title">number of entries in hash table</div>
 <ul class="choices" id="read_miss_small_string_runtime_choices"></ul>
 
+<div class="chart" id="read_miss_small_string_bopsnsec"></div>
+<div class="xaxis-title">number of entries in hash table</div>
+<ul class="choices" id="read_miss_small_string_bopsnsec_choices"></ul>
+
 
 <h3>Reads after deleting half: execution time (small strings)</h3>
 
@@ -435,6 +555,10 @@ different order which will lead to 50% hits and 50% misses.</p>
 <div class="chart" id="read_small_string_after_delete_runtime"></div>
 <div class="xaxis-title">number of entries in hash table</div>
 <ul class="choices" id="read_small_string_after_delete_runtime_choices"></ul>
+
+<div class="chart" id="read_small_string_after_delete_bopsnsec"></div>
+<div class="xaxis-title">number of entries in hash table</div>
+<ul class="choices" id="read_small_string_after_delete_bopsnsec_choices"></ul>
 
 
 
@@ -458,6 +582,10 @@ different order which will lead to 50% hits and 50% misses.</p>
 <div class="xaxis-title">number of entries in hash table</div>
 <ul class="choices" id="insert_string_runtime_choices"></ul>
 
+<div class="chart" id="insert_string_bopsnsec"></div>
+<div class="xaxis-title">number of entries in hash table</div>
+<ul class="choices" id="insert_string_bopsnsec_choices"></ul>
+
 
 <h3>Inserts with reserve: execution time (strings)</h3>
 
@@ -472,6 +600,10 @@ It provides a fair comparison even if the growth factor of each hash map is diff
 <div class="xaxis-title">number of entries in hash table</div>
 <ul class="choices" id="insert_string_reserve_runtime_choices"></ul>
 
+<div class="chart" id="insert_string_reserve_bopsnsec"></div>
+<div class="xaxis-title">number of entries in hash table</div>
+<ul class="choices" id="insert_string_reserve_bopsnsec_choices"></ul>
+
 
 <h3>Deletes: execution time (strings)</h3>
 
@@ -482,6 +614,10 @@ We then delete each key one by one in a different and random order than the one 
 <div class="xaxis-title">number of entries in hash table</div>
 <ul class="choices" id="delete_string_runtime_choices"></ul>
 
+<div class="chart" id="delete_string_bopsnsec"></div>
+<div class="xaxis-title">number of entries in hash table</div>
+<ul class="choices" id="delete_string_bopsnsec_choices"></ul>
+
 
 <h3>Reads: execution time (strings)</h3>
 
@@ -491,6 +627,10 @@ We then read each key-value pair in a different and random order than the one th
 <div class="chart" id="read_string_runtime"></div>
 <div class="xaxis-title">number of entries in hash table</div>
 <ul class="choices" id="read_string_runtime_choices"></ul>
+
+<div class="chart" id="read_string_bopsnsec"></div>
+<div class="xaxis-title">number of entries in hash table</div>
+<ul class="choices" id="read_string_bopsnsec_choices"></ul>
 
 
 <h3>Reads misses: execution time (strings)</h3>
@@ -503,6 +643,10 @@ we try to search for these unknown elements in the hash map.</p>
 <div class="xaxis-title">number of entries in hash table</div>
 <ul class="choices" id="read_miss_string_runtime_choices"></ul>
 
+<div class="chart" id="read_miss_string_bopsnsec"></div>
+<div class="xaxis-title">number of entries in hash table</div>
+<ul class="choices" id="read_miss_string_bopsnsec_choices"></ul>
+
 
 <h3>Reads after deleting half: execution time (strings)</h3>
 
@@ -512,6 +656,10 @@ We then try to read all the original values in a different order which will lead
 <div class="chart" id="read_string_after_delete_runtime"></div>
 <div class="xaxis-title">number of entries in hash table</div>
 <ul class="choices" id="read_string_after_delete_runtime_choices"></ul>
+
+<div class="chart" id="read_string_after_delete_bopsnsec"></div>
+<div class="xaxis-title">number of entries in hash table</div>
+<ul class="choices" id="read_string_after_delete_bopsnsec_choices"></ul>
 
 
 
