@@ -24,8 +24,8 @@ programs = [
     'tsl_ordered_map',
     'tsl_array_map',
     'tsl_array_map_mlf_1_0',
-    #'judyL',
-    #'judyHS',
+    'judyL',
+    'judyHS',
     #'nata88',
     #'nataF8'
 ]

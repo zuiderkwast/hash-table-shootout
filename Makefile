@@ -14,8 +14,8 @@ APPS += emilib_hash_map ska_flat_hash_map
 APPS += google_sparse_hash_map
 APPS += google_dense_hash_map
 APPS += google_dense_hash_map_mlf_0_9
-#APPS += judyHS
-#APPS += judyL
+APPS += judyHS
+APPS += judyL
 #APPS += nata88
 #APPS += nataF8
 APPS += tsl_hopscotch_map
@@ -39,7 +39,8 @@ LDFLAGS ?= -lm
 LDFLAGS += ${LDFLAGS_MALLOC}
 
 ifeq ($(filter qt_qhash,${APPS}), qt_qhash)
-CXXFLAGS_qt_qhash ?= $(shell pkg-config --cflags --libs Qt5Core) -fPIC
+CXXFLAGS_qt_qhash ?= $(shell pkg-config --cflags Qt5Core) -fPIC
+LDFLAGS_qt_qhash ?= $(shell pkg-config --libs Qt5Core)
 endif
 CXXFLAGS_spp_sparse_hash_map            ?= -Isparsepp
 CXXFLAGS_emilib_hash_map                ?= -Iemilib
