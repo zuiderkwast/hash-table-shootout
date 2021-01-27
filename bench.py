@@ -2,6 +2,13 @@
 
 import sys, os, subprocess, signal
 
+# samples of use:
+#  ./bench.py
+#  ./bench.py insert_random_full insert_random_full_reserve
+#  ./bench.py small_string string
+
+######################################################################
+### Fill free to change the following defaults
 programs = [
     'std_unordered_map',
     'boost_unordered_map',
@@ -35,35 +42,44 @@ maxkeys  = 30*100*1000
 interval =  2*100*1000
 best_out_of = 5
 
+######################################################################
 outfile = open('output', 'w')
 
+short_names = {
+    'random_shuffle_range': [
+        'insert_random_shuffle_range', 'read_random_shuffle_range'
+    ],
+    'random_full': [
+        'insert_random_full', 'insert_random_full_reserve',
+        'read_random_full', 'read_miss_random_full',
+        'delete_random_full', 'read_random_full_after_delete',
+        'iteration_random_full'
+    ],
+    'small_string': [
+        'insert_small_string', 'insert_small_string_reserve',
+        'read_small_string', 'read_miss_small_string',
+        'delete_small_string',
+        'read_small_string_after_delete'
+    ],
+    'string': [
+        'insert_string', 'insert_string_reserve',
+        'read_string', 'read_miss_string',
+        'delete_string',
+        'read_string_after_delete'
+    ]
+}
+
 if len(sys.argv) > 1:
-    benchtypes = sys.argv[1:]
+    benchtypes = []
+    for x in sys.argv[1:]:
+        benchtypes.extend(short_names.get(x, [x]))
 else:
-    benchtypes = ('insert_random_shuffle_range', 'read_random_shuffle_range', 
-                  'insert_random_full', 'insert_random_full_reserve', 
-                  'read_random_full', 'read_miss_random_full', 
-                  'read_random_full_after_delete', 
-                  'iteration_random_full', 'delete_random_full', 
-
-                  'insert_small_string', 'insert_small_string_reserve', 
-                  'read_small_string', 'read_miss_small_string', 
-                  'read_small_string_after_delete', 
-                  'delete_small_string',
-                    
-                  'insert_string', 'insert_string_reserve', 
-                  'read_string', 'read_miss_string', 
-                  'read_string_after_delete', 
-                  'delete_string', )
-
+    benchtypes = short_names['random_shuffle_range'] + short_names['random_full'] \
+        + short_names['small_string'] + short_names['string']
 
 for nkeys in range(minkeys, maxkeys + 1, interval):
     for benchtype in benchtypes:
         for program in programs:
-            if program.startswith('tsl_array_map') and 'string' not in benchtype:
-                continue
-            
-            
             fastest_attempt = 1000000
             fastest_attempt_data = ''
 
