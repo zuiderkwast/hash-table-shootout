@@ -130,7 +130,7 @@ private:
 
 int main(int argc, char ** argv) {
     if(argc != 3) {
-        std::cout << argv[0] << " num_keys test_type" << std::endl;
+        std::cerr << argv[0] << " num_keys test_type\n";
         return 1;
     }
     
@@ -254,7 +254,7 @@ int main(int argc, char ** argv) {
         }
         
         if(nb_found != num_keys / 2) {
-            std::cout << "error, duplicates" << std::endl;
+            std::cerr << "error, duplicates\n";
             std::exit(6);
         }
     }
@@ -370,7 +370,7 @@ int main(int argc, char ** argv) {
         }
         
         if(nb_found != num_keys / 2) {
-            std::cout << "error, duplicates" << std::endl;
+            std::cerr << "error, duplicates\n";
             std::exit(6);
         }
     }
@@ -471,7 +471,7 @@ int main(int argc, char ** argv) {
         }
         
         if(nb_found != num_keys / 2) {
-            std::cout << "error, duplicates" << std::endl;
+            std::cerr << "error, duplicates\n";
             std::exit(6);
         }
     }
@@ -494,8 +494,9 @@ int main(int argc, char ** argv) {
 #endif
     
     else {
-        std::cout << "Unknown test type: " << test_type << "." << std::endl;
-        std::exit(1);
+        std::cerr << "Unknown test type: " << test_type << ".\n";
+		// Do not change the exit status 71! It is used by bench.py
+        std::exit(71);
     }
 
     float load_factor_int = 0;
