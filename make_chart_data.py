@@ -3,26 +3,8 @@
 import sys, json
 from collections import OrderedDict
 
-lines = [ line.strip() for line in sys.stdin if line.strip() ]
-
-by_benchtype = {}
-
-for line in lines:
-    if len(line) == 0:
-        next
-    benchtype, nkeys, program, load_factor, nbytes, runtime = line.split(',')
-    nkeys = int(nkeys)
-    nbytes = float(nbytes) / nkeys # bytes per (key,value) pair
-    runtime = float(runtime) * 1000000000 / nkeys # microseconds per operation
-    load_factor = float(load_factor)
-
-    if runtime > 0 and nbytes > 0:
-        by_benchtype.setdefault("%s_runtime" % benchtype, {}).setdefault(program, []).append([nkeys, runtime, load_factor])
-        by_benchtype.setdefault("%s_bopsnsec" % benchtype, {}).setdefault(program, []).append([nkeys, runtime * nbytes, load_factor])
-        if benchtype in ('insert_random_shuffle_range', 'insert_random_full', 'insert_small_string', 'insert_string',
-                         'insert_random_full_reserve', 'insert_small_string_reserve', 'insert_string_reserve'):
-            by_benchtype.setdefault("%s_memory"  % benchtype, {}).setdefault(program, []).append([nkeys, nbytes, load_factor])
-
+######################################################################
+### Fill free to change the following defaults
 proper_names = OrderedDict([
     ('std_unordered_map', 'std::unordered_map'),
     ('google_dense_hash_map', 'google::dense_hash_map'),
@@ -47,8 +29,8 @@ proper_names = OrderedDict([
     ('tsl_array_map_mlf_1_0', 'tsl::array_map (1.0 mlf)')
 ])
 
-# do them in the desired order to make the legend not overlap the chart data
-# too much
+# do them in the desired order to make the legend not overlap
+# the chart data too much
 program_slugs = [
     'std_unordered_map',
     'google_dense_hash_map',
@@ -88,6 +70,27 @@ program_slugs = [
 #    'tsl_robin_map',
 #    'tsl_hopscotch_map_store_hash',
 #    'tsl_robin_map_store_hash']
+
+######################################################################
+lines = [ line.strip() for line in sys.stdin if line.strip() ]
+
+by_benchtype = {}
+
+for line in lines:
+    if len(line) == 0:
+        next
+    benchtype, nkeys, program, load_factor, nbytes, runtime = line.split(',')
+    nkeys = int(nkeys)
+    nbytes = float(nbytes) / nkeys # bytes per (key,value) pair
+    runtime = float(runtime) * 1000000000 / nkeys # microseconds per operation
+    load_factor = float(load_factor)
+
+    if runtime > 0 and nbytes > 0:
+        by_benchtype.setdefault("%s_runtime" % benchtype, {}).setdefault(program, []).append([nkeys, runtime, load_factor])
+        by_benchtype.setdefault("%s_bopsnsec" % benchtype, {}).setdefault(program, []).append([nkeys, runtime * nbytes, load_factor])
+        if benchtype in ('insert_random_shuffle_range', 'insert_random_full', 'insert_small_string', 'insert_string',
+                         'insert_random_full_reserve', 'insert_small_string_reserve', 'insert_string_reserve'):
+            by_benchtype.setdefault("%s_memory"  % benchtype, {}).setdefault(program, []).append([nkeys, nbytes, load_factor])
 
 for program in program_slugs:
     proper_names.setdefault(program, program)
