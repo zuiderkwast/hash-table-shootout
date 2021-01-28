@@ -105,8 +105,7 @@ for nkeys in points:
 
             for attempt in range(best_out_of):
                 try:
-                    output = subprocess.check_output(['./build/' + program, str(nkeys), benchtype],
-                                                     stderr=subprocess.STDOUT)
+                    output = subprocess.check_output(['./build/' + program, str(nkeys), benchtype])
                     words = output.strip().split()
                     
                     runtime_seconds = float(words[0])
