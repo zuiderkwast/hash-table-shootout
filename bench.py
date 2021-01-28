@@ -20,6 +20,7 @@ programs = [
     'emilib_hash_map',
     'ska_flat_hash_map',
     'ska_flat_hash_map_power_of_two',
+    'ska_bytell_hash_map',
     'tsl_sparse_map',
     'tsl_hopscotch_map',
     'tsl_hopscotch_map_mlf_0_5',

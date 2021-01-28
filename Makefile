@@ -10,7 +10,10 @@ LDFLAGS_MALLOC ?= -ltcmalloc_minimal # often even better than jemalloc
 
 ifndef APPS
 APPS += boost_unordered_map
-APPS += emilib_hash_map ska_flat_hash_map
+APPS += emilib_hash_map
+APPS += ska_flat_hash_map
+APPS += ska_flat_hash_map_power_of_two
+APPS += ska_bytell_hash_map
 APPS += google_sparse_hash_map
 APPS += google_dense_hash_map
 APPS += google_dense_hash_map_mlf_0_9
@@ -29,7 +32,6 @@ APPS += tsl_sparse_map
 APPS += tsl_ordered_map
 APPS += tsl_array_map
 APPS += tsl_array_map_mlf_1_0
-APPS += ska_flat_hash_map_power_of_two
 APPS += spp_sparse_hash_map
 APPS += std_unordered_map
 APPS += qt_qhash
@@ -46,6 +48,7 @@ CXXFLAGS_spp_sparse_hash_map            ?= -Isparsepp
 CXXFLAGS_emilib_hash_map                ?= -Iemilib
 CXXFLAGS_ska_flat_hash_map              ?= -Iflat_hash_map
 CXXFLAGS_ska_flat_hash_map_power_of_two ?= ${CXXFLAGS_ska_flat_hash_map}
+CXXFLAGS_ska_bytell_hash_map            ?= ${CXXFLAGS_ska_flat_hash_map}
 CXXFLAGS_tsl_hopscotch_map              ?= -Ihopscotch-map
 CXXFLAGS_tsl_hopscotch_map_mlf_0_5      ?= ${CXXFLAGS_tsl_hopscotch_map}
 CXXFLAGS_tsl_hopscotch_map_store_hash   ?= ${CXXFLAGS_tsl_hopscotch_map}
