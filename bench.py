@@ -40,6 +40,7 @@ programs = [
 minkeys  =  2*100*1000
 maxkeys  = 30*100*1000
 interval =  2*100*1000
+#step_percent =  30 # you may use this variable instead of "interval"
 best_out_of = 5
 
 ######################################################################
@@ -69,6 +70,11 @@ short_names = {
     ]
 }
 
+if ("interval" in dir() and "step_percent" in dir()) or \
+   ("interval" not in dir() and "step_percent" not in dir()):
+    print("Either (exclusively) 'interval' or 'step_percent' variable should be set")
+    sys.exit(1)
+
 if len(sys.argv) > 1:
     benchtypes = []
     for x in sys.argv[1:]:
@@ -77,7 +83,16 @@ else:
     benchtypes = short_names['random_shuffle_range'] + short_names['random_full'] \
         + short_names['small_string'] + short_names['string']
 
-for nkeys in range(minkeys, maxkeys + 1, interval):
+if "interval" in dir():
+    points = range(minkeys, maxkeys + 1, interval)
+else:
+    points = []
+    keys = minkeys
+    while keys <= maxkeys:
+        points.append(keys)
+        keys = int(max(keys + 1, keys * (100 + step_percent) / 100))
+
+for nkeys in points:
     for benchtype in benchtypes:
         for program in programs:
             fastest_attempt = 1000000
@@ -115,7 +130,7 @@ for nkeys in range(minkeys, maxkeys + 1, interval):
             if fastest_attempt != 1000000:
                 print(fastest_attempt_data, file=outfile)
                 print(fastest_attempt_data)
-        
+
         # Print blank line
         print(file=outfile)
         print()
