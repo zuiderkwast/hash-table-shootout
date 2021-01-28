@@ -12,7 +12,7 @@
 #define FIND_INT_EXISTING_FROM_HASH(key) if (nata88get(hash_int, key, NULL) == NULL) { printf("error"); exit(1); }
 #define FIND_INT_MISSING_FROM_HASH(key) if (nata88get(hash_int, key, NULL) != NULL) { printf("error"); exit(1); }
 #define FIND_INT_EXISTING_FROM_HASH_COUNT(key, count) if (nata88get(hash_int, key, NULL) != NULL) { count++; }
-#define CHECK_INT_ITERATOR_VALUE(iterator, value)
+#define CHECK_INT_ITERATOR_VALUE(iterator, value) printf("iteration for nata88 is not implemented yet"); exit(73);
 #define ITERATE_HASH(key)
 
 #define LOAD_FACTOR_INT_HASH(hash) (0.0f)
