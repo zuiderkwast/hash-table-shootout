@@ -39,8 +39,8 @@ programs = [
 
 minkeys  =  2*100*1000
 maxkeys  = 30*100*1000
-interval =  2*100*1000
-#step_percent =  30 # you may use this variable instead of "interval"
+#interval =  2*100*1000
+step_percent =  30 # you may use this variable instead of "interval" for exponetial step
 best_out_of = 5
 
 ######################################################################
