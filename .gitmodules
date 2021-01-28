@@ -22,3 +22,6 @@
 [submodule "sparsepp"]
 	path = sparsepp
 	url = git@github.com:greg7mdp/sparsepp.git
+[submodule "ordered_patch_map"]
+	path = ordered_patch_map
+	url = https://github.com/1ykos/ordered_patch_map
