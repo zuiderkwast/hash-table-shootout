@@ -51,8 +51,6 @@ apps_env = os.environ.get('APPS', None)
 if apps_env:
     programs = apps_env.strip().split()
 
-    print(str(programs), file=sys.stderr)
-
 short_names = {
     'random_shuffle_range': [
         'insert_random_shuffle_range', 'read_random_shuffle_range'
