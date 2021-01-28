@@ -5,7 +5,7 @@ import sys, os, subprocess
 # samples of use:
 #  ./bench.py
 #  ./bench.py insert_random_full insert_random_full_reserve
-#  ./bench.py small_string string
+#  APPS='judyHS ska_bytell_hash_map' ./bench.py small_string string
 
 ######################################################################
 ### Fill free to change the following defaults
@@ -46,6 +46,12 @@ best_out_of = 5
 
 ######################################################################
 outfile = open('output', 'w')
+
+apps_env = os.environ.get('APPS', None)
+if apps_env:
+    programs = apps_env.strip().split()
+
+    print(str(programs), file=sys.stderr)
 
 short_names = {
     'random_shuffle_range': [
