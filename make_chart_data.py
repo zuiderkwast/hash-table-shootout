@@ -27,7 +27,8 @@ proper_names = OrderedDict([
     ('spp_sparse_hash_map', 'spp::sparse_hash_map'),
     ('emilib_hash_map', 'emilib::HashMap'),
     ('tsl_array_map', 'tsl::array_map'),
-    ('tsl_array_map_mlf_1_0', 'tsl::array_map (1.0 mlf)')
+    ('tsl_array_map_mlf_1_0', 'tsl::array_map (1.0 mlf)'),
+    ('cuckoohash_map', 'libcuckoo::cuckoohash_map')
 ])
 
 # do them in the desired order to make the legend not overlap
@@ -58,7 +59,8 @@ program_slugs = [
     'judyL',
     'judyHS',
     'nata88',
-    'nataF8'
+    'nataF8',
+    'cuckoohash_map'
 ]
 
 # hashmap which will be shown (checkbox checked),

@@ -35,6 +35,7 @@ APPS += tsl_array_map_mlf_1_0
 APPS += spp_sparse_hash_map
 APPS += std_unordered_map
 APPS += qt_qhash
+APPS +=	cuckoohash_map
 endif # APPS
 
 LDFLAGS ?= -lm
@@ -64,11 +65,13 @@ CXXFLAGS_judyL                          ?=
 CXXFLAGS_judyHS                         ?=
 CXXFLAGS_nata88                         ?=
 CXXFLAGS_nataF8                         ?= ${CXXFLAGS_nata88}
+CXXFLAGS_cuckoohash_map                 ?= -Ilibcuckoo -pthread
 
 LDFLAGS_judyL                           ?= -lJudy
 LDFLAGS_judyHS                          ?= ${LDFLAGS_judyL}
 LDFLAGS_nata88                          ?= -lnata
 LDFLAGS_nataF8                          ?= ${LDFLAGS_nata88}
+LDFLAGS_cuckoohash_map                  ?= -lpthread
 
 BUILD_DIR ?= ./build
 

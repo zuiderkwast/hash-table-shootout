@@ -25,3 +25,6 @@
 [submodule "ordered_patch_map"]
 	path = ordered_patch_map
 	url = https://github.com/1ykos/ordered_patch_map
+[submodule "libcuckoo"]
+	path = libcuckoo
+	url = https://github.com/efficient/libcuckoo.git
