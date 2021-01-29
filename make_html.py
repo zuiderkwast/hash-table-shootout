@@ -8,8 +8,11 @@ charts_data = sys.stdin.read()
 
 repls = (
     ('insert_random_shuffle_range',    'INSERT_RANDOM_SHUFFLE_RANGE'),
+    ('reinsert_random_shuffle_range',  'REINSERT_RND_SHUFFLE_RANGE'),
+
     ('read_random_shuffle_range',      'READ_RANDOM_SHUFFLE_RANGE'),
     ('insert_random_full',             'INSERT_RANDOM_FULL'),
+    ('reinsert_random_full',           'REINSERT_RND_FULL'),
     ('insert_random_full_reserve',     'INSERT_RANDOM_F_RESERVE'),
     ('read_random_full',               'READ_RANDOM_FULL'),
     ('read_miss_random_full',          'READ_MISS_RANDOM_FULL'),
@@ -18,6 +21,7 @@ repls = (
     ('iteration_random_full',          'ITERATION_RANDOM_FULL'),
 
     ('insert_small_string',            'INSERT_SMALL_STRING'),
+    ('reinsert_small_string',          'REINSERT__SMALL__STRING'),
     ('insert_small_string_reserve',    'RESERVE_SMALL_STRING'),
     ('read_small_string',              'READ_SMALL_STRING'),
     ('read_miss_small_string',         'READ_MISS_SMALL_STRING'),
@@ -26,6 +30,7 @@ repls = (
 
 
     ('insert_string',                  'INSERT_STRING'),
+    ('reinsert_string',                'REINSERT__STRING'),
     ('insert_string_reserve',          'RESERVE_STRING'),
     ('read_string',                    'READ_STRING'),
     ('read_miss_string',               'READ_MISS_STRING'),

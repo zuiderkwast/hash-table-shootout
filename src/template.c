@@ -163,6 +163,21 @@ int main(int argc, char ** argv) {
         }
     }
 
+    else if(test_type == "reinsert_random_shuffle_range") {
+        std::vector<std::int64_t> keys = get_random_shuffle_range_ints(num_keys);
+        measurements m;
+        for(std::int64_t i = 0; i < num_keys; i++) {
+            INSERT_INT_INTO_HASH(keys[i], value);
+        }
+        std::shuffle(keys.begin(), keys.end(), generator);
+
+
+        m.set_chrono_start();
+        for(std::int64_t i = 0; i < num_keys; i++) {
+            INSERT_INT_INTO_HASH(keys[i], value);
+        }
+    }
+
     else if(test_type == "read_random_shuffle_range") {
         std::vector<std::int64_t> keys = get_random_shuffle_range_ints(num_keys);
         measurements m;
@@ -188,6 +203,21 @@ int main(int argc, char ** argv) {
         }
     }
 
+    else if(test_type == "reinsert_random_full") {
+        std::vector<std::int64_t> keys = get_random_full_ints(num_keys);
+        measurements m;
+        for(std::int64_t i = 0; i < num_keys; i++) {
+            INSERT_INT_INTO_HASH(keys[i], value);
+        }
+        std::shuffle(keys.begin(), keys.end(), generator);
+
+
+        m.set_chrono_start();
+        for(std::int64_t i = 0; i < num_keys; i++) {
+            INSERT_INT_INTO_HASH(keys[i], value);
+        }
+    }
+
     else if(test_type == "insert_random_full_reserve") {
         const std::vector<std::int64_t> keys = get_random_full_ints(num_keys);
         
@@ -206,7 +236,7 @@ int main(int argc, char ** argv) {
         for(std::int64_t i = 0; i < num_keys; i++) {
             INSERT_INT_INTO_HASH(keys[i], value);
         }
-        
+
         std::shuffle(keys.begin(), keys.end(), generator);
         
 
@@ -296,10 +326,27 @@ int main(int argc, char ** argv) {
      * Small strings
      */
     else if(test_type == "insert_small_string") {
-        const std::vector<std::string> keys = get_random_alphanum_strings(num_keys, SMALL_STRING_SIZE);
+        const std::vector<std::string> keys = get_random_alphanum_strings(
+            num_keys, SMALL_STRING_SIZE);
         
         
         measurements m;
+        for(std::int64_t i = 0; i < num_keys; i++) {
+            INSERT_STR_INTO_HASH(keys[i], value);
+        }
+    }
+
+    else if(test_type == "reinsert_small_string") {
+        std::vector<std::string> keys = get_random_alphanum_strings(
+            num_keys, SMALL_STRING_SIZE);
+        measurements m;
+        for(std::int64_t i = 0; i < num_keys; i++) {
+            INSERT_STR_INTO_HASH(keys[i], value);
+        }
+        std::shuffle(keys.begin(), keys.end(), generator);
+
+
+        m.set_chrono_start();
         for(std::int64_t i = 0; i < num_keys; i++) {
             INSERT_STR_INTO_HASH(keys[i], value);
         }
@@ -405,7 +452,22 @@ int main(int argc, char ** argv) {
             INSERT_STR_INTO_HASH(keys[i], value);
         }
     }
-    
+
+    else if(test_type == "reinsert_string") {
+        std::vector<std::string> keys = get_random_alphanum_strings(num_keys, STRING_SIZE);
+        measurements m;
+        for(std::int64_t i = 0; i < num_keys; i++) {
+            INSERT_STR_INTO_HASH(keys[i], value);
+        }
+        std::shuffle(keys.begin(), keys.end(), generator);
+
+
+        m.set_chrono_start();
+        for(std::int64_t i = 0; i < num_keys; i++) {
+            INSERT_STR_INTO_HASH(keys[i], value);
+        }
+    }
+
     else if(test_type == "insert_string_reserve") {
         const std::vector<std::string> keys = get_random_alphanum_strings(num_keys, STRING_SIZE);
         
@@ -495,7 +557,7 @@ int main(int argc, char ** argv) {
     
     else {
         std::cerr << "Unknown test type: " << test_type << ".\n";
-		// Do not change the exit status 71! It is used by bench.py
+        // Do not change the exit status 71! It is used by bench.py
         std::exit(71);
     }
 

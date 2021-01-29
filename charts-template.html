@@ -156,6 +156,9 @@
         plot_chart(chart_data['insert_random_shuffle_range_memory'], '#insert_random_shuffle_range_memory', '#insert_random_shuffle_range_memory_choices', memory_settings, redraw_only);
         plot_chart(chart_data['insert_random_shuffle_range_bopsnsec'], '#insert_random_shuffle_range_bopsnsec', '#insert_random_shuffle_range_bopsnsec_choices', bopsnsec_settings, redraw_only);
 
+        plot_chart(chart_data['reinsert_random_shuffle_range_runtime'], '#reinsert_random_shuffle_range_runtime', '#reinsert_random_shuffle_range_runtime_choices', runtime_settings, redraw_only);
+        plot_chart(chart_data['reinsert_random_shuffle_range_bopsnsec'], '#reinsert_random_shuffle_range_bopsnsec', '#reinsert_random_shuffle_range_bopsnsec_choices', bopsnsec_settings, redraw_only);
+
         plot_chart(chart_data['read_random_shuffle_range_runtime'], '#read_random_shuffle_range_runtime', '#read_random_shuffle_range_runtime_choices', runtime_settings, redraw_only);
         plot_chart(chart_data['read_random_shuffle_range_bopsnsec'], '#read_random_shuffle_range_bopsnsec', '#read_random_shuffle_range_bopsnsec_choices', bopsnsec_settings, redraw_only);
 
@@ -163,6 +166,9 @@
 
         plot_chart(chart_data['insert_random_full_runtime'], '#insert_random_full_runtime', '#insert_random_full_runtime_choices', runtime_settings, redraw_only);
         plot_chart(chart_data['insert_random_full_bopsnsec'], '#insert_random_full_bopsnsec', '#insert_random_full_bopsnsec_choices', bopsnsec_settings, redraw_only);
+
+        plot_chart(chart_data['reinsert_random_full_runtime'], '#reinsert_random_full_runtime', '#reinsert_random_full_runtime_choices', runtime_settings, redraw_only);
+        plot_chart(chart_data['reinsert_random_full_bopsnsec'], '#reinsert_random_full_bopsnsec', '#reinsert_random_full_bopsnsec_choices', bopsnsec_settings, redraw_only);
 
         plot_chart(chart_data['insert_random_full_reserve_runtime'], '#insert_random_full_reserve_runtime', '#insert_random_full_reserve_runtime_choices', runtime_settings, redraw_only);
         plot_chart(chart_data['insert_random_full_reserve_bopsnsec'], '#insert_random_full_reserve_bopsnsec', '#insert_random_full_reserve_bopsnsec_choices', bopsnsec_settings, redraw_only);
@@ -191,6 +197,9 @@
         plot_chart(chart_data['insert_small_string_runtime'], '#insert_small_string_runtime', '#insert_small_string_runtime_choices', runtime_settings, redraw_only);
         plot_chart(chart_data['insert_small_string_bopsnsec'], '#insert_small_string_bopsnsec', '#insert_small_string_bopsnsec_choices', bopsnsec_settings, redraw_only);
 
+        plot_chart(chart_data['reinsert_small_string_runtime'], '#reinsert_small_string_runtime', '#reinsert_small_string_runtime_choices', runtime_settings, redraw_only);
+        plot_chart(chart_data['reinsert_small_string_bopsnsec'], '#reinsert_small_string_bopsnsec', '#reinsert_small_string_bopsnsec_choices', bopsnsec_settings, redraw_only);
+
         plot_chart(chart_data['insert_small_string_reserve_runtime'], '#insert_small_string_reserve_runtime', '#insert_small_string_reserve_runtime_choices', runtime_settings, redraw_only);
         plot_chart(chart_data['insert_small_string_reserve_bopsnsec'], '#insert_small_string_reserve_bopsnsec', '#insert_small_string_reserve_bopsnsec_choices', bopsnsec_settings, redraw_only);
 
@@ -214,6 +223,9 @@
 
 	plot_chart(chart_data['insert_string_runtime'], '#insert_string_runtime', '#insert_string_runtime_choices', runtime_settings, redraw_only);
 	plot_chart(chart_data['insert_string_bopsnsec'], '#insert_string_bopsnsec', '#insert_string_bopsnsec_choices', bopsnsec_settings, redraw_only);
+
+	plot_chart(chart_data['reinsert_string_runtime'], '#reinsert_string_runtime', '#reinsert_string_runtime_choices', runtime_settings, redraw_only);
+	plot_chart(chart_data['reinsert_string_bopsnsec'], '#reinsert_string_bopsnsec', '#reinsert_string_bopsnsec_choices', bopsnsec_settings, redraw_only);
 
         plot_chart(chart_data['insert_string_reserve_runtime'], '#insert_string_reserve_runtime', '#insert_string_reserve_runtime_choices', runtime_settings, redraw_only);
         plot_chart(chart_data['insert_string_reserve_bopsnsec'], '#insert_string_reserve_bopsnsec', '#insert_string_reserve_bopsnsec_choices', bopsnsec_settings, redraw_only);
@@ -338,6 +350,23 @@ Then for each value k in the vector, we insert the key-value pair (k, 1) in the 
 <!-- END_INSERT_RANDOM_SHUFFLE_RANGE -->
 
 
+<!-- BEGIN_REINSERT_RND_SHUFFLE_RANGE -->
+<h3>Random shuffle inserts of existing keys: execution time (integers)</h3>
+
+<p>Before the test, we generate a vector with the values [0,
+  nb_entries) and insert the key-value pairs (k, 1) in the map. Then,
+  we shuffle this vector and insert keys again.</p>
+
+<div class="chart" id="reinsert_random_shuffle_range_runtime"></div>
+<div class="xaxis-title">number of entries in hash table</div>
+<ul class="choices" id="reinsert_random_shuffle_range_runtime_choices"></ul>
+
+<div class="chart" id="reinsert_random_shuffle_range_bopsnsec"></div>
+<div class="xaxis-title">number of entries in hash table</div>
+<ul class="choices" id="reinsert_random_shuffle_range_bopsnsec_choices"></ul>
+<!-- END_REINSERT_RND_SHUFFLE_RANGE -->
+
+
 <!-- BEGIN_READ_RANDOM_SHUFFLE_RANGE -->
 <h3>Random shuffle reads: execution time (integers)</h3>
 
@@ -372,6 +401,25 @@ Then for each value k in the vector, we insert the key-value pair (k, 1) in the 
 <div class="xaxis-title">number of entries in hash table</div>
 <ul class="choices" id="insert_random_full_bopsnsec_choices"></ul>
 <!-- END_INSERT_RANDOM_FULL -->
+
+
+<!-- BEGIN_REINSERT_RND_FULL -->
+<h3>Random full inserts of existing keys: execution time (integers)</h3>
+
+<p>Before the test, we generate a vector of nb_entries size where each
+  value is randomly taken from an uniform random number generator from
+  all possible positive values an int64_t can hold and insert the
+  key-value pairs (k, 1) in the hash map.  Then we shuffle the vector
+  and insert keys again.</p>
+
+<div class="chart" id="reinsert_random_full_runtime"></div>
+<div class="xaxis-title">number of entries in hash table</div>
+<ul class="choices" id="reinsert_random_full_runtime_choices"></ul>
+
+<div class="chart" id="reinsert_random_full_bopsnsec"></div>
+<div class="xaxis-title">number of entries in hash table</div>
+<ul class="choices" id="reinsert_random_full_bopsnsec_choices"></ul>
+<!-- END_REINSERT_RND_FULL -->
 
 
 <!-- BEGIN_INSERT_RANDOM_F_RESERVE -->
@@ -508,6 +556,23 @@ We then use the hash map iterators to read all the key-value pairs.</p>
 <!-- END_INSERT_SMALL_STRING -->
 
 
+<!-- BEGIN_REINSERT__SMALL__STRING -->
+<h3>Inserts of existing keys: execution time (small strings)</h3>
+
+<p>Before the test for each entry in the range [0, nb_entries), we
+  generate a string as key and insert it with the value 1.  Then, we
+  shuffle the vector of keys and insert them again</p>
+
+<div class="chart" id="reinsert_small_string_runtime"></div>
+<div class="xaxis-title">number of entries in hash table</div>
+<ul class="choices" id="reinsert_small_string_runtime_choices"></ul>
+
+<div class="chart" id="reinsert_small_string_bopsnsec"></div>
+<div class="xaxis-title">number of entries in hash table</div>
+<ul class="choices" id="reinsert_small_string_bopsnsec_choices"></ul>
+<!-- END_REINSERT__SMALL__STRING -->
+
+
 <!-- BEGIN_RESERVE_SMALL_STRING -->
 <h3>Inserts with reserve: memory footprint and execution time (small strings)</h3>
 
@@ -622,6 +687,23 @@ different order which will lead to 50% hits and 50% misses.</p>
 <div class="xaxis-title">number of entries in hash table</div>
 <ul class="choices" id="insert_string_bopsnsec_choices"></ul>
 <!-- END_INSERT_STRING -->
+
+
+<!-- BEGIN_REINSERT__STRING -->
+<h3>Inserts of existing keys: execution time (strings)</h3>
+
+<p>Before the test for each entry in the range [0, nb_entries), we
+  generate a string as key and insert it with the value 1.  Then, we
+  shuffle the vector of keys and insert them again.</p>
+
+<div class="chart" id="reinsert_string_runtime"></div>
+<div class="xaxis-title">number of entries in hash table</div>
+<ul class="choices" id="reinsert_string_runtime_choices"></ul>
+
+<div class="chart" id="reinsert_string_bopsnsec"></div>
+<div class="xaxis-title">number of entries in hash table</div>
+<ul class="choices" id="reinsert_string_bopsnsec_choices"></ul>
+<!-- END_REINSERT__STRING -->
 
 
 <!-- BEGIN_RESERVE_STRING -->

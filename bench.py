@@ -53,22 +53,26 @@ if apps_env:
 
 short_names = {
     'random_shuffle_range': [
-        'insert_random_shuffle_range', 'read_random_shuffle_range'
+        'insert_random_shuffle_range', 'reinsert_random_shuffle_range',
+        'read_random_shuffle_range'
     ],
     'random_full': [
-        'insert_random_full', 'insert_random_full_reserve',
+        'insert_random_full', 'reinsert_random_full',
+        'insert_random_full_reserve',
         'read_random_full', 'read_miss_random_full',
         'delete_random_full', 'read_random_full_after_delete',
         'iteration_random_full'
     ],
     'small_string': [
-        'insert_small_string', 'insert_small_string_reserve',
+        'insert_small_string', 'reinsert_small_string',
+        'insert_small_string_reserve',
         'read_small_string', 'read_miss_small_string',
         'delete_small_string',
         'read_small_string_after_delete'
     ],
     'string': [
-        'insert_string', 'insert_string_reserve',
+        'insert_string', 'reinsert_string',
+        'insert_string_reserve',
         'read_string', 'read_miss_string',
         'delete_string',
         'read_string_after_delete'
