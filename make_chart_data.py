@@ -60,6 +60,8 @@ program_slugs = [
     'judyHS',
     'nata88',
     'nataF8',
+    'glib_tree',
+    'glib_hash_table',
     'cuckoohash_map'
 ]
 

@@ -33,7 +33,6 @@
 * bplus_tree berenm@
   0f66d5fe847fe6e75976f9a9a0cf248db265af51
   cbbf525c5719742da34087993b5e18b09da57e4d 
-* restore glib2 benchmark
 * lua hash map
   0402e290ffce94c0e8c7472e386a6d1ce1220cb6
 * TCL hash map

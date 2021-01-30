@@ -22,6 +22,7 @@ APPS += judyL
 #APPS += nata88
 #APPS += nataF8
 APPS +=	glib_tree
+APPS +=	glib_hash_table
 APPS += tsl_hopscotch_map
 APPS += tsl_hopscotch_map_mlf_0_5
 APPS += tsl_hopscotch_map_store_hash
@@ -46,6 +47,11 @@ ifeq ($(filter glib_tree,${APPS}), glib_tree)
 CXXFLAGS_glib_tree ?= $(shell pkg-config --cflags glib-2.0) \
 	-DG_DISABLE_CHECKS -DG_DISABLE_ASSERT
 LDFLAGS_glib_tree ?= $(shell pkg-config --libs glib-2.0)
+endif
+ifeq ($(filter glib_hash_table,${APPS}), glib_hash_table)
+CXXFLAGS_glib_hash_table ?= $(shell pkg-config --cflags glib-2.0) \
+	-DG_DISABLE_CHECKS -DG_DISABLE_ASSERT
+LDFLAGS_glib_hash_table ?= $(shell pkg-config --libs glib-2.0)
 endif
 ifeq ($(filter qt_qhash,${APPS}), qt_qhash)
 CXXFLAGS_qt_qhash ?= $(shell pkg-config --cflags Qt5Core) -fPIC
