@@ -1,0 +1,84 @@
+* remove _FROM_HASH and _INTO_HASH
+* google btree_map morzhovets@
+* instead of "error when unsupported"
+  just ifdef! appropriate section in code
+* remove propername morzhovetz@
+* 2a997403a11105bc9148fc8343a9841c48bad729
+  except KeyboardInterrupt:
+* insert_random_shuffle_range_reserve
+  9bd0d84473d4c8b4918cc6aade00176b69712360 by Nick Roseveare
+* 435365df7363f2ff4a5a61462a51af9ad892eb61
+  khash hpj@
+* e03bdb5b165c365463037ba458366ee8fd039049
+  python3 dict hpj@
+* ae52b0cc13054a76d0d12cb35e49fc5512cdf6df
+  treadmil hpj@
+* RustHashMap bcec90c5d782333537bf150a87fe25d1180bb764
+  cuviper@
+* ipython notebook by Nick Roseveare
+* pointers instead of std::string
+* fnv1 hash function
+* plots like in klib
+* Each executablke should identify yourself:
+  Commit 0d92c294f35e50f58b9cef17100c79f291393a41
+         ff58f8ee9f0383cec421529042332544b23be231
+* Targets for output and charts.html
+* List of programs in external file?
+* perl benchmark driedfruit@
+   160f2ebf82eec2841ad9977b8e49f7d7fb9167ae
+   7d631b4ba5001e91d6c1ebfd2c9f9e017e6de4a0
+   4cec0b1dd5e59b33a35bf6272102651a40c0eb9a
+   89acfdd2790b1da9492807d27c3ea4b129b7b708
+   82e6634311de83ddde5f750da13fe3dffd4b9d2f
+* bplus_tree berenm@
+  0f66d5fe847fe6e75976f9a9a0cf248db265af51
+  cbbf525c5719742da34087993b5e18b09da57e4d 
+* restore glib2 benchmark
+* lua hash map
+  0402e290ffce94c0e8c7472e386a6d1ce1220cb6
+* TCL hash map
+  167eee9b77d24d5ebb17e37f175055b66c456493
+* CFDictionary?
+  107cdc323d02ac4d4f69c110f6df09d60f6029be
+* collectc hashtable
+  92c27184210e820724de4e1afe4c3d979148307c
+* simple_sparsehash
+  853d47a4f1567deefd4130392a8a99aa8b83a5d6
+* 92c2a013790f2dbf57fb96b9ba450e9df3be568c YamatoWestern
+  kyotocabinet_hash
+  kyotocabinet_stash
+  rockc
+  leveldb
+  postgresql
+* 2a1f3307325bcaf7077491994523953480ef6fcd greg7mdp
+  another btree
+* 2a1f3307325bcaf7077491994523953480ef6fcd
+  css
+* std::map?
+* 850f32e532d29bcd03873bbcef6443c422394317 mgd020
+  home-made robin_hood
+* spacehash and custom
+  78d37ea1ab875bcf58e24b19dca7dae8a79f0bc2 mgd020
+* yet another robin hood
+  5d3c1b7be140ffab7b1e661efe66a012feb36144 mgd020
+* mgd020 -- custom and home-made robin_hood
+* d3x0r -- generic_sparse?
+* rabbit_unordered_map, rabbit_sparse_unordered_map, sherwood_map -- 9abcfb6cd32329f139a22c6338bbe7a5d074b910
+* std_unordered_map_momo_pool, momo_unordered_map, DataTable -- morzhovetz@
+* Each executable should identify yourself:
+  Commit 0d92c294f35e50f58b9cef17100c79f291393a41
+         ff58f8ee9f0383cec421529042332544b23be231
+* Targets for output and charts.html
+* List of programs in external file?
+* perl benchmark driedfruit@
+   160f2ebf82eec2841ad9977b8e49f7d7fb9167ae
+   7d631b4ba5001e91d6c1ebfd2c9f9e017e6de4a0
+   4cec0b1dd5e59b33a35bf6272102651a40c0eb9a
+   89acfdd2790b1da9492807d27c3ea4b129b7b708
+* bplus_tree berenm@
+  0f66d5fe847fe6e75976f9a9a0cf248db265af51
+  cbbf525c5719742da34087993b5e18b09da57e4d 
+* restore glib2 benchmark
+* lua hash map
+  0402e290ffce94c0e8c7472e386a6d1ce1220cb6
+* TCL hash map
