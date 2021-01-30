@@ -109,7 +109,7 @@ for nkeys in points:
 
             for attempt in range(best_out_of):
                 try:
-                    output = subprocess.check_output(['./build/' + program, str(nkeys), benchtype])
+                    output = subprocess.check_output(['./build/' + program, str(nkeys), benchtype], text=True, stderr=subprocess.STDOUT)
                     words = output.strip().split()
                     
                     runtime_seconds = float(words[0])
@@ -121,13 +121,9 @@ for nkeys in points:
                     if e.returncode == 71: # unknown test type for program?
                         continue # silently ignore this case
 
-                    if e.returncode == -2 or e.returncode == -3: # SIGINT or SIGQUIT?
-                        #os.exit(128 - e.returncode) # exit with error
-                        sys.exit(76)
-
                     print("Error with %s" % str(['./build/' + program, str(nkeys), benchtype]), file=sys.stderr)
                     print("Exit status is %d" % e.returncode, file=sys.stderr)
-                    print(e.stdout.decode("utf-8"), file=sys.stderr)
+                    print(e.stdout, file=sys.stderr)
                     break
 
                 line = ','.join(map(str, [benchtype, nkeys, program, "%0.2f" % load_factor, 
