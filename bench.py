@@ -115,6 +115,8 @@ for nkeys in points:
                     runtime_seconds = float(words[0])
                     memory_usage_bytes = int(words[1])
                     load_factor = float(words[2])
+                except KeyboardInterrupt as e:
+                    sys.exit(130);
                 except subprocess.CalledProcessError as e:
                     if e.returncode == 71: # unknown test type for program?
                         continue # silently ignore this case
