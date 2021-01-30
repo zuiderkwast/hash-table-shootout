@@ -37,6 +37,10 @@ static std::mt19937_64 generator(SEED);
 #define ITERATE_HASH(it) for(const auto& it : hash)
 #endif
 
+#ifndef SHUFFLE_STR_ARRAY
+#define SHUFFLE_STR_ARRAY(keys) std::shuffle(keys.begin(), keys.end(), generator)
+#endif
+
 std::size_t get_memory_usage_bytes() {
     std::ifstream file("/proc/self/statm");
     
@@ -268,7 +272,7 @@ int main(int argc, char ** argv) {
         for(std::int64_t i = 0; i < num_keys; i++) {
             INSERT_INT_INTO_HASH(keys[i], value);
         }
-        
+      
         std::shuffle(keys.begin(), keys.end(), generator);
         for(std::int64_t i = 0; i < num_keys / 2; i++) {
             DELETE_INT_FROM_HASH(keys[i]);
@@ -343,7 +347,7 @@ int main(int argc, char ** argv) {
         for(std::int64_t i = 0; i < num_keys; i++) {
             INSERT_STR_INTO_HASH(keys[i], value);
         }
-        std::shuffle(keys.begin(), keys.end(), generator);
+        SHUFFLE_STR_ARRAY(keys);
 
 
         m.set_chrono_start();
@@ -367,11 +371,10 @@ int main(int argc, char ** argv) {
         std::vector<std::string> keys = get_random_alphanum_strings(num_keys, SMALL_STRING_SIZE);
         measurements m;
         for(std::int64_t i = 0; i < num_keys; i++) {
-            INSERT_STR_INTO_HASH(keys[i], value);
+            INSERT_STR_INTO_HASH(keys[i], 1);
         }
         
-        std::shuffle(keys.begin(), keys.end(), generator);
-        
+        SHUFFLE_STR_ARRAY(keys);
         
         m.set_chrono_start();
         for(std::int64_t i = 0; i < num_keys; i++) {
@@ -402,13 +405,12 @@ int main(int argc, char ** argv) {
             INSERT_STR_INTO_HASH(keys[i], value);
         }
         
-        std::shuffle(keys.begin(), keys.end(), generator); 
+        SHUFFLE_STR_ARRAY(keys);
         for(std::int64_t i = 0; i < num_keys / 2; i++) {
             DELETE_STR_FROM_HASH(keys[i]);
         }
-        
-        std::shuffle(keys.begin(), keys.end(), generator);
-        
+        SHUFFLE_STR_ARRAY(keys);
+
         
         std::int64_t nb_found = 0;
         m.set_chrono_start();
@@ -429,7 +431,7 @@ int main(int argc, char ** argv) {
             INSERT_STR_INTO_HASH(keys[i], value);
         }
         
-        std::shuffle(keys.begin(), keys.end(), generator); 
+        SHUFFLE_STR_ARRAY(keys);
         
         
         m.set_chrono_start();
@@ -459,9 +461,9 @@ int main(int argc, char ** argv) {
         for(std::int64_t i = 0; i < num_keys; i++) {
             INSERT_STR_INTO_HASH(keys[i], value);
         }
-        std::shuffle(keys.begin(), keys.end(), generator);
+        SHUFFLE_STR_ARRAY(keys);
 
-
+		
         m.set_chrono_start();
         for(std::int64_t i = 0; i < num_keys; i++) {
             INSERT_STR_INTO_HASH(keys[i], value);
@@ -486,7 +488,7 @@ int main(int argc, char ** argv) {
             INSERT_STR_INTO_HASH(keys[i], value);
         }
         
-        std::shuffle(keys.begin(), keys.end(), generator);   
+        SHUFFLE_STR_ARRAY(keys);
         
         
         m.set_chrono_start();
@@ -518,12 +520,12 @@ int main(int argc, char ** argv) {
             INSERT_STR_INTO_HASH(keys[i], value);
         }
         
-        std::shuffle(keys.begin(), keys.end(), generator); 
+        SHUFFLE_STR_ARRAY(keys);
         for(std::int64_t i = 0; i < num_keys / 2; i++) {
             DELETE_STR_FROM_HASH(keys[i]);
         }
-        
-        std::shuffle(keys.begin(), keys.end(), generator);
+        SHUFFLE_STR_ARRAY(keys);
+
         
         
         std::int64_t nb_found = 0;
@@ -545,7 +547,7 @@ int main(int argc, char ** argv) {
             INSERT_STR_INTO_HASH(keys[i], value);
         }
         
-        std::shuffle(keys.begin(), keys.end(), generator); 
+        SHUFFLE_STR_ARRAY(keys);
         
         
         m.set_chrono_start();
