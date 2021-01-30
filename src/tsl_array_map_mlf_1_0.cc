@@ -19,7 +19,7 @@ typedef tsl::array_map<char, int64_t, str_hash<char>> str_hash_t;
 #undef SETUP_STR
 #define SETUP_STR str_hash_t str_hash; str_hash.max_load_factor(1.0f);
 
-#undef INSERT_STR_INTO_HASH
-#define INSERT_STR_INTO_HASH(key, value) str_hash.insert(key, value)
+#undef INSERT_STR
+#define INSERT_STR(key, value) str_hash.insert(key, value)
 
 #include "template.c"

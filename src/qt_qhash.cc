@@ -15,19 +15,19 @@ typedef QHash<std::string, int64_t> str_hash_t;
 
 #undef LOAD_FACTOR_INT_HASH
 #define LOAD_FACTOR_INT_HASH(hash) 0.0f
-#undef INSERT_INT_INTO_HASH
-#define INSERT_INT_INTO_HASH(key, value) hash.insert(key, value)
-#undef DELETE_INT_FROM_HASH
-#define DELETE_INT_FROM_HASH(key) hash.remove(key)
+#undef INSERT_INT
+#define INSERT_INT(key, value) hash.insert(key, value)
+#undef DELETE_INT
+#define DELETE_INT(key) hash.remove(key)
 #undef CHECK_INT_ITERATOR_VALUE
 #define CHECK_INT_ITERATOR_VALUE(iterator, val) \
 	if(iterator != val) { printf("error"); exit(3); }
 
 #undef LOAD_FACTOR_STR_HASH
 #define LOAD_FACTOR_STR_HASH(hash) 0.0f
-#undef INSERT_STR_INTO_HASH
-#define INSERT_STR_INTO_HASH(key, value) str_hash.insert(key, value)
-#undef DELETE_STR_FROM_HASH
-#define DELETE_STR_FROM_HASH(key) str_hash.remove(key);
+#undef INSERT_STR
+#define INSERT_STR(key, value) str_hash.insert(key, value)
+#undef DELETE_STR
+#define DELETE_STR(key) str_hash.remove(key);
 
 #include "template.c"

@@ -18,15 +18,15 @@ typedef libcuckoo::cuckoohash_map<std::string, int64_t, std::hash<std::string>> 
   hash_t mt_hash; \
   hash_t::locked_table hash = mt_hash.lock_table()
 
-#undef INSERT_INT_INTO_HASH
-#define INSERT_INT_INTO_HASH(key, value) \
+#undef INSERT_INT
+#define INSERT_INT(key, value) \
   hash.insert(key, value);
 
 #undef CHECK_INT_ITERATOR_VALUE
 #define CHECK_INT_ITERATOR_VALUE(iterator, value)
 
-#undef INSERT_STR_INTO_HASH
-#define INSERT_STR_INTO_HASH(key, value) \
+#undef INSERT_STR
+#define INSERT_STR(key, value) \
   str_hash.insert(key, value);
 
 #include "template.c"
