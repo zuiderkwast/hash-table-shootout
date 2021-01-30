@@ -1,4 +1,3 @@
-* remove _FROM_HASH and _INTO_HASH
 * google btree_map morzhovets@
 * instead of "error when unsupported"
   just ifdef! appropriate section in code
