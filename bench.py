@@ -34,6 +34,7 @@ programs = [
     'tsl_array_map_mlf_1_0',
     'judyL',
     'judyHS',
+    'bplus_tree',
     #'nata88',
     #'nataF8'
 ]

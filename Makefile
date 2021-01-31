@@ -8,6 +8,9 @@ CXXFLAGS ?= -O3 -march=native -std=c++14 -DNDEBUG
 # LDFLAGS_MALLOC ?= -ljemalloc # much better that glibc's malloc on some workloads
 LDFLAGS_MALLOC ?= -ltcmalloc_minimal # often even better than jemalloc
 
+BUILD_DIR      ?= ./build
+OBJ_DIR        ?= ./obj
+
 ifndef APPS
 APPS += boost_unordered_map
 APPS += emilib_hash_map
@@ -38,6 +41,7 @@ APPS += spp_sparse_hash_map
 APPS += std_unordered_map
 APPS += qt_qhash
 APPS +=	cuckoohash_map
+APPS += bplus_tree
 endif # APPS
 
 LDFLAGS ?= -lm
@@ -78,26 +82,41 @@ CXXFLAGS_judyHS                         ?=
 CXXFLAGS_nata88                         ?=
 CXXFLAGS_nataF8                         ?= ${CXXFLAGS_nata88}
 CXXFLAGS_cuckoohash_map                 ?= -Ilibcuckoo -pthread
+ifeq ($(filter bplus_tree,${APPS}), bplus_tree)
+CFLAGS_bplus_tree                       ?= \
+	-DBPLUS_TREE_ORDER=32 -DBNPPP_MEMORY_USE_GLIB \
+	-DG_DISABLE_CHECKS -DG_DISABLE_ASSERT -D_NDEBUG \
+	-Ibplus-tree/include $(shell pkg-config --cflags glib-2.0)
+CXXFLAGS_bplus_tree                     ?= ${CFLAGS_bplus_tree}
+LDFLAGS_bplus_tree                      ?= \
+	$(shell pkg-config --libs glib-2.0)
+${BUILD_DIR}/bplus_tree: ${OBJ_DIR}/bplus_foreach.o ${OBJ_DIR}/bplus_insert.o \
+   ${OBJ_DIR}/bplus_iterator.o ${OBJ_DIR}/bplus_leaf.o ${OBJ_DIR}/bplus_node.o \
+   ${OBJ_DIR}/bplus_rebalance.o ${OBJ_DIR}/bplus_remove.o \
+   ${OBJ_DIR}/bplus_search.o ${OBJ_DIR}/bplus_tree.o
+${OBJ_DIR}/%.o: bplus-tree/src/%.c
+	${CC} -std=c99 ${CFLAGS} ${CFLAGS_bplus_tree} -c -o $@ $<
+endif
 
 LDFLAGS_judyL                           ?= -lJudy
 LDFLAGS_judyHS                          ?= ${LDFLAGS_judyL}
 LDFLAGS_nata88                          ?= -lnata
 LDFLAGS_nataF8                          ?= ${LDFLAGS_nata88}
-LDFLAGS_cuckoohash_map                  ?= -lpthread
-
-BUILD_DIR ?= ./build
+LDFLAGS_cuckoohash_map                  ?= -pthread
 
 ##################################################
 
+.DEFAULT_GOAL := all
+
 EXECUTABLES = $(APPS:%=$(BUILD_DIR)/%)
 
-all: | $(BUILD_DIR) $(EXECUTABLES)
+all: $(BUILD_DIR) $(OBJ_DIR) $(EXECUTABLES)
 
-$(BUILD_DIR):
+$(OBJ_DIR) $(BUILD_DIR):
 	mkdir -p $@
 
 clean:
-	rm -rf $(BUILD_DIR)
+	rm -rf $(BUILD_DIR) $(OBJ_DIR)
 
-$(EXECUTABLES): $(BUILD_DIR)/%: src/%.cc src/template.c
-	$(CXX) $(CXXFLAGS) ${CXXFLAGS_${notdir $@}} -o $@ $< ${LDFLAGS} ${LDFLAGS_${notdir $@}}
+$(BUILD_DIR)/% : src/%.cc ${OBJS_${notdir $@}} | src/template.c
+	$(CXX) $(CXXFLAGS) ${CXXFLAGS_${notdir $@}} -o $@ $^ ${OBJS_${notdir $@}} ${LDFLAGS} ${LDFLAGS_${notdir $@}}

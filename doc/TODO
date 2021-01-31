@@ -18,9 +18,6 @@
 * pointers instead of std::string
 * fnv1 hash function
 * plots like in klib
-* Each executablke should identify yourself:
-  Commit 0d92c294f35e50f58b9cef17100c79f291393a41
-         ff58f8ee9f0383cec421529042332544b23be231
 * Targets for output and charts.html
 * List of programs in external file?
 * perl benchmark driedfruit@
@@ -29,9 +26,6 @@
    4cec0b1dd5e59b33a35bf6272102651a40c0eb9a
    89acfdd2790b1da9492807d27c3ea4b129b7b708
    82e6634311de83ddde5f750da13fe3dffd4b9d2f
-* bplus_tree berenm@
-  0f66d5fe847fe6e75976f9a9a0cf248db265af51
-  cbbf525c5719742da34087993b5e18b09da57e4d 
 * lua hash map
   0402e290ffce94c0e8c7472e386a6d1ce1220cb6
 * TCL hash map
@@ -73,9 +67,6 @@
    7d631b4ba5001e91d6c1ebfd2c9f9e017e6de4a0
    4cec0b1dd5e59b33a35bf6272102651a40c0eb9a
    89acfdd2790b1da9492807d27c3ea4b129b7b708
-* bplus_tree berenm@
-  0f66d5fe847fe6e75976f9a9a0cf248db265af51
-  cbbf525c5719742da34087993b5e18b09da57e4d 
 * restore glib2 benchmark
 * lua hash map
   0402e290ffce94c0e8c7472e386a6d1ce1220cb6
