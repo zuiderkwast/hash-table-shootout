@@ -35,6 +35,7 @@ programs = [
     'judyL',
     'judyHS',
     'bplus_tree',
+    'cuckoohash_map',
     #'nata88',
     #'nataF8'
 ]
