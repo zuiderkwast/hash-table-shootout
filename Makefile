@@ -39,6 +39,7 @@ APPS += tsl_array_map
 APPS += tsl_array_map_mlf_1_0
 APPS += spp_sparse_hash_map
 APPS += std_unordered_map
+APPS += std_map
 APPS += qt_qhash
 APPS +=	cuckoohash_map
 APPS += bplus_tree

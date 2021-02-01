@@ -11,6 +11,7 @@ import sys, os, subprocess
 ### Fill free to change the following defaults
 programs = [
     'std_unordered_map',
+    'std_map',
     'boost_unordered_map',
     'google_sparse_hash_map',
     'google_dense_hash_map',
