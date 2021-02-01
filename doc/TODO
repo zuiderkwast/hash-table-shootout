@@ -71,3 +71,5 @@
 * lua hash map
   0402e290ffce94c0e8c7472e386a6d1ce1220cb6
 * TCL hash map
+* https://github.com/SchrodingerZhu/in-memory-btree
+* https://code.google.com/archive/p/cpp-btree/wikis/UsageInstructions.wiki
