@@ -2,6 +2,11 @@
 
 #define __UNCONST(p) ((void *)((char*)NULL+((char*)p-(char*)NULL)))
 
+static void ghrfunc(gpointer key, gpointer value, gpointer user_data)
+{
+//	printf("%p %p\n", key, *(int64_t*)value);
+}
+
 #define SETUP_INT GHashTable* hash = g_hash_table_new(g_direct_hash, g_direct_equal);
 #define RESERVE_INT(size)
 #define INSERT_INT(key, value) \
@@ -22,10 +27,9 @@
 	}
 #define DELETE_INT(key) \
 	g_hash_table_remove(hash, GINT_TO_POINTER(key))
-#define CHECK_INT_ITERATOR_VALUE(iterator, value) \
-	printf("iteration for glib_tree is not implemented yet"); exit(73);
+#define CHECK_INT_ITERATOR_VALUE(iterator, value)
 #define ITERATE_HASH(key) \
-	printf("iteration for glib_tree is not implemented yet"); exit(73);
+	g_hash_table_foreach(hash, ghrfunc, NULL);
 #define LOAD_FACTOR_INT_HASH(hash) (0.0f)
 #define CLEAR_INT
 
