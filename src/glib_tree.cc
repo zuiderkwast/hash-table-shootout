@@ -12,6 +12,12 @@ static gint gstrcmp(gconstpointer a, gconstpointer b)
 	return strcmp((char*) a, (char*) b);
 }
 
+static gboolean gtraversefunc(gpointer key, gpointer value, gpointer data)
+{
+//	printf("%p %p\n", key, *(int64_t*)value);
+	return 0;
+}
+
 #define SETUP_INT GTree * hash = g_tree_new(&intcmp);
 #define RESERVE_INT(size)
 #define INSERT_INT(key, value) \
@@ -32,10 +38,9 @@ static gint gstrcmp(gconstpointer a, gconstpointer b)
 	}
 #define DELETE_INT(key) \
 	g_tree_remove(hash, GINT_TO_POINTER(key))
-#define CHECK_INT_ITERATOR_VALUE(iterator, value) \
-	printf("iteration for glib_tree is not implemented yet"); exit(73);
+#define CHECK_INT_ITERATOR_VALUE(iterator, value)
 #define ITERATE_HASH(key) \
-	printf("iteration for glib_tree is not implemented yet"); exit(73);
+	g_tree_foreach(hash, gtraversefunc, NULL);
 #define LOAD_FACTOR_INT_HASH(hash) (0.0f)
 #define CLEAR_INT
 
