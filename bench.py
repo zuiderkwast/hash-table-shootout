@@ -40,6 +40,7 @@ programs = [
     'glib_tree',
     'glib_hash_table',
     'kyotocabinet_stash',
+    #'kyotocabinet_hash',
     #'nata88',
     #'nataF8'
 ]
