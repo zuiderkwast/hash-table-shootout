@@ -14,12 +14,12 @@
 	exit(72); //nata88del(&hash_int, key, NULL);
 #define FIND_INT_EXISTING(key) \
 	if (nata88get(hash_int, key, NULL) == NULL) { \
-		printf("error"); \
+		printf("error\n"); \
 		exit(1); \
 	}
 #define FIND_INT_MISSING(key) \
 	if (nata88get(hash_int, key, NULL) != NULL) { \
-		printf("error"); \
+		printf("error\n"); \
 		exit(1); \
 	}
 #define FIND_INT_EXISTING_COUNT(key, count) \

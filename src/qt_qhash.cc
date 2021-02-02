@@ -21,8 +21,10 @@ typedef QHash<std::string, int64_t> str_hash_t;
 #define DELETE_INT(key) hash.remove(key)
 #undef CHECK_INT_ITERATOR_VALUE
 #define CHECK_INT_ITERATOR_VALUE(iterator, val) \
-	if(iterator != val) { printf("error"); exit(3); }
-
+	if(iterator != val) { \
+		printf("error\n"); \
+		exit(3); \
+	}
 #undef LOAD_FACTOR_STR_HASH
 #define LOAD_FACTOR_STR_HASH(hash) 0.0f
 #undef INSERT_STR

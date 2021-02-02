@@ -11,12 +11,12 @@
 	bplus_tree_insert(hash, key, (char*)0 + value)
 #define FIND_INT_EXISTING(key) \
 	if (bplus_tree_get(hash, key) == NULL){ \
-		printf("error"); \
+		printf("error\n"); \
 		exit(1); \
 	}
 #define FIND_INT_MISSING(key) \
 	if (bplus_tree_get(hash, key) != NULL){ \
-		printf("error"); \
+		printf("error\n"); \
 		exit(1); \
 	}
 #define FIND_INT_EXISTING_COUNT(key, count) \
