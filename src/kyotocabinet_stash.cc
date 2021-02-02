@@ -65,30 +65,21 @@ typedef kyotocabinet::StashDB str_hash_t;
 
 #undef FIND_STR_MISSING
 #define FIND_STR_MISSING(key)						\
-	{												\
-		std::string s_val;							\
-		if(str_hash.get(key, &s_val)) {				\
-			printf("error\n");						\
-			exit(1);								\
-		}											\
+	if(str_hash.get(key, &s_val)) {					\
+		printf("error\n");							\
+		exit(1);									\
 	}
 
 #undef FIND_INT_EXISTING_COUNT
 #define FIND_INT_EXISTING_COUNT(key, count)			\
-	{												\
-		std::string s_val;							\
-		if(hash.get(std::to_string(key), &s_val)) { \
-			count++;								\
-		}											\
+	if(hash.get(std::to_string(key), &s_val)) {		\
+		count++;									\
 	}
 
 #undef FIND_STR_EXISTING_COUNT
 #define FIND_STR_EXISTING_COUNT(key, count)			\
-	{												\
-		std::string s_val;							\
-		if(str_hash.get(key, &s_val)) {				\
-			count++;								\
-		}											\
+	if(str_hash.get(key, &s_val)) {					\
+		count++;									\
 	}
 
 #undef ITERATE_HASH

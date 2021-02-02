@@ -283,6 +283,7 @@ int main(int argc, char ** argv) {
         
         std::int64_t nb_found = 0;
         m.set_chrono_start();
+		std::string s_val; // for kyotocabinet_stash
         for(std::int64_t i = 0; i < num_keys; i++) {
             FIND_INT_EXISTING_COUNT(keys[i], nb_found);
         }
@@ -392,6 +393,7 @@ int main(int argc, char ** argv) {
         }
         
         
+		std::string s_val; // for kyotocabinet_stash
         m.set_chrono_start();
         for(std::int64_t i = 0; i < num_keys; i++) {
             FIND_STR_MISSING(keys_read[i]);
@@ -413,6 +415,7 @@ int main(int argc, char ** argv) {
 
         
         std::int64_t nb_found = 0;
+		std::string s_val; // for kyotocabinet_stash
         m.set_chrono_start();
         for(std::int64_t i = 0; i < num_keys; i++) {
             FIND_STR_EXISTING_COUNT(keys[i], nb_found);
@@ -507,6 +510,7 @@ int main(int argc, char ** argv) {
         }
         
         
+		std::string s_val; // for kyotocabinet_stash
         m.set_chrono_start();
         for(std::int64_t i = 0; i < num_keys; i++) {
             FIND_STR_MISSING(keys_read[i]);
@@ -529,6 +533,7 @@ int main(int argc, char ** argv) {
         
         
         std::int64_t nb_found = 0;
+		std::string s_val; // for kyotocabinet_stash
         m.set_chrono_start();
         for(std::int64_t i = 0; i < num_keys; i++) {
             FIND_STR_EXISTING_COUNT(keys[i], nb_found);
