@@ -39,6 +39,7 @@ programs = [
     'cuckoohash_map',
     'glib_tree',
     'glib_hash_table',
+    'kyotocabinet_stash',
     #'nata88',
     #'nataF8'
 ]

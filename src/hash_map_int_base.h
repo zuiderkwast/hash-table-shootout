@@ -7,3 +7,4 @@
 #define FIND_INT_MISSING(key) if(hash.find(key) != hash.end()) { printf("error"); exit(1); }
 #define FIND_INT_EXISTING_COUNT(key, count) if(hash.find(key) != hash.end()) { count++; }
 #define CHECK_INT_ITERATOR_VALUE(iterator, value) if(iterator.second != value) { printf("error"); exit(1); }
+#define CLEAR_INT

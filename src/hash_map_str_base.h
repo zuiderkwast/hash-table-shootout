@@ -6,3 +6,4 @@
 #define FIND_STR_EXISTING(key) if(str_hash.find(key) == str_hash.end()) { printf("error"); exit(4); }
 #define FIND_STR_MISSING(key) if(str_hash.find(key) != str_hash.end()) { printf("error"); exit(5); }
 #define FIND_STR_EXISTING_COUNT(key, count) if(str_hash.find(key) != str_hash.end()) { count++; }
+#define CLEAR_STR

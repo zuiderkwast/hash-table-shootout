@@ -22,6 +22,7 @@
 #define ITERATE_HASH(key) \
 	printf("iteration for glib_tree is not implemented yet"); exit(73);
 #define LOAD_FACTOR_INT_HASH(hash) (0.0f)
+#define CLEAR_INT
 
 #define SETUP_STR GHashTable* str_hash = g_hash_table_new(g_str_hash, g_str_equal);
 #define RESERVE_STR(size)
@@ -40,5 +41,6 @@
 #define DELETE_STR(key) \
 	g_hash_table_remove(str_hash, __UNCONST(key.c_str()));
 #define LOAD_FACTOR_STR_HASH(hash) (0.0f)
+#define CLEAR_STR
 
 #include "template.c"

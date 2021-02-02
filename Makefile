@@ -43,6 +43,7 @@ APPS += std_map
 APPS += qt_qhash
 APPS +=	cuckoohash_map
 APPS += bplus_tree
+APPS += kyotocabinet_stash
 endif # APPS
 
 LDFLAGS ?= -lm
@@ -104,6 +105,10 @@ LDFLAGS_judyHS                          ?= ${LDFLAGS_judyL}
 LDFLAGS_nata88                          ?= -lnata
 LDFLAGS_nataF8                          ?= ${LDFLAGS_nata88}
 LDFLAGS_cuckoohash_map                  ?= -pthread
+ifeq ($(filter kyotocabinet_stash,${APPS}), kyotocabinet_stash)
+CXXFLAGS_kyotocabinet_stash ?= $(shell pkg-config --cflags kyotocabinet)
+LDFLAGS_kyotocabinet_stash  ?= $(shell pkg-config --libs kyotocabinet)
+endif
 
 ##################################################
 

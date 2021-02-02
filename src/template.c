@@ -574,5 +574,13 @@ int main(int argc, char ** argv) {
     load_factor_str = LOAD_FACTOR_STR_HASH(str_hash);
 #endif
 
+#ifdef SETUP_INT
+    CLEAR_INT;
+#endif
+
+#ifdef SETUP_STR
+    CLEAR_STR;
+#endif
+
     std::cout << std::max(load_factor_int, load_factor_str) << std::endl;
 }

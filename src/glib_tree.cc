@@ -32,6 +32,7 @@ static gint gstrcmp(gconstpointer a, gconstpointer b)
 #define ITERATE_HASH(key) \
 	printf("iteration for glib_tree is not implemented yet"); exit(73);
 #define LOAD_FACTOR_INT_HASH(hash) (0.0f)
+#define CLEAR_INT
 
 #define SETUP_STR GTree* str_hash = g_tree_new(&gstrcmp);
 #define RESERVE_STR(size)
@@ -50,5 +51,6 @@ static gint gstrcmp(gconstpointer a, gconstpointer b)
 #define DELETE_STR(key) \
 	g_tree_remove(str_hash, __UNCONST(key.c_str()));
 #define LOAD_FACTOR_STR_HASH(hash) (0.0f)
+#define CLEAR_STR
 
 #include "template.c"

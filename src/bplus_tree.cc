@@ -29,5 +29,6 @@
 #define LOAD_FACTOR_INT_HASH(hash) (0.0f)
 #define ITERATE_HASH(it)
 #define CHECK_INT_ITERATOR_VALUE(it,value)
+#define CLEAR_INT
 
 #include "template.c"
