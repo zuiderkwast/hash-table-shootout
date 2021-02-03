@@ -36,11 +36,7 @@
   92c27184210e820724de4e1afe4c3d979148307c
 * simple_sparsehash
   853d47a4f1567deefd4130392a8a99aa8b83a5d6
-* 92c2a013790f2dbf57fb96b9ba450e9df3be568c YamatoWestern
-  kyotocabinet_hash
-  kyotocabinet_stash
-  rockc
-  leveldb
+* rockc
   postgresql
 * 2a1f3307325bcaf7077491994523953480ef6fcd greg7mdp
   another btree
