@@ -377,6 +377,7 @@ int main(int argc, char ** argv) {
         
         SHUFFLE_STR_ARRAY(keys);
         
+		std::string s_val; // for leveldb
         m.set_chrono_start();
         for(std::int64_t i = 0; i < num_keys; i++) {
             FIND_STR_EXISTING(keys[i]);
@@ -494,6 +495,7 @@ int main(int argc, char ** argv) {
         SHUFFLE_STR_ARRAY(keys);
         
         
+		std::string s_val; // for leveldb
         m.set_chrono_start();
         for(std::int64_t i = 0; i < num_keys; i++) {
             FIND_STR_EXISTING(keys[i]);
@@ -526,6 +528,7 @@ int main(int argc, char ** argv) {
         
         SHUFFLE_STR_ARRAY(keys);
         for(std::int64_t i = 0; i < num_keys / 2; i++) {
+//			std::cerr << "delete " << keys[i] << '\n';
             DELETE_STR(keys[i]);
         }
         SHUFFLE_STR_ARRAY(keys);
@@ -541,6 +544,7 @@ int main(int argc, char ** argv) {
         
         if(nb_found != num_keys / 2) {
             std::cerr << "error, duplicates\n";
+//            std::cerr << nb_found << ' ' << num_keys << '\n';
             std::exit(6);
         }
     }
