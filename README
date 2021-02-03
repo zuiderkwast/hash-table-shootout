@@ -9,6 +9,7 @@ First, some prerequisites are:
 * qt
 * libjudy
 * libkyotocabinet
+* libleveldb
 * librocksdb
 
 Now, run:
