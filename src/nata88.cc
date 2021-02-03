@@ -10,16 +10,16 @@
 #define INSERT_INT(key, value) \
 	*nata88ins(&hash_int, key, NULL) = value;
 #define DELETE_INT(key) \
-	printf("nata88del is not implemented yet"); \
+	std::cerr << "nata88del is not implemented yet"; \
 	exit(72); //nata88del(&hash_int, key, NULL);
 #define FIND_INT_EXISTING(key) \
 	if (nata88get(hash_int, key, NULL) == NULL) { \
-		printf("error\n"); \
+		std::cerr << "error\n"; \
 		exit(1); \
 	}
 #define FIND_INT_MISSING(key) \
 	if (nata88get(hash_int, key, NULL) != NULL) { \
-		printf("error\n"); \
+		std::cerr << "error\n"; \
 		exit(1); \
 	}
 #define FIND_INT_EXISTING_COUNT(key, count) \
@@ -27,7 +27,7 @@
 		count++; \
 	}
 #define CHECK_INT_ITERATOR_VALUE(iterator, value) \
-	printf("iteration for nata88 is not implemented yet"); \
+	std::cerr << "iteration for nata88 is not implemented yet\n"; \
 	exit(73);
 #define ITERATE_HASH(key)
 

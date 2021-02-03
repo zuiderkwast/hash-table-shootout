@@ -24,13 +24,13 @@ static gboolean gtraversefunc(gpointer key, gpointer value, gpointer data)
 	g_tree_insert(hash, GINT_TO_POINTER(key), __UNCONST(&value))
 #define FIND_INT_EXISTING(key) \
 	if (g_tree_lookup(hash, GINT_TO_POINTER(key)) == NULL) { \
-		printf("error\n"); \
+		std::cerr << "error\n"; \
 		exit(1); \
 	}
 #define FIND_INT_MISSING(key) \
 	if (g_tree_lookup(hash, GINT_TO_POINTER(key)) != NULL) { \
-		printf("error\n"); \
-		exit(1); \
+		std::cerr << "error\n";								 \
+		exit(1);											 \
 	}
 #define FIND_INT_EXISTING_COUNT(key, count) \
 	if (g_tree_lookup(hash, GINT_TO_POINTER(key)) != NULL) { \
@@ -49,15 +49,15 @@ static gboolean gtraversefunc(gpointer key, gpointer value, gpointer data)
 #define SHUFFLE_STR_ARRAY(keys)
 #define INSERT_STR(key, value) \
 	g_tree_insert(str_hash, __UNCONST(key.c_str()), (char*)0 + value)
-#define FIND_STR_EXISTING(key) \
+#define FIND_STR_EXISTING(key)									   \
 	if (g_tree_lookup(str_hash, __UNCONST(key.c_str())) == NULL) { \
-		printf("error\n"); \
-		exit(1); \
+		std::cerr << "error\n";									   \
+		exit(1);												   \
 	}
-#define FIND_STR_MISSING(key) \
+#define FIND_STR_MISSING(key)									   \
 	if (g_tree_lookup(str_hash, __UNCONST(key.c_str())) != NULL) { \
-		printf("error\n"); \
-		exit(1); \
+		std::cerr << "error\n";									   \
+		exit(1);												   \
 	}
 #define FIND_STR_EXISTING_COUNT(key, count) \
 	if (g_tree_lookup(str_hash, __UNCONST(key.c_str())) != NULL) { \

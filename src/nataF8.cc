@@ -12,12 +12,12 @@
 	nataF8del(&str_hash, __UNCONST(key.c_str()), key.size(), NULL);
 #define FIND_STR_EXISTING(key) \
 	if (nataF8get(str_hash, __UNCONST(key.c_str()), key.size()) == NULL) { \
-		printf("error"); \
+		std::cerr << "error\n"; \
 		exit(1); \
 	}
 #define FIND_STR_MISSING(key) \
 	if (nataF8get(str_hash, __UNCONST(key.c_str()), key.size()) != NULL) { \
-		printf("error"); \
+		std::cerr << "error\n"; \
 		exit(1); \
 	}
 #define FIND_STR_EXISTING_COUNT(key, count) \

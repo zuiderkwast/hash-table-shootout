@@ -13,12 +13,12 @@
 	JudyHSDel(&str_hash, __UNCONST(key.c_str()), key.size(), NULL);
 #define FIND_STR_EXISTING(key) \
 	if (JudyHSGet(str_hash, __UNCONST(key.c_str()), key.size()) == NULL) { \
-		printf("error"); \
+		std::cerr << "error"; \
 		exit(1); \
 	}
 #define FIND_STR_MISSING(key) \
 	if (JudyHSGet(str_hash, __UNCONST(key.c_str()), key.size()) != NULL) { \
-		printf("error"); \
+		std::cerr << "error"; \
 		exit(1); \
 	}
 #define FIND_STR_EXISTING_COUNT(key, count) \

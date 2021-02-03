@@ -13,13 +13,13 @@ static void ghrfunc(gpointer key, gpointer value, gpointer user_data)
 	g_hash_table_insert(hash, GINT_TO_POINTER(key), __UNCONST(&value))
 #define FIND_INT_EXISTING(key) \
 	if (g_hash_table_lookup(hash, GINT_TO_POINTER(key)) == NULL) { \
-		printf("error\n"); \
+		std::cerr << "error\n";									   \
 		exit(1); \
 	}
 #define FIND_INT_MISSING(key) \
 	if (g_hash_table_lookup(hash, GINT_TO_POINTER(key)) != NULL) { \
-		printf("error\n"); \
-		exit(1); \
+		std::cerr << "error\n";									   \
+		exit(1);												   \
 	}
 #define FIND_INT_EXISTING_COUNT(key, count) \
 	if (g_hash_table_lookup(hash, GINT_TO_POINTER(key)) != NULL) { \
@@ -40,12 +40,12 @@ static void ghrfunc(gpointer key, gpointer value, gpointer user_data)
 	g_hash_table_insert(str_hash, __UNCONST(key.c_str()), (char*)0 + value)
 #define FIND_STR_EXISTING(key) \
 	if (g_hash_table_lookup(str_hash, __UNCONST(key.c_str())) == NULL) { \
-		printf("error\n"); \
-		exit(1); \
+		std::cerr << "error\n";											\
+		exit(1);														\
 	}
 #define FIND_STR_MISSING(key) \
 	if (g_hash_table_lookup(str_hash, __UNCONST(key.c_str())) != NULL) { \
-		printf("error\n"); \
+		std::cerr << "error\n";											\
 		exit(1); \
 	}
 #define FIND_STR_EXISTING_COUNT(key, count) \

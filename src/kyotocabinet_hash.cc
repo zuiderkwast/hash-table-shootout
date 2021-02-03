@@ -9,7 +9,7 @@ typedef kyotocabinet::HashDB str_hash_t;
 #define SETUP_INT									 \
 	hash_t hash;									 \
 	if (!hash.open("zzz")){							 \
-		printf("error 5\n");						 \
+		std::cerr << "error 5\n";					 \
 		exit(1);									 \
 	}
 
@@ -41,7 +41,7 @@ typedef kyotocabinet::HashDB str_hash_t;
 	{												 \
 		std::string s_val;							 \
 		if(!hash.get(std::to_string(key), &s_val)) { \
-			printf("error 1\n");					 \
+			std::cerr << "error 1\n";				 \
 			exit(1);								 \
 		}											 \
 	}
@@ -51,7 +51,7 @@ typedef kyotocabinet::HashDB str_hash_t;
 	{												\
 		std::string s_val;							\
 		if(!str_hash.get(key, &s_val)) {			\
-			printf("error 2\n");					\
+			std::cerr << "error 2\n";				\
 			exit(2);								\
 		}											\
 	}
@@ -61,7 +61,7 @@ typedef kyotocabinet::HashDB str_hash_t;
 	{												\
 		std::string s_val;							\
 		if(hash.get(std::to_string(key), &s_val)) { \
-			printf("error 3\n");					\
+			std::cerr << "error 3\n";				\
 			exit(3);								\
 		}											\
 	}
@@ -69,7 +69,7 @@ typedef kyotocabinet::HashDB str_hash_t;
 #undef FIND_STR_MISSING
 #define FIND_STR_MISSING(key)						\
 	if(str_hash.get(key, &s_val)) {					\
-		printf("error 4\n");						\
+		std::cerr << "error 4\n";					\
 		exit(4);									\
 	}
 
