@@ -41,6 +41,7 @@ programs = [
     'glib_hash_table',
     'kyotocabinet_stash',
     'kyotocabinet_hash',
+    'khash',
     #'nata88',
     #'nataF8'
 ]

@@ -31,3 +31,6 @@
 [submodule "bplus-tree"]
 	path = bplus-tree
 	url = git://github.com/berenm/bplus-tree.git
+[submodule "klibs"]
+	path = klibs
+	url = https://github.com/attractivechaos/klib.git

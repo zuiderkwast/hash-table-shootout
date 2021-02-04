@@ -47,6 +47,7 @@ APPS += kyotocabinet_stash
 APPS += kyotocabinet_hash
 APPS += leveldb
 APPS += rocksdb
+APPS += khash
 endif # APPS
 
 LDFLAGS ?= -lm
@@ -89,6 +90,7 @@ CXXFLAGS_nataF8                         ?= ${CXXFLAGS_nata88}
 CXXFLAGS_cuckoohash_map                 ?= -Ilibcuckoo -pthread
 CXXFLAGS_leveldb                        ?=
 CXXFLAGS_rocksdb                        ?=
+CXXFLAGS_khash                          ?= -Iklibs
 ifeq ($(filter bplus_tree,${APPS}), bplus_tree)
 CFLAGS_bplus_tree                       ?= \
 	-DBPLUS_TREE_ORDER=32 -DBNPPP_MEMORY_USE_GLIB \
@@ -120,6 +122,7 @@ LDFLAGS_kyotocabinet_hash  ?= $(shell pkg-config --libs kyotocabinet)
 endif
 LDFLAGS_leveldb                         ?= -lleveldb
 LDFLAGS_rocksdb                         ?= -lrocksdb
+LDFLAGS_khash                           ?=
 
 ##################################################
 
