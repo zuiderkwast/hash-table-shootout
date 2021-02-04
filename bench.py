@@ -146,5 +146,6 @@ for nkeys in points:
                 print(fastest_attempt_data)
 
         # Print blank line
-        print(file=outfile)
-        print()
+        if fastest_attempt != 1000000:
+            print(file=outfile)
+            print()
