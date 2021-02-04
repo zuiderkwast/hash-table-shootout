@@ -28,7 +28,7 @@ static void ghrfunc(gpointer key, gpointer value, gpointer user_data)
 #define DELETE_INT(key) \
 	g_hash_table_remove(hash, GINT_TO_POINTER(key))
 #define CHECK_INT_ITERATOR_VALUE(iterator, value)
-#define ITERATE_HASH(key) \
+#define ITERATE_INT(key) \
 	g_hash_table_foreach(hash, ghrfunc, NULL);
 #define LOAD_FACTOR_INT_HASH(hash) (0.0f)
 #define CLEAR_INT

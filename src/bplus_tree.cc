@@ -27,7 +27,7 @@
 	bplus_tree_remove(hash, key)
 #define TEARDOWN bplus_tree_destroy(hash);
 #define LOAD_FACTOR_INT_HASH(hash) (0.0f)
-#define ITERATE_HASH(it)
+#define ITERATE_INT(it)
 #define CHECK_INT_ITERATOR_VALUE(it,value)
 #define CLEAR_INT
 

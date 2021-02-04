@@ -33,8 +33,8 @@ static const std::size_t STRING_SIZE = 50;
 static const std::int64_t SEED = 0;
 static std::mt19937_64 generator(SEED);
 
-#ifndef ITERATE_HASH
-#define ITERATE_HASH(it) for(const auto& it : hash)
+#ifndef ITERATE_INT
+#define ITERATE_INT(it) for(const auto& it : hash)
 #endif
 
 #ifndef SHUFFLE_STR_ARRAY
@@ -303,7 +303,7 @@ int main(int argc, char ** argv) {
         
         
         m.set_chrono_start();
-        ITERATE_HASH(it) {
+        ITERATE_INT(it) {
             CHECK_INT_ITERATOR_VALUE(it, value);
         }
     }

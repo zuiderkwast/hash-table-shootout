@@ -70,7 +70,7 @@ KHASH_MAP_INIT_STR(khstr, int64_t)
 	if (k == kh_end(str_hash)) {										\
 		++count;														\
 	}
-#define ITERATE_HASH(key)												\
+#define ITERATE_INT(key)												\
 	khiter_t it;														\
 	for (it = kh_begin(hash); it != kh_end(hash); ++it){				\
 		if (kh_exist(hash, it)){										\

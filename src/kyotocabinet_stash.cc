@@ -82,8 +82,8 @@ typedef kyotocabinet::StashDB str_hash_t;
 		count++;									\
 	}
 
-#undef ITERATE_HASH
-#define ITERATE_HASH(it)
+#undef ITERATE_INT
+#define ITERATE_INT(it)
 
 #undef CHECK_INT_ITERATOR_VALUE
 #define CHECK_INT_ITERATOR_VALUE(it, value)

@@ -56,8 +56,8 @@ static std::string kDBPath = "/tmp/str_leveldb";
 		count++;												   \
 	}
 
-#undef ITERATE_HASH
-#define ITERATE_HASH(it)
+#undef ITERATE_INT
+#define ITERATE_INT(it)
 
 #undef LOAD_FACTOR_STR_HASH
 #define LOAD_FACTOR_STR_HASH(hash) 0.0f

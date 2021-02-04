@@ -29,7 +29,7 @@
 #define CHECK_INT_ITERATOR_VALUE(iterator, value) \
 	std::cerr << "iteration for nata88 is not implemented yet\n"; \
 	exit(73);
-#define ITERATE_HASH(key)
+#define ITERATE_INT(key)
 
 #define LOAD_FACTOR_INT_HASH(hash) (0.0f)
 
