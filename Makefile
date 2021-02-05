@@ -85,6 +85,10 @@ ifeq ($(filter kyotocabinet_hash,${APPS}), kyotocabinet_hash)
 CXXFLAGS_kyotocabinet_hash ?= $(shell pkg-config --cflags kyotocabinet)
 LDFLAGS_kyotocabinet_hash  ?= $(shell pkg-config --libs kyotocabinet)
 endif
+ifeq ($(filter python3_dict,${APPS}), python3_dict)
+CXXFLAGS_python3_dict ?= $(shell pkg-config --cflags python3)
+LDFLAGS_python3_dict  ?= $(shell pkg-config --libs python3)
+endif
 LDFLAGS_leveldb                         ?= -lleveldb
 LDFLAGS_rocksdb                         ?= -lrocksdb
 LDFLAGS_khash                           ?=
