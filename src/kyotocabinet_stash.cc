@@ -1,19 +1,31 @@
 #include <inttypes.h>
 #include <string>
 #include <kcstashdb.h>
+#include <stdlib.h>
 
 typedef kyotocabinet::StashDB hash_t;
 typedef kyotocabinet::StashDB str_hash_t;
 
+static std::string dbpath = "/tmp/str_kyotocabinet_stash.dat";
+static std::string rem_kyotodb_stash_cmd = std::string("rm -rf ") + dbpath;
+
 #undef SETUP_INT
-#define SETUP_INT \
-	hash_t hash; \
-	hash.open("*", hash_t::OWRITER | hash_t::OCREATE);
+#define SETUP_INT														\
+	hash_t hash;														\
+	system(rem_kyotodb_stash_cmd.c_str());								\
+	if (!hash.open(dbpath, hash_t::OWRITER | hash_t::OCREATE)){			\
+		std::cerr << "error 5\n";										\
+		exit(1);														\
+	}
 
 #undef SETUP_STR
-#define SETUP_STR \
-	str_hash_t str_hash; \
-	str_hash.open("*", str_hash_t::OWRITER | str_hash_t::OCREATE);
+#define SETUP_STR														\
+	str_hash_t str_hash;												\
+	system(rem_kyotodb_stash_cmd.c_str());								\
+	if (!str_hash.open(dbpath, str_hash_t::OWRITER | str_hash_t::OCREATE)){	\
+		std::cerr << "error 6\n";										\
+		exit(1);														\
+	}
 
 #undef RESERVE_INT
 #define RESERVE_INT(size)
@@ -95,9 +107,9 @@ typedef kyotocabinet::StashDB str_hash_t;
 #define LOAD_FACTOR_STR_HASH(hash) 0.0f
 
 #undef CLEAR_INT
-#define CLEAR_INT hash.close()
+#define CLEAR_INT hash.close(); system(rem_kyotodb_stash_cmd.c_str());
 
 #undef CLEAR_STR
-#define CLEAR_STR str_hash.close();
+#define CLEAR_STR str_hash.close(); system(rem_kyotodb_stash_cmd.c_str());
 
 #include "template.c"
