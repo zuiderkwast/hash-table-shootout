@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 
-import sys, os, subprocess
+import sys, os, subprocess, re
 
 # samples of use:
 #  ./bench.py
@@ -9,44 +9,11 @@ import sys, os, subprocess
 
 ######################################################################
 ### Fill free to change the following defaults
-programs = [
-    'std_unordered_map',
-    'std_map',
-    'boost_unordered_map',
-    'google_sparse_hash_map',
-    'google_dense_hash_map',
-    'google_dense_hash_map_mlf_0_9',
-    'qt_qhash',
-    'spp_sparse_hash_map',
-    'emilib_hash_map',
-    'ska_flat_hash_map',
-    'ska_flat_hash_map_power_of_two',
-    'ska_bytell_hash_map',
-    'tsl_sparse_map',
-    'tsl_hopscotch_map',
-    'tsl_hopscotch_map_mlf_0_5',
-    'tsl_hopscotch_map_store_hash',
-    'tsl_robin_map',
-    'tsl_robin_map_mlf_0_9',
-    'tsl_robin_map_store_hash',
-    'tsl_robin_pg_map',
-    'tsl_ordered_map',
-    'tsl_array_map',
-    'tsl_array_map_mlf_1_0',
-    'judyL',
-    'judyHS',
-    'bplus_tree',
-    'cuckoohash_map',
-    'glib_tree',
-    'glib_hash_table',
-    'kyotocabinet_stash',
-    'kyotocabinet_hash',
-    'leveldb',
-    'rocksdb',
-    'khash',
-    #'nata88',
-    #'nataF8'
-]
+programs = []
+for line in open("apps.txt"):
+    line = re.sub("#.*$", "", line).strip()
+    if line:
+        programs.append(line)
 
 minkeys  =  2*100*1000
 maxkeys  = 30*100*1000

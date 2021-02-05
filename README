@@ -15,9 +15,10 @@ First, some prerequisites are:
 Now, run:
 
 $ git submodule update --init --recursive
+$ emacs apps.txt # select assotiative arrays you are interested in
 $ make
-$ python3 bench.py
-$ python3 make_chart_data.py < output | python make_html.py
+$ ./bench.py
+$ ./make_chart_data.py < output | ./make_html.py
 
 Your charts are now in charts.html.
 

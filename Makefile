@@ -12,42 +12,7 @@ BUILD_DIR      ?= ./build
 OBJ_DIR        ?= ./obj
 
 ifndef APPS
-APPS += boost_unordered_map
-APPS += emilib_hash_map
-APPS += ska_flat_hash_map
-APPS += ska_flat_hash_map_power_of_two
-APPS += ska_bytell_hash_map
-APPS += google_sparse_hash_map
-APPS += google_dense_hash_map
-APPS += google_dense_hash_map_mlf_0_9
-APPS += judyHS
-APPS += judyL
-#APPS += nata88
-#APPS += nataF8
-APPS +=	glib_tree
-APPS +=	glib_hash_table
-APPS += tsl_hopscotch_map
-APPS += tsl_hopscotch_map_mlf_0_5
-APPS += tsl_hopscotch_map_store_hash
-APPS += tsl_robin_map
-APPS += tsl_robin_map_mlf_0_9
-APPS += tsl_robin_map_store_hash
-APPS += tsl_robin_pg_map
-APPS += tsl_sparse_map
-APPS += tsl_ordered_map
-APPS += tsl_array_map
-APPS += tsl_array_map_mlf_1_0
-APPS += spp_sparse_hash_map
-APPS += std_unordered_map
-APPS += std_map
-APPS += qt_qhash
-APPS +=	cuckoohash_map
-APPS += bplus_tree
-APPS += kyotocabinet_stash
-APPS += kyotocabinet_hash
-APPS += leveldb
-APPS += rocksdb
-APPS += khash
+APPS = $(shell awk '{sub(/#.*$$/, ""); print}' apps.txt)
 endif # APPS
 
 LDFLAGS ?= -lm
