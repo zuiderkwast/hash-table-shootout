@@ -12,7 +12,8 @@ BUILD_DIR      ?= ./build
 OBJ_DIR        ?= ./obj
 
 ifndef APPS
-APPS = $(shell awk '{sub(/#.*$$/, ""); print}' apps.txt)
+cmd := grep -v \\\# apps.txt
+APPS = ${shell ${cmd}}
 endif # APPS
 
 LDFLAGS ?= -lm
