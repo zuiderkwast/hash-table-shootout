@@ -4,29 +4,16 @@
 
 First, some prerequisites are:
 
-=over 4
-
-=item * make
-
-=item * gcc and recent g++ (4.3-ish?)
-
-=item * boost
-
-=item * google sparsehash
-
-=item * qt
-
-=item * libjudy
-
-=item * libkyotocabinet
-
-=item * libleveldb
-
-=item * librocksdb
-
-=item * libpython3
-
-=back
+     make
+     modern C and C++ compilers (gcc, clang or similar)
+     boost
+     google sparsehash
+     qt
+     libjudy
+     libkyotocabinet
+     libleveldb
+     librocksdb
+     libpython3
 
 Now, run:
 
@@ -52,10 +39,10 @@ allocate too much memory.)
 
 =head1 Copyright Information
 
-Written by Nick Welch in 2010.
-Forked by Tessil in 2016.
-Forked by Aleksey Cheusov in 2020.
-No copyright.  This work is dedicated to the public domain.
-For full details, see http://creativecommons.org/publicdomain/zero/1.0/
+ Written by Nick Welch in 2010.
+ Forked by Tessil in 2016.
+ Forked by Aleksey Cheusov in 2020.
+ No copyright.  This work is dedicated to the public domain.
+ For full details, see http://creativecommons.org/publicdomain/zero/1.0/
 
 =cut
