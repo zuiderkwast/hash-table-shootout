@@ -3,8 +3,6 @@
   just ifdef! appropriate section in code
 * insert_random_shuffle_range_reserve
   9bd0d84473d4c8b4918cc6aade00176b69712360 by Nick Roseveare
-* ae52b0cc13054a76d0d12cb35e49fc5512cdf6df
-  treadmil hpj@
 * RustHashMap bcec90c5d782333537bf150a87fe25d1180bb764
   cuviper@
 * ipython notebook by Nick Roseveare
