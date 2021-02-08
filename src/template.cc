@@ -27,8 +27,10 @@ static const std::array<char, 62> ALPHANUMERIC_CHARS = {
 /**
  * SMALL_STRING_SIZE should be small enough so that there is no heap allocation when a std::string is created.
  */
-static const std::size_t SMALL_STRING_SIZE = 15;
-static const std::size_t STRING_SIZE = 50;
+static const std::size_t SMALL_STRING_MIN_SIZE = 10;
+static const std::size_t SMALL_STRING_MAX_SIZE = 20;
+static const std::size_t STRING_MIN_SIZE = 20;
+static const std::size_t STRING_MAX_SIZE = 100;
 
 static const std::int64_t SEED = 0;
 static std::mt19937_64 generator(SEED);
@@ -51,9 +53,14 @@ std::size_t get_memory_usage_bytes() {
 	return memory * getpagesize();
 }
 
-std::string get_random_alphanum_string(std::size_t size) {
+std::string get_random_alphanum_string(
+	std::size_t min_size, std::size_t max_size)
+{
+	std::uniform_int_distribution<std::size_t> rd_uniform_size(min_size, max_size);
+	size_t size = rd_uniform_size(generator);
+
 	std::uniform_int_distribution<std::size_t> rd_uniform(0, ALPHANUMERIC_CHARS.size() - 1);
-	
+
 	std::string str(size, '\0');
 	for(std::size_t i = 0; i < size; i++) {
 		str[i] = ALPHANUMERIC_CHARS[rd_uniform(generator)];
@@ -76,9 +83,10 @@ std::vector<std::int64_t> get_random_shuffle_range_ints(std::size_t nb_ints) {
 /**
  * Generate random vector of random ints between min and max.
  */
-std::vector<std::int64_t> get_random_full_ints(std::size_t nb_ints, 
-											   std::int64_t min = 0, 
-											   std::int64_t max = std::numeric_limits<std::int64_t>::max()) 
+std::vector<std::int64_t> get_random_full_ints(
+	std::size_t nb_ints, 
+	std::int64_t min = 0, 
+	std::int64_t max = std::numeric_limits<std::int64_t>::max()) 
 {
 	std::uniform_int_distribution<std::int64_t> rd_uniform(min, max);
 	
@@ -91,10 +99,12 @@ std::vector<std::int64_t> get_random_full_ints(std::size_t nb_ints,
 }
 
 
-std::vector<std::string> get_random_alphanum_strings(std::size_t nb_strings, std::size_t string_size) {
+std::vector<std::string> get_random_alphanum_strings(
+	std::size_t nb_strings, std::size_t min_size, std::size_t max_size)
+{
 	std::vector<std::string> random_strings(nb_strings);
 	for(std::size_t i = 0; i < random_strings.size(); i++) {
-		random_strings[i] = get_random_alphanum_string(string_size);
+		random_strings[i] = get_random_alphanum_string(min_size, max_size);
 	}
 	
 	return random_strings;
@@ -349,7 +359,8 @@ static bool process_strings()
 		if (test_type == "read_miss_small_string"){
 			RESERVE_STR(num_keys);
 		}
-		keys = get_random_alphanum_strings(num_keys, SMALL_STRING_SIZE);
+		keys = get_random_alphanum_strings(
+			num_keys, SMALL_STRING_MIN_SIZE, SMALL_STRING_MAX_SIZE);
 	}else if (test_type == "insert_string" ||
 			  test_type == "reinsert_string" ||
 			  test_type == "insert_string_reserve" ||
@@ -361,7 +372,8 @@ static bool process_strings()
 		if (test_type == "read_miss_string"){
 			RESERVE_STR(num_keys);
 		}
-		keys = get_random_alphanum_strings(num_keys, STRING_SIZE);
+		keys = get_random_alphanum_strings(
+			num_keys, STRING_MIN_SIZE, STRING_MAX_SIZE);
 	}
 
 	if (test_type == "insert_small_string" ||
@@ -407,9 +419,11 @@ static bool process_strings()
 	else if (test_type == "read_miss_small_string" || test_type == "read_miss_string"){
 		std::vector<std::string> keys_read;
 		if (test_type == "read_miss_string")
-			keys_read = get_random_alphanum_strings(num_keys, STRING_SIZE);
+			keys_read = get_random_alphanum_strings(
+				num_keys, STRING_MIN_SIZE, STRING_MAX_SIZE);
 		else if (test_type == "read_miss_small_string")
-			keys_read = get_random_alphanum_strings(num_keys, SMALL_STRING_SIZE);
+			keys_read = get_random_alphanum_strings(
+				num_keys, SMALL_STRING_MIN_SIZE, SMALL_STRING_MAX_SIZE);
 
 		measurements m;
 		for(std::int64_t i = 0; i < num_keys; i++) {
