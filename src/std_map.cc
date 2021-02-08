@@ -20,4 +20,4 @@ typedef std::map<std::string, int64_t> str_hash_t;
 #undef LOAD_FACTOR_STR_HASH
 #define LOAD_FACTOR_STR_HASH(hash) 0.0f
 
-#include "template.c"
+#include "template.cc"

@@ -75,4 +75,4 @@ static std::string kDBPath = "/tmp/str_rocksdb";
 #undef CLEAR_STR
 #define CLEAR_STR delete str_db; system(rem_rocksdb_cmd.c_str());
 
-#include "template.c"
+#include "template.cc"

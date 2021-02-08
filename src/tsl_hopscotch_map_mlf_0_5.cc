@@ -11,4 +11,4 @@ typedef tsl::hopscotch_map<std::string, int64_t, std::hash<std::string>> str_has
 #undef SETUP
 #define SETUP hash_t hash; hash.max_load_factor(0.5f); str_hash_t str_hash; str_hash.max_load_factor(0.5f);
 
-#include "template.c"
+#include "template.cc"

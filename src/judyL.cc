@@ -32,4 +32,4 @@
 #define LOAD_FACTOR_INT_HASH(hash) (0.0f)
 #define CLEAR_INT
 
-#include "template.c"
+#include "template.cc"

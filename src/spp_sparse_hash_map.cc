@@ -8,5 +8,5 @@ typedef spp::sparse_hash_map<std::string, int64_t, std::hash<std::string>, std::
 #include "hash_map_int_base.h"
 #include "hash_map_str_base.h"
 
-#include "template.c"
+#include "template.cc"
 

@@ -32,4 +32,4 @@ typedef QHash<std::string, int64_t> str_hash_t;
 #undef DELETE_STR
 #define DELETE_STR(key) str_hash.remove(key);
 
-#include "template.c"
+#include "template.cc"

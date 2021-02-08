@@ -27,4 +27,4 @@
 #define LOAD_FACTOR_STR_HASH(hash) (0.0f)
 #define CLEAR_STR
 
-#include "template.c"
+#include "template.cc"

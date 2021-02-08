@@ -8,5 +8,5 @@ typedef ska::flat_hash_map<std::string, int64_t, ska::power_of_two_std_hash<std:
 #include "hash_map_int_base.h"
 #include "hash_map_str_base.h"
 
-#include "template.c"
+#include "template.cc"
 

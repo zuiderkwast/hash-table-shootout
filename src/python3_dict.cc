@@ -88,4 +88,4 @@ typedef PyObject * hash_t;
 
 #define CLEAR_STR
 
-#include "template.c"
+#include "template.cc"

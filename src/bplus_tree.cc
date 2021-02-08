@@ -31,4 +31,4 @@
 #define CHECK_INT_ITERATOR_VALUE(it,value)
 #define CLEAR_INT
 
-#include "template.c"
+#include "template.cc"

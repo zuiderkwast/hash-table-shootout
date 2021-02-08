@@ -35,4 +35,4 @@
 
 #define CLEAR_INT
 
-#include "template.c"
+#include "template.cc"

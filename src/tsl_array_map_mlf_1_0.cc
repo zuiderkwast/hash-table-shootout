@@ -22,4 +22,4 @@ typedef tsl::array_map<char, int64_t, str_hash<char>> str_hash_t;
 #undef INSERT_STR
 #define INSERT_STR(key, value) str_hash.insert(key, value)
 
-#include "template.c"
+#include "template.cc"

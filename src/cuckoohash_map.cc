@@ -29,4 +29,4 @@ typedef libcuckoo::cuckoohash_map<std::string, int64_t, std::hash<std::string>> 
 #define INSERT_STR(key, value) \
   str_hash.insert(key, value);
 
-#include "template.c"
+#include "template.cc"

@@ -84,4 +84,4 @@ KHASH_MAP_INIT_STR(khstr, int64_t)
 #define CLEAR_INT
 #define CLEAR_STR
 
-#include "template.c"
+#include "template.cc"

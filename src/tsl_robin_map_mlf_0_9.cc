@@ -14,4 +14,4 @@ typedef tsl::robin_map<std::string, int64_t, std::hash<std::string>> str_hash_t;
 #undef SETUP_STR
 #define SETUP_STR str_hash_t str_hash; str_hash.max_load_factor(0.9f);
 
-#include "template.c"
+#include "template.cc"

@@ -30,4 +30,4 @@
 
 #define CLEAR_STR
 
-#include "template.c"
+#include "template.cc"

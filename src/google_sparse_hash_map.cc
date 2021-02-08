@@ -20,4 +20,4 @@ typedef google::sparse_hash_map<std::string, int64_t, std::hash<std::string>> st
 #undef RESERVE_STR
 #define RESERVE_STR(size) str_hash.resize(size)
 
-#include "template.c"
+#include "template.cc"

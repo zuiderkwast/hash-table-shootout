@@ -112,4 +112,4 @@ static std::string rem_kyotodb_stash_cmd = std::string("rm -rf ") + dbpath;
 #undef CLEAR_STR
 #define CLEAR_STR str_hash.close(); system(rem_kyotodb_stash_cmd.c_str());
 
-#include "template.c"
+#include "template.cc"
