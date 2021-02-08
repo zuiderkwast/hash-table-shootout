@@ -19,6 +19,7 @@ Now, run:
 
     $ git submodule update --init --recursive
     $ emacs apps.txt # select assotiative arrays you are interested in
+    $ export PYTHON3_PC=<what_you_need> # if necessary
     $ make
     $ ./bench.py
     $ ./make_chart_data.py < output | ./make_html.py

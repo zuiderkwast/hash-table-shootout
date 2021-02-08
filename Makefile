@@ -11,6 +11,8 @@ LDFLAGS_MALLOC ?= -ltcmalloc_minimal # often even better than jemalloc
 BUILD_DIR      ?= ./build
 OBJ_DIR        ?= ./obj
 
+PYTHON3_PC     ?= python3 # pkg-config ID for python3 development files
+
 ifndef APPS
 cmd := grep -v \\\# apps.txt
 APPS = ${shell ${cmd}}
@@ -87,8 +89,8 @@ CXXFLAGS_kyotocabinet_hash ?= $(shell pkg-config --cflags kyotocabinet)
 LDFLAGS_kyotocabinet_hash  ?= $(shell pkg-config --libs kyotocabinet)
 endif
 ifeq ($(filter python3_dict,${APPS}), python3_dict)
-CXXFLAGS_python3_dict ?= $(shell pkg-config --cflags python3)
-LDFLAGS_python3_dict  ?= $(shell pkg-config --libs python3)
+CXXFLAGS_python3_dict ?= $(shell pkg-config --cflags ${PYTHON3_PC})
+LDFLAGS_python3_dict  ?= $(shell pkg-config --libs ${PYTHON3_PC})
 endif
 LDFLAGS_leveldb                         ?= -lleveldb
 LDFLAGS_rocksdb                         ?= -lrocksdb
