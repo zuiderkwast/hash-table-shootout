@@ -65,7 +65,7 @@ CFLAGS_bplus_tree                       ?= \
 CXXFLAGS_bplus_tree                     ?= ${CFLAGS_bplus_tree}
 LDFLAGS_bplus_tree                      ?= \
 	$(shell pkg-config --libs glib-2.0)
-${BUILD_DIR}/bplus_tree: ${OBJ_DIR}/bplus_foreach.o ${OBJ_DIR}/bplus_insert.o \
+OBJS_bplus_tree = ${OBJ_DIR}/bplus_foreach.o ${OBJ_DIR}/bplus_insert.o \
    ${OBJ_DIR}/bplus_iterator.o ${OBJ_DIR}/bplus_leaf.o ${OBJ_DIR}/bplus_node.o \
    ${OBJ_DIR}/bplus_rebalance.o ${OBJ_DIR}/bplus_remove.o \
    ${OBJ_DIR}/bplus_search.o ${OBJ_DIR}/bplus_tree.o
@@ -108,5 +108,5 @@ $(OBJ_DIR) $(BUILD_DIR):
 clean:
 	rm -rf $(BUILD_DIR) $(OBJ_DIR)
 
-$(BUILD_DIR)/% : src/%.cc ${OBJS_${notdir $@}} | src/template.cc
-	$(CXX) $(CXXFLAGS) ${CXXFLAGS_${notdir $@}} -o $@ $^ ${OBJS_${notdir $@}} ${LDFLAGS} ${LDFLAGS_${notdir $@}}
+$(BUILD_DIR)/% : src/%.cc ${OBJS_${notdir $@}} src/template.cc
+	$(CXX) $(CXXFLAGS) ${CXXFLAGS_${notdir $@}} -o $@ $< ${OBJS_${notdir $@}} ${LDFLAGS} ${LDFLAGS_${notdir $@}}
