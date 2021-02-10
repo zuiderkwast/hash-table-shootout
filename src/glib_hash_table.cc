@@ -36,9 +36,14 @@ static void ghrfunc(gpointer key, gpointer value, gpointer user_data)
 #define SETUP_STR GHashTable* str_hash = g_hash_table_new(g_str_hash, g_str_equal);
 #define RESERVE_STR(size)
 #define SHUFFLE_STR_ARRAY(keys)
-#define INSERT_STR(key, value) \
-	g_hash_table_insert(str_hash, __UNCONST(key.c_str()), (char*)0 + value)
-#define FIND_STR_EXISTING(key) \
+#define INSERT_STR(key, value)											\
+	{																	\
+		char *key_copy = strdup(key.c_str());							\
+		if (!g_hash_table_insert(str_hash, key_copy, (char*)0 + value)){ \
+			free(key_copy);												\
+		}																\
+	}
+#define FIND_STR_EXISTING(key)											\
 	if (g_hash_table_lookup(str_hash, __UNCONST(key.c_str())) == NULL) { \
 		std::cerr << "error\n";											\
 		exit(1);														\
