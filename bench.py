@@ -40,6 +40,7 @@ short_names = {
         'delete_random_full', 'read_random_full_after_delete',
         'iteration_random_full'
     ],
+    
     'small_string': [
         'insert_small_string', 'reinsert_small_string',
         'insert_small_string_reserve',
@@ -54,6 +55,7 @@ short_names = {
         'delete_string',
         'read_string_after_delete'
     ]
+    
 }
 
 if ("interval" in dir() and "step_percent" in dir()) or \
@@ -66,8 +68,8 @@ if len(sys.argv) > 1:
     for x in sys.argv[1:]:
         benchtypes.extend(short_names.get(x, [x]))
 else:
-    benchtypes = short_names['random_shuffle_range'] + short_names['random_full'] \
-        + short_names['small_string'] + short_names['string']
+    benchtypes = short_names['random_shuffle_range'] # + short_names['random_full'] \
+        #+ short_names['small_string'] + short_names['string']
 
 if "interval" in dir():
     points = range(minkeys, maxkeys + 1, interval)
