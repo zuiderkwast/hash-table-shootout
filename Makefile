@@ -2,7 +2,7 @@
 # User-settable variables
 
 CXX      ?= clang++
-CXXFLAGS ?= -O3 -march=native -std=c++14 -DNDEBUG
+CXXFLAGS ?= -O3 -march=native -std=c++14 -DNDEBUG -I/opt/boost/include
 
 # LDFLAGS_MALLOC ?=
 # LDFLAGS_MALLOC ?= -ljemalloc # much better that glibc's malloc on some workloads
