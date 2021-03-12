@@ -6,7 +6,7 @@ CXXFLAGS ?= -O3 -march=native -std=c++14 -DNDEBUG
 
 # LDFLAGS_MALLOC ?=
 # LDFLAGS_MALLOC ?= -ljemalloc # much better that glibc's malloc on some workloads
-LDFLAGS_MALLOC ?= -ltcmalloc_minimal # often even better than jemalloc
+LDFLAGS_MALLOC ?=  # often even better than jemalloc
 
 BUILD_DIR      ?= ./build
 OBJ_DIR        ?= ./obj
@@ -18,7 +18,7 @@ cmd := grep -v \\\# apps.txt
 APPS = ${shell ${cmd}}
 endif # APPS
 
-LDFLAGS ?= -lm
+LDFLAGS ?= -lm -lpython3.8
 LDFLAGS += ${LDFLAGS_MALLOC}
 
 ifeq ($(filter glib_tree,${APPS}), glib_tree)

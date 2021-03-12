@@ -63,7 +63,7 @@ for line in lines:
     benchtype, nkeys, program, load_factor, nbytes, runtime = line.split(',')
     nkeys = int(nkeys)
     nbytes = float(nbytes) / nkeys # bytes per (key,value) pair
-    runtime = float(runtime) * 1000000000 / nkeys # microseconds per operation
+    runtime = float(runtime) * 1000000000 / nkeys # nanoseconds per operation
     load_factor = float(load_factor)
 
     if runtime > 0 and nbytes > 0:
