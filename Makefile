@@ -21,6 +21,14 @@ endif # APPS
 LDFLAGS ?= -lm -lpython3.8
 LDFLAGS += ${LDFLAGS_MALLOC}
 
+REDIS_LIB = libredis.a
+
+$(REDIS_LIB): redis/alloc.o redis/dict.o redis/sds.o 
+	ar -r -o $@ $^
+
+redis/%.o: reids/%.c 
+	$(CC) -c $(CXXFLAGS) -o $@  $<
+
 ifeq ($(filter glib_tree,${APPS}), glib_tree)
 CXXFLAGS_glib_tree ?= $(shell pkg-config --cflags glib-2.0) \
 	-DG_DISABLE_CHECKS -DG_DISABLE_ASSERT
@@ -59,6 +67,8 @@ CXXFLAGS_cuckoohash_map                 ?= -Ilibcuckoo -pthread
 CXXFLAGS_leveldb                        ?=
 CXXFLAGS_rocksdb                        ?=
 CXXFLAGS_khash                          ?= -Iklibs
+CXXFLAGS_redis_dict                     ?= -I.
+
 ifeq ($(filter bplus_tree,${APPS}), bplus_tree)
 CFLAGS_bplus_tree                       ?= \
 	-DBPLUS_TREE_ORDER=32 -DBNPPP_MEMORY_USE_GLIB \
@@ -95,7 +105,7 @@ endif
 LDFLAGS_leveldb                         ?= -lleveldb
 LDFLAGS_rocksdb                         ?= -lrocksdb
 LDFLAGS_khash                           ?=
-
+LDFLAGS_redis_dict                      ?= -L. -lredis
 ##################################################
 
 .DEFAULT_GOAL := all
@@ -110,5 +120,5 @@ $(OBJ_DIR) $(BUILD_DIR):
 clean:
 	rm -rf $(BUILD_DIR) $(OBJ_DIR)
 
-$(BUILD_DIR)/% : src/%.cc ${OBJS_${notdir $@}} src/template.cc
+$(BUILD_DIR)/% : src/%.cc ${OBJS_${notdir $@}} src/template.cc $(REDIS_LIB)
 	$(CXX) $(CXXFLAGS) ${CXXFLAGS_${notdir $@}} -o $@ $< ${OBJS_${notdir $@}} ${LDFLAGS} ${LDFLAGS_${notdir $@}}
