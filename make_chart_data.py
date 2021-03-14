@@ -37,6 +37,7 @@ program_slugs = [
     'nataF8',
     'glib_tree',
     'glib_hash_table',
+    'redis_dict',
     'cuckoohash_map'
 ]
 

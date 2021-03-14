@@ -16,7 +16,7 @@ for line in open("apps.txt"):
         programs.append(line)
 
 minkeys  =  2*100*1000
-maxkeys  = 30*100*1000
+maxkeys  = 10*1000*1000
 #interval =  2*100*1000
 step_percent =  30 # you may use this variable instead of "interval" for exponetial step
 best_out_of = 5
@@ -68,8 +68,8 @@ if len(sys.argv) > 1:
     for x in sys.argv[1:]:
         benchtypes.extend(short_names.get(x, [x]))
 else:
-    benchtypes = short_names['random_shuffle_range'] # + short_names['random_full'] \
-        #+ short_names['small_string'] + short_names['string']
+    benchtypes = short_names['random_shuffle_range'] + short_names['random_full'] \
+    + short_names['small_string'] + short_names['string']
 
 if "interval" in dir():
     points = range(minkeys, maxkeys + 1, interval)
