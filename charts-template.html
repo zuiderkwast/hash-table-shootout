@@ -36,7 +36,8 @@
                                return parseInt(num/1000) + 'k'; 
                            }
         },
-        transform: function(v) { return Math.log(v+0.000001)/Math.log(11); }
+        min: 1000000,
+        // transform: function(v) { return Math.log(v+0.000001)/Math.log(11); }
     };
 
     yaxis_runtime_settings = {
@@ -56,7 +57,8 @@
 
     legend_settings = {
         position: 'nw',
-        backgroundOpacity: 0
+        backgroundOpacity: 0,
+        margin: [-250, 0]
     };
 
     runtime_settings = {
@@ -286,17 +288,17 @@
 <style>
     div.global {
         margin: auto;
-        width: 950px;
+        width: 1250px;
     }
     div.global_select_all_none {
         text-align: center;
     }
     div.chart {
-        width: 900px;
-        height: 500px;
+        width: 1200px;
+        height: 700px;
     }
     div.xaxis-title {
-        width: 900px;
+        width: 1100px;
         text-align: center;
         font-style: italic;
         font-size: small;

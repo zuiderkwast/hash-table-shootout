@@ -6,7 +6,7 @@ CXXFLAGS ?= -O3 -march=native -std=c++14 -DNDEBUG -I/opt/boost/include
 
 # LDFLAGS_MALLOC ?=
 # LDFLAGS_MALLOC ?= -ljemalloc # much better that glibc's malloc on some workloads
-LDFLAGS_MALLOC ?=  # often even better than jemalloc
+LDFLAGS_MALLOC ?=  -ljemalloc # often even better than jemalloc
 
 BUILD_DIR      ?= ./build
 OBJ_DIR        ?= ./obj
