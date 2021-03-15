@@ -11,7 +11,7 @@ from collections import OrderedDict
 program_slugs = [
     'std_unordered_map',
     'google_dense_hash_map',
-    'qt_qhash',
+    'python3_dict',
     'tsl_sparse_map',
     'tsl_hopscotch_map',
     'tsl_robin_map',
