@@ -24,7 +24,7 @@ class BucketBase {
 
  public:
   using SlotId = uint8_t;
-  static constexpr SlotId kNanSlot = 255;
+  enum { kNanSlot = 255 };
 
   BucketBase();
 
@@ -379,7 +379,7 @@ class DashTable {
     return segment_.capacity() * sizeof(Segment*) + sizeof(Segment) * unique_segments_;
   }
 
-  double load_factor() const { return double(size()) / (segment_.capacity()*unique_segments()) ;}
+  double load_factor() const { return double(size()) / (Segment::capacity() * unique_segments()) ;}
 
   void set_cmp(Bucket::comp_fun cmp_fun) {
     cmp_fun_ = cmp_fun;

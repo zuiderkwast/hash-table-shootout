@@ -7,7 +7,6 @@
 #include <immintrin.h>
 
 #include <cstring>
-
 #include "aquahash.h"
 
 namespace base {
@@ -57,6 +56,7 @@ bool BucketBase::ClearStash(uint8_t fp, unsigned stash_pos, bool is_own) {
   auto res = IterateStash(fp, is_own, std::move(cb));
   return res.second != kNanSlot;
 }
+
 
 auto Bucket::Find(Key_t key, comp_fun cf, uint8_t meta_hash, bool probe) const -> SlotId {
   unsigned mask = SSE_CMP8(finger_array_, meta_hash) & GetBusy();
@@ -285,6 +285,7 @@ void Segment::Split(Segment* dest) {
 
       invalid_mask |= (1u << slot);
 
+      dest->InsertUniq(key, v, hash);
       dest->size_++;
       ++removed;
 
