@@ -26,8 +26,17 @@ REDIS_LIB = libredis.a
 $(REDIS_LIB): redis/alloc.o redis/dict.o redis/sds.o 
 	ar -r -o $@ $^
 
-redis/%.o: reids/%.c 
+redis/%.o: redis/%.c 
 	$(CC) -c $(CXXFLAGS) -o $@  $<
+
+DASH_LIB = libdash.a
+
+$(DASH_LIB): dash/dash.o 
+	ar -r -o $@ $^
+
+dash/%.o: dash/%.c 
+	$(CC) -c $(CXXFLAGS) -o $@  $<
+
 
 ifeq ($(filter glib_tree,${APPS}), glib_tree)
 CXXFLAGS_glib_tree ?= $(shell pkg-config --cflags glib-2.0) \
@@ -68,6 +77,7 @@ CXXFLAGS_leveldb                        ?=
 CXXFLAGS_rocksdb                        ?=
 CXXFLAGS_khash                          ?= -Iklibs
 CXXFLAGS_redis_dict                     ?= -I.
+CXXFLAGS_dash_table                     ?= -I.
 
 ifeq ($(filter bplus_tree,${APPS}), bplus_tree)
 CFLAGS_bplus_tree                       ?= \
@@ -106,6 +116,8 @@ LDFLAGS_leveldb                         ?= -lleveldb
 LDFLAGS_rocksdb                         ?= -lrocksdb
 LDFLAGS_khash                           ?=
 LDFLAGS_redis_dict                      ?= -L. -lredis
+LDFLAGS_dash_table                      ?= -L. -ldash
+
 ##################################################
 
 .DEFAULT_GOAL := all
@@ -120,5 +132,5 @@ $(OBJ_DIR) $(BUILD_DIR):
 clean:
 	rm -rf $(BUILD_DIR) $(OBJ_DIR)
 
-$(BUILD_DIR)/% : src/%.cc ${OBJS_${notdir $@}} src/template.cc $(REDIS_LIB)
+$(BUILD_DIR)/% : src/%.cc ${OBJS_${notdir $@}} src/template.cc $(REDIS_LIB) $(DASH_LIB)
 	$(CXX) $(CXXFLAGS) ${CXXFLAGS_${notdir $@}} -o $@ $< ${OBJS_${notdir $@}} ${LDFLAGS} ${LDFLAGS_${notdir $@}}

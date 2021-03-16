@@ -38,7 +38,8 @@ program_slugs = [
     'glib_tree',
     'glib_hash_table',
     'redis_dict',
-    'cuckoohash_map'
+    'dash_table',
+    'cuckoohash_map',
 ]
 
 # hashmap which will be shown (checkbox checked),
