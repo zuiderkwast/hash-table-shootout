@@ -252,6 +252,7 @@ class Segment {
   using Value_t = Bucket::Value_t;
   using Key_t = Bucket::Key_t;
   using DtorFn = void (*)(uint64_t);
+  using HashFn = size_t (*)(Key_t);
 
   explicit Segment(size_t depth) : local_depth_(depth) {
   }
@@ -261,7 +262,7 @@ class Segment {
   // Returns 0 if insert succeeds, -1 if it's full, -3 for duplicate,
   int Insert(Key_t key, Value_t value, size_t key_hash, Bucket::comp_fun cmp_fun);
 
-  void Split(Segment* dest);
+  void Split(HashFn hfn, Segment* dest);
 
   bool Find(Key_t key, size_t key_hash, Bucket::comp_fun cf, Value_t* res) const;
   bool Delete(Key_t key, size_t key_hash, Bucket::comp_fun cf, DtorFn dfun);
@@ -344,7 +345,6 @@ class DashTable {
  public:
   using Key_t = Bucket::Key_t;
   using Value_t = Bucket::Value_t;
-  using HashFn = size_t (*)(uint64_t);
 
   explicit DashTable(size_t capacity_log = 1);
   ~DashTable();
@@ -389,7 +389,7 @@ class DashTable {
     key_dtor_fun_ = dfun;
   }
 
-  void set_hash_fn(HashFn fn) {
+  void set_hash_fn(Segment::HashFn fn) {
     hash_fn_ = fn;
   }
 
@@ -406,7 +406,7 @@ class DashTable {
   size_t size_ = 0;
   Bucket::comp_fun cmp_fun_ = nullptr;
   Segment::DtorFn key_dtor_fun_ = nullptr;
-  HashFn hash_fn_ = nullptr;
+  Segment::HashFn hash_fn_ = nullptr;
 
   std::vector<Segment*> segment_;
 };

@@ -30,7 +30,7 @@ inline unsigned SSE_CMP8(const void* src, uint8_t key) {
   return mask;
 }
 
-uint64_t HashFun(Segment::Key_t k) {
+size_t HashFun(Segment::Key_t k) {
   // return XXH3_64bits_withSeed(&k, sizeof(k), 0);
   auto hash = AquaHash::SmallKeyAlgorithm(reinterpret_cast<const uint8_t*>(&k), sizeof(k));
   return _mm_cvtsi128_si64x(hash);
@@ -239,16 +239,19 @@ bool Segment::Find(Key_t key, size_t key_hash, Bucket::comp_fun cf, Value_t* res
   return true;
 }
 
-void Segment::Split(Segment* dest) {
+void Segment::Split(HashFn hfn, Segment* dest) {
   ++local_depth_;
   dest->local_depth_ = local_depth_;
   unsigned removed = 0;
+
+  if (!hfn)
+    hfn = &HashFun;
 
   for (unsigned i = 0; i < kNumBucket; ++i) {
     uint32_t invalid_mask = 0;
 
     auto cb = [&](unsigned slot, Key_t k, Value_t v, bool probe) {
-      uint64_t hash = HashFun(k);
+      uint64_t hash = hfn(k);
 
       // we extract local_depth bits from the left part of the hash. Since we extended local_depth,
       // we added an additional bit to the right, therefore we need to look at lsb of the extract.
@@ -279,7 +282,7 @@ void Segment::Split(Segment* dest) {
     uint32_t invalid_mask = 0;
 
     auto cb = [&](unsigned slot, Key_t key, Value_t v, bool probe) {
-      uint64_t hash = HashFun(key);
+      uint64_t hash = hfn(key);
       if ((hash >> (64 - local_depth_) & 1) == 0)
         return;
 
@@ -374,7 +377,7 @@ void DashTable::Reserve(size_t size) {
 }
 
 int DashTable::Insert(Key_t key, Value_t value) {
-  uint64_t key_hash = HashFun(key);
+  uint64_t key_hash = Hash(key);
 
   while (true) {
     // Keep last global_depth_ msb bits of the hash.
@@ -404,7 +407,7 @@ int DashTable::Insert(Key_t key, Value_t value) {
     size_t start_idx = x & (~(chunk_size - 1));
 
     Segment* s = new Segment(target->local_depth_ + 1);
-    target->Split(s);  // increases the depth.
+    target->Split(hash_fn_, s);  // increases the depth.
     ++unique_segments_;
 
     for (size_t i = start_idx + chunk_size / 2; i < start_idx + chunk_size; ++i) {

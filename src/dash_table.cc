@@ -4,13 +4,15 @@
 
 #include "dash/dash.h"
 
-static unsigned int IntHash(const void* key) {
+static unsigned long IntHash(uint64_t key) {
   std::hash<int64_t> h;
 
-  return h((int64_t)key);
+  return h(key);
 }
 
 #define SETUP_INT base::DashTable hash
+                  // hash.set_hash_fn(&IntHash)
+
 #define RESERVE_INT(size) hash.Reserve(size)
 #define INSERT_INT(key, value) hash.Insert(key, value)
 
