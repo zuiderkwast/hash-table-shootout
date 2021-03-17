@@ -19,8 +19,8 @@
 // low and the impact nearly null that it's not really worth it).
 
 static const std::array<char, 62> ALPHANUMERIC_CHARS = {
-	'0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 
-	'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z', 
+	'0', '1', '2', '3', '4', '5', '6', '7', '8', '9',
+	'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z',
 	'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z'
 };
 
@@ -45,11 +45,11 @@ static std::mt19937_64 generator(SEED);
 
 std::size_t get_memory_usage_bytes() {
 	std::ifstream file("/proc/self/statm");
-	
+
 	std::size_t memory;
 	file >> memory; // Ignore first
 	file >> memory;
-	
+
 	return memory * getpagesize();
 }
 
@@ -65,7 +65,7 @@ std::string get_random_alphanum_string(
 	for(std::size_t i = 0; i < size; i++) {
 		str[i] = ALPHANUMERIC_CHARS[rd_uniform(generator)];
 	}
-	
+
 	return str;
 }
 
@@ -76,7 +76,7 @@ std::vector<std::int64_t> get_random_shuffle_range_ints(std::size_t nb_ints) {
 	std::vector<std::int64_t> random_shuffle_ints(nb_ints);
 	std::iota(random_shuffle_ints.begin(), random_shuffle_ints.end(), 0);
 	std::shuffle(random_shuffle_ints.begin(), random_shuffle_ints.end(), generator);
-	
+
 	return random_shuffle_ints;
 }
 
@@ -84,17 +84,17 @@ std::vector<std::int64_t> get_random_shuffle_range_ints(std::size_t nb_ints) {
  * Generate random vector of random ints between min and max.
  */
 std::vector<std::int64_t> get_random_full_ints(
-	std::size_t nb_ints, 
-	std::int64_t min = 0, 
-	std::int64_t max = std::numeric_limits<std::int64_t>::max()) 
+	std::size_t nb_ints,
+	std::int64_t min = 0,
+	std::int64_t max = std::numeric_limits<std::int64_t>::max())
 {
 	std::uniform_int_distribution<std::int64_t> rd_uniform(min, max);
-	
+
 	std::vector<std::int64_t> random_ints(nb_ints);
 	for(std::size_t i = 0; i < random_ints.size(); i++) {
 		random_ints[i] = rd_uniform(generator);
 	}
-	
+
 	return random_ints;
 }
 
@@ -106,15 +106,15 @@ std::vector<std::string> get_random_alphanum_strings(
 	for(std::size_t i = 0; i < random_strings.size(); i++) {
 		random_strings[i] = get_random_alphanum_string(min_size, max_size);
 	}
-	
+
 	return random_strings;
 }
 
 class measurements {
- public:	
+ public:
  measurements(): m_memory_usage_bytes_start(get_memory_usage_bytes()),
 		m_chrono_start(std::chrono::high_resolution_clock::now())
-					
+
 	{
 	}
 
@@ -126,7 +126,7 @@ class measurements {
 	~measurements() {
 		const auto chrono_end = std::chrono::high_resolution_clock::now();
 		const std::size_t memory_usage_bytes_end = get_memory_usage_bytes();
-		
+
 		const double nb_seconds = std::chrono::duration<double>(chrono_end - m_chrono_start).count();
 		// On reads or delete the used bytes could be less than initially.
 		const std::size_t used_memory_bytes = (memory_usage_bytes_end > m_memory_usage_bytes_start)?
@@ -134,8 +134,8 @@ class measurements {
 
 		std::cout << nb_seconds << " " << used_memory_bytes << " ";
 	}
-	
- private:	
+
+ private:
 	std::size_t m_memory_usage_bytes_start;
 	std::chrono::time_point<std::chrono::high_resolution_clock> m_chrono_start;
 };
@@ -225,9 +225,9 @@ static bool process_integers()
 		for(std::int64_t i = 0; i < num_keys; i++) {
 			INSERT_INT(keys[i], value);
 		}
-		
+
 		std::shuffle(keys.begin(), keys.end(), generator);
-		
+
 		m.set_chrono_start();
 		for(std::int64_t i = 0; i < num_keys; i++) {
 			FIND_INT_EXISTING(keys[i]);
@@ -267,7 +267,8 @@ static bool process_integers()
 		}
 
 		std::shuffle(keys.begin(), keys.end(), generator);
-		for(std::int64_t i = 0; i < num_keys / 2; i++) {
+		size_t delete_count = num_keys / 2;
+		for(std::int64_t i = 0; i < delete_count; i++) {
 			DELETE_INT(keys[i]);
 		}
 
@@ -280,9 +281,9 @@ static bool process_integers()
 		for(std::int64_t i = 0; i < num_keys; i++) {
 			FIND_INT_EXISTING_COUNT(keys[i], nb_found);
 		}
-		
-		if(nb_found != num_keys / 2) {
-			std::cerr << "error, duplicates\n";
+
+		if(nb_found + delete_count != num_keys) {
+			std::cerr << "error, duplicates " << nb_found << "/" << delete_count << "\n";
 			std::exit(6);
 		}
 	}
@@ -294,14 +295,14 @@ static bool process_integers()
 		for(std::int64_t i = 0; i < num_keys; i++) {
 			INSERT_INT(keys[i], value);
 		}
-		
-		
+
+
 		m.set_chrono_start();
 		ITERATE_INT(it) {
 			CHECK_INT_ITERATOR_VALUE(it, value);
 		}
 	}
-	
+
 	else if (test_type == "delete_random_shuffle_range" ||
 			 test_type == "delete_random_full")
 	{
@@ -309,10 +310,10 @@ static bool process_integers()
 		for(std::int64_t i = 0; i < num_keys; i++) {
 			INSERT_INT(keys[i], value);
 		}
-		
+
 		std::shuffle(keys.begin(), keys.end(), generator);
-		
-		
+
+
 		m.set_chrono_start();
 		for(std::int64_t i = 0; i < num_keys; i++) {
 			DELETE_INT(keys[i]);
@@ -429,8 +430,8 @@ static bool process_strings()
 		for(std::int64_t i = 0; i < num_keys; i++) {
 			INSERT_STR(keys[i], value);
 		}
-		
-		
+
+
 		std::string s_val; // for kyotocabinet_stash
 		m.set_chrono_start();
 		for(std::int64_t i = 0; i < num_keys; i++) {
@@ -445,21 +446,21 @@ static bool process_strings()
 		for(std::int64_t i = 0; i < num_keys; i++) {
 			INSERT_STR(keys[i], value);
 		}
-		
+
 		SHUFFLE_STR_ARRAY(keys);
 		for(std::int64_t i = 0; i < num_keys / 2; i++) {
 			DELETE_STR(keys[i]);
 		}
 		SHUFFLE_STR_ARRAY(keys);
 
-		
+
 		std::int64_t nb_found = 0;
 		std::string s_val; // for kyotocabinet_stash
 		m.set_chrono_start();
 		for(std::int64_t i = 0; i < num_keys; i++) {
 			FIND_STR_EXISTING_COUNT(keys[i], nb_found);
 		}
-		
+
 		if(nb_found != num_keys / 2) {
 			std::cerr << "error, duplicates\n";
 			std::exit(6);
@@ -473,10 +474,10 @@ static bool process_strings()
 		for(std::int64_t i = 0; i < num_keys; i++) {
 			INSERT_STR(keys[i], value);
 		}
-		
+
 		SHUFFLE_STR_ARRAY(keys);
-		
-		
+
+
 		m.set_chrono_start();
 		for(std::int64_t i = 0; i < num_keys; i++) {
 			DELETE_STR(keys[i]);
