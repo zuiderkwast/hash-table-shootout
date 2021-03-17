@@ -2,7 +2,7 @@
 # User-settable variables
 
 CXX      ?= clang++
-CXXFLAGS ?= -O3 -march=native -std=c++14 -DNDEBUG -I/opt/boost/include
+CXXFLAGS ?= -O3 -g -march=native -std=c++14 -DNDEBUG -I/opt/boost/include
 
 # LDFLAGS_MALLOC ?=
 # LDFLAGS_MALLOC ?= -ljemalloc # much better that glibc's malloc on some workloads
@@ -116,7 +116,7 @@ LDFLAGS_leveldb                         ?= -lleveldb
 LDFLAGS_rocksdb                         ?= -lrocksdb
 LDFLAGS_khash                           ?=
 LDFLAGS_redis_dict                      ?= -L. -lredis
-LDFLAGS_dash_table                      ?= -L. -ldash
+LDFLAGS_dash_table                      ?= -L. -ldash -lredis
 
 ##################################################
 

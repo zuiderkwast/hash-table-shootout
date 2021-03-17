@@ -13,23 +13,6 @@ namespace base {
 
 namespace {
 
-inline unsigned SSE_CMP8(const void* src, uint8_t key) {
-  // Replicate 16 times uint8_t key to key_data.
-  const __m128i key_data = _mm_set1_epi8(key);
-
-  // Loads 16 bytes of src into seg_data.
-  __m128i seg_data = _mm_loadu_si128(reinterpret_cast<const __m128i*>(src));
-
-  // compare 16-byte vectors seg_data and key_data, dst[i] := ( a[i] == b[i] ) ? 0xFF : 0.
-  __m128i rv_mask = _mm_cmpeq_epi8(seg_data, key_data);
-
-  // collapses 16 msb bits from each byte in rv_mask into mask.
-  int mask = _mm_movemask_epi8(rv_mask);
-
-  // Note: Last 2 operations can be combined in skylake with _mm_cmpeq_epi8_mask.
-  return mask;
-}
-
 size_t HashFun(Segment::Key_t k) {
   // return XXH3_64bits_withSeed(&k, sizeof(k), 0);
   auto hash = AquaHash::SmallKeyAlgorithm(reinterpret_cast<const uint8_t*>(&k), sizeof(k));
@@ -57,26 +40,43 @@ bool BucketBase::ClearStash(uint8_t fp, unsigned stash_pos, bool is_own) {
   return res.second != kNanSlot;
 }
 
+unsigned BucketBase::CompareFP(uint8_t fp) const {
+  // Replicate 16 times uint8_t key to key_data.
+  const __m128i key_data = _mm_set1_epi8(fp);
+
+  // Loads 16 bytes of src into seg_data.
+  __m128i seg_data = _mm_loadu_si128(reinterpret_cast<const __m128i*>(finger_array_));
+
+  // compare 16-byte vectors seg_data and key_data, dst[i] := ( a[i] == b[i] ) ? 0xFF : 0.
+  __m128i rv_mask = _mm_cmpeq_epi8(seg_data, key_data);
+
+  // collapses 16 msb bits from each byte in rv_mask into mask.
+  int mask = _mm_movemask_epi8(rv_mask);
+
+  // Note: Last 2 operations can be combined in skylake with _mm_cmpeq_epi8_mask.
+  return mask & GetBusy();
+}
 
 auto Bucket::Find(Key_t key, comp_fun cf, uint8_t meta_hash, bool probe) const -> SlotId {
-  unsigned mask = SSE_CMP8(finger_array_, meta_hash) & GetBusy();
+  unsigned mask = CompareFP(meta_hash);
   mask &= (GetProbe() ^ ((1u - probe) * kAllocMask));
 
-  unsigned delta = 0;
-  bool eq;
-  while (mask) {
-    int index = __builtin_ctz(mask);
-    if (cf) {
-      eq = cf(key_[delta + index], key);
-    } else {
-      eq = (key_[delta + index] == key);
-    }
+  return mask ? FindByMask(key, mask, cf) : unsigned(kNanSlot);
+}
 
-    if (eq) {
-      return delta + index;
+auto Bucket::Find(Key_t key, uint8_t meta_hash, bool probe) const -> SlotId {
+  unsigned mask = CompareFP(meta_hash);
+  mask &= (GetProbe() ^ ((1u - probe) * kAllocMask));
+
+  if (mask) {
+    unsigned delta = __builtin_ctz(mask);
+    mask >>= delta;
+    for (; delta < 14; ++delta) {
+      if ((mask & 1) && key_[delta] == key) {
+        return delta;
+      }
+      mask >>= 1;
     }
-    mask >>= (index + 1);
-    delta += (index + 1);
   }
 
   return kNanSlot;
@@ -86,7 +86,6 @@ Segment::~Segment() {
 }
 
 void Segment::SetStashPtr(unsigned stash_pos, uint8_t meta_hash, Bucket* target, Bucket* next) {
-
   unsigned index = target->FindOverflowSlot();  // index finds the rightmost free slot.
 
   // we use only 4 fp slots for handling stash buckets,
@@ -157,14 +156,14 @@ auto Segment::Find(Key_t key, size_t key_hash, Bucket::comp_fun cf) const -> Ite
   const Bucket* target = bucket_ + bidx;
   uint8_t fp_hash = key_hash & kFpMask;
 
-  Bucket::SlotId sid = target->Find(key, cf, fp_hash, false);
+  Bucket::SlotId sid = cf ? target->Find(key, cf, fp_hash, false) : target->Find(key, fp_hash, false);
   if (sid != Bucket::kNanSlot) {
     return Iterator{bidx, sid};
   }
   uint8_t nid = (bidx + 1) & kBucketMask;
   const Bucket* probe = bucket_ + nid;
 
-  sid = probe->Find(key, cf, fp_hash, true);
+  sid = cf ? probe->Find(key, cf, fp_hash, true) : probe->Find(key, fp_hash, true);
   if (sid != Bucket::kNanSlot) {
     return Iterator{nid, sid};
   }
@@ -174,10 +173,8 @@ auto Segment::Find(Key_t key, size_t key_hash, Bucket::comp_fun cf) const -> Ite
   }
 
   auto stash_cb = [&](unsigned overflow_index, unsigned pos) -> Bucket::SlotId {
-
-
     const Bucket* bucket = bucket_ + kNumBucket + pos;
-    return bucket->Find(key, cf, fp_hash, false);
+    return cf ? bucket->Find(key, cf, fp_hash, false) : bucket->Find(key, fp_hash, false);
   };
 
   if (target->HasStashOverflow()) {

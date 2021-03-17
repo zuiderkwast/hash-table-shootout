@@ -142,21 +142,21 @@ class BucketBase {
     return (bitmap_ >> 4) & kAllocMask;
   }
 
-  uint32_t version_unsused_ = 0;  // could be used for CAS and MVC.
+  unsigned CompareFP(uint8_t fp) const;
 
-  // bitmap is [14 bit- busy][14bit-probing, whether the key does not belong to this
+  uint8_t overflow_bitmap_ = 0;
+  uint8_t overflow_pos_ = 0;
+  uint8_t overflow_member_ = 0; /*overflow_member_ indicates membership of the overflow
+                             fingerprint*/
+  uint8_t overflow_count_ = 0;
+
+   // bitmap is [14 bit- busy][14bit-probing, whether the key does not belong to this
   // bucket][4bit-count]
   uint32_t bitmap_ = 0;  // allocation bitmap + pointer bitmap + counter
 
   /*only use the first 14 bytes, can be accelerated by
     SSE instruction,0-13 for finger, 14-17 for overflowed*/
   uint8_t finger_array_[kNumSlots + kOverflowLen];
-  uint8_t overflow_bitmap_ = 0;
-  uint8_t overflow_pos_ = 0;
-  uint8_t overflow_member_ = 0; /*overflow_member_ indicates membership of the overflow
-                             fingerprint*/
-  uint8_t overflow_count_ = 0;
-  uint8_t unused[2];
 };
 
 class Bucket : public BucketBase {
@@ -188,8 +188,10 @@ class Bucket : public BucketBase {
     SetHash(slot, meta_hash, probe);
   }
 
-  // Returns the slot id if key was found, or kNanSlot if not.
+  SlotId Find(Key_t key, uint8_t meta_hash, bool probe) const;
+
   SlotId Find(Key_t key, comp_fun cf, uint8_t meta_hash, bool probe) const;
+
 
   // if own_items is true it means we try to move owned item to probing bucket.
   // if own_items false it means we try to move non-owned item from probing bucket back to its host.
@@ -227,14 +229,26 @@ class Bucket : public BucketBase {
   }
 
  private:
-  struct Pair {
-    Key_t key;
-    Value_t value;
-  };
+  // Returns the slot id if key was found, or kNanSlot if not.
+  template <typename F> SlotId FindByMask(Key_t key, unsigned mask, F&& f) const {
+    unsigned delta = __builtin_ctz(mask);
+    mask >>= delta;
+
+    do {
+      if ((mask & 1) && f(key_[delta], key)) {
+        return delta;
+      }
+      mask >>= 1;
+      ++delta;
+    } while (mask);
+    return kNanSlot;
+  }
 
   Key_t key_[kNumSlots];
   Value_t value_[kNumSlots];
 };
+
+constexpr size_t kBSize = sizeof(Bucket);
 
 class Segment {
   friend class DashTable;
