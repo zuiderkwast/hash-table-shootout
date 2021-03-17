@@ -40,15 +40,15 @@ static bool dictSdsKeyCompare(uint64_t key1, uint64_t key2) {
 
 #define DELETE_INT(key) hash.Delete(key)
 
-#define FIND_INT_EXISTING(key) uint64_t rval; \
-    if(!hash.Find(key, &rval)) { printf("error"); exit(1); }
+#define FIND_INT_EXISTING(key)  \
+    if(!hash.Find(key)) { printf("error"); exit(1); }
 
-#define FIND_INT_MISSING(key) uint64_t rval; \
-    if(hash.Find(key, &rval)) { printf("error"); exit(1); }
+#define FIND_INT_MISSING(key)  \
+    if(hash.Find(key)) { printf("error"); exit(1); }
 
 
-#define FIND_INT_EXISTING_COUNT(key, count) uint64_t rval; \
-    if(hash.Find(key, &rval)) { count++; }
+#define FIND_INT_EXISTING_COUNT(key, count)  \
+    if(hash.Find(key)) { count++; }
 
 #define ITERATE_INT(it)
 #define CHECK_INT_ITERATOR_VALUE(iterator, value)
@@ -74,20 +74,17 @@ static bool dictSdsKeyCompare(uint64_t key1, uint64_t key2) {
 
 
 #define FIND_STR_EXISTING(key) \
-  uint64_t rval; \
   sk = sdscpylen(sk, key.data(), key.size()); \
-	if(!str_hash.Find((uint64_t)sk, &rval)) { std::cerr << "error\n"; exit(4); }
+	if(!str_hash.Find((uint64_t)sk)) { std::cerr << "error\n"; exit(4); }
 
 #define FIND_STR_MISSING(key) \
-  uint64_t rval; \
-	sk = sdscpylen(sk, key.data(), key.size()); \
-	if(str_hash.Find((uint64_t)sk, &rval)) { std::cerr << "error\n"; exit(5); }
+  sk = sdscpylen(sk, key.data(), key.size()); \
+	if(str_hash.Find((uint64_t)sk)) { std::cerr << "error\n"; exit(5); }
 
 
 #define FIND_STR_EXISTING_COUNT(key, count) \
-  uint64_t rval; \
-	sk = sdscpylen(sk, key.data(), key.size()); \
-	if(str_hash.Find((uint64_t)sk, &rval)) { count++; }
+  sk = sdscpylen(sk, key.data(), key.size()); \
+	if(str_hash.Find((uint64_t)sk)) { count++; }
 
 
 #define CLEAR_STR

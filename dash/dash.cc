@@ -136,7 +136,7 @@ void Segment::UnsetStashPtr(unsigned stash_pos, uint8_t meta_hash, Bucket* targe
 
 int Segment::Insert(Key_t key, Value_t value, size_t key_hash, Bucket::comp_fun cmp_fun) {
   /*unique check, needs to check 2 hash table*/
-  Iterator it = Find(key, key_hash, cmp_fun);
+  Iterator it = FindIt(key, key_hash, cmp_fun);
   if (it.found()) {
     return -3; /* duplicate insert*/
   }
@@ -151,7 +151,7 @@ int Segment::Insert(Key_t key, Value_t value, size_t key_hash, Bucket::comp_fun 
   return -1;
 }
 
-auto Segment::Find(Key_t key, size_t key_hash, Bucket::comp_fun cf) const -> Iterator {
+auto Segment::FindIt(Key_t key, size_t key_hash, Bucket::comp_fun cf) const -> Iterator {
   unsigned bidx = BucketIndex(key_hash);
   const Bucket* target = bucket_ + bidx;
   uint8_t fp_hash = key_hash & kFpMask;
@@ -207,7 +207,7 @@ void Segment::DeleteKeys(DtorFn dfun) {
 }
 
 bool Segment::Delete(Key_t key, size_t key_hash, Bucket::comp_fun cf, DtorFn dfun) {
-  auto it = Find(key, key_hash, cf);
+  auto it = FindIt(key, key_hash, cf);
 
   if (!it.found())
     return false;
@@ -227,7 +227,7 @@ bool Segment::Delete(Key_t key, size_t key_hash, Bucket::comp_fun cf, DtorFn dfu
 }
 
 bool Segment::Find(Key_t key, size_t key_hash, Bucket::comp_fun cf, Value_t* res) const {
-  auto it = Find(key, key_hash, cf);
+  auto it = FindIt(key, key_hash, cf);
   if (!it.found())
     return false;
 

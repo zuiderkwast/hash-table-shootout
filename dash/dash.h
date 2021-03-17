@@ -279,6 +279,12 @@ class Segment {
   void Split(HashFn hfn, Segment* dest);
 
   bool Find(Key_t key, size_t key_hash, Bucket::comp_fun cf, Value_t* res) const;
+
+  bool Find(Key_t key, size_t key_hash, Bucket::comp_fun cf) const {
+    auto it = FindIt(key, key_hash, cf);
+    return it.found();
+  }
+
   bool Delete(Key_t key, size_t key_hash, Bucket::comp_fun cf, DtorFn dfun);
 
   void DeleteKeys(DtorFn dfun);
@@ -339,7 +345,7 @@ class Segment {
     return false;
   }
 
-  Iterator Find(Key_t key, size_t key_hash, Bucket::comp_fun cf) const;
+  Iterator FindIt(Key_t key, size_t key_hash, Bucket::comp_fun cf) const;
 
   void SetStashPtr(unsigned stash_pos, uint8_t meta_hash, Bucket* target, Bucket* next);
 
@@ -368,6 +374,7 @@ class DashTable {
   // -1 for duplicate, 0 if inserted.
   int Insert(Key_t key, Value_t value);
   bool Find(Key_t key, Value_t* res) const;
+  bool Find(Key_t key) const;
 
   bool Delete(Key_t);
 
@@ -432,6 +439,15 @@ inline bool DashTable::Find(Key_t key, Value_t* res) const {
   const Segment* target = segment_[x];
 
   return target->Find(key, key_hash, cmp_fun_, res);
+}
+
+inline bool DashTable::Find(Key_t key) const {
+  uint64_t key_hash = Hash(key);
+  size_t x = SegmentId(key_hash);
+
+  const Segment* target = segment_[x];
+
+  return target->Find(key, key_hash, cmp_fun_);
 }
 
 inline bool DashTable::Delete(Key_t key) {
