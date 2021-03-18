@@ -198,8 +198,8 @@ void Segment::DeleteKeys(DtorFn dfun) {
   }
 }
 
-bool Segment::Delete(Key_t key, size_t key_hash, comp_fun cf, DtorFn dfun) {
-  auto it = FindIt(key, key_hash, cf);
+bool Segment::Delete(Key_t k, size_t key_hash, comp_fun cf, DtorFn dfun) {
+  auto it = FindIt(k, key_hash, cf);
 
   if (!it.found())
     return false;
@@ -210,8 +210,9 @@ bool Segment::Delete(Key_t key, size_t key_hash, comp_fun cf, DtorFn dfun) {
     auto* probe = &bucket_[(y + 1) & kBucketMask].b;
     UnsetStashPtr(it.index - kNumBucket, key_hash & kFpMask, owner, probe);
   }
+
   if (dfun) {
-    dfun(value(it.index, it.slot));
+    dfun(key(it.index, it.slot));
   }
   bucket_[it.index].b.ClearHash(it.slot);
 
