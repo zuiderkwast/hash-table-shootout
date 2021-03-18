@@ -4,22 +4,30 @@
 
 #include "dash.h"
 
-#include <immintrin.h>
 
 #include <cstring>
+
+
 #include "aquahash.h"
+
+#define DCHECK_EQ(x, y)
+#define DCHECK(x)
+#define  DCHECK_LT(x, y)
+#define  DCHECK_LE(x, y)
+#define  DCHECK_GT(x, y)
 
 namespace base {
 
 namespace {
 
-size_t HashFun(Segment::Key_t k) {
-  // return XXH3_64bits_withSeed(&k, sizeof(k), 0);
+uint64_t HashFun(DashTable::Key_t k) {
   auto hash = AquaHash::SmallKeyAlgorithm(reinterpret_cast<const uint8_t*>(&k), sizeof(k));
   return _mm_cvtsi128_si64x(hash);
 }
 
 }  // namespace
+
+namespace detail {
 
 BucketBase::BucketBase() {
 }
@@ -31,6 +39,7 @@ bool BucketBase::ClearStash(uint8_t fp, unsigned stash_pos, bool is_own) {
       overflow_member_ &= (~(1u << i));
       overflow_pos_ &= (~(3u << (i * 2)));
 
+      DCHECK_EQ(0u, ((overflow_pos_ >> (i * 2)) & Segment::kStashMask));
       return 0;
     }
     return kNanSlot;
@@ -40,64 +49,25 @@ bool BucketBase::ClearStash(uint8_t fp, unsigned stash_pos, bool is_own) {
   return res.second != kNanSlot;
 }
 
-unsigned BucketBase::CompareFP(uint8_t fp) const {
-  // Replicate 16 times uint8_t key to key_data.
-  const __m128i key_data = _mm_set1_epi8(fp);
-
-  // Loads 16 bytes of src into seg_data.
-  __m128i seg_data = _mm_loadu_si128(reinterpret_cast<const __m128i*>(finger_array_));
-
-  // compare 16-byte vectors seg_data and key_data, dst[i] := ( a[i] == b[i] ) ? 0xFF : 0.
-  __m128i rv_mask = _mm_cmpeq_epi8(seg_data, key_data);
-
-  // collapses 16 msb bits from each byte in rv_mask into mask.
-  int mask = _mm_movemask_epi8(rv_mask);
-
-  // Note: Last 2 operations can be combined in skylake with _mm_cmpeq_epi8_mask.
-  return mask & GetBusy();
-}
-
-auto Bucket::Find(Key_t key, comp_fun cf, uint8_t meta_hash, bool probe) const -> SlotId {
-  unsigned mask = CompareFP(meta_hash);
-  mask &= (GetProbe() ^ ((1u - probe) * kAllocMask));
-
-  return mask ? FindByMask(key, mask, cf) : unsigned(kNanSlot);
-}
-
-auto Bucket::Find(Key_t key, uint8_t meta_hash, bool probe) const -> SlotId {
-  unsigned mask = CompareFP(meta_hash);
-  mask &= (GetProbe() ^ ((1u - probe) * kAllocMask));
-
-  if (mask) {
-    unsigned delta = __builtin_ctz(mask);
-    mask >>= delta;
-    for (; delta < 14; ++delta) {
-      if ((mask & 1) && key_[delta] == key) {
-        return delta;
-      }
-      mask >>= 1;
-    }
-  }
-
-  return kNanSlot;
-}
-
 Segment::~Segment() {
 }
 
-void Segment::SetStashPtr(unsigned stash_pos, uint8_t meta_hash, Bucket* target, Bucket* next) {
+void Segment::SetStashPtr(unsigned stash_pos, uint8_t meta_hash, BucketBase* target,
+                          BucketBase* next) {
+  DCHECK_LT(stash_pos, kNumStashBucket);
+
   unsigned index = target->FindOverflowSlot();  // index finds the rightmost free slot.
 
-  // we use only 4 fp slots for handling stash buckets,
+  // we use only kOverflowLen fp slots for handling stash buckets,
   // therefore if all those slots are used we try neighbor (probing bucket) as a fallback to point
   // to stash buckets. otherwise we increment overflow. if overflow is incremented we need to check
   // all the stash buckets. otherwise we can use overflow_index_ to find the the stash bucket
   // effectively.
-  if (index < 4) {
+  if (index < BucketBase::kOverflowLen) {
     target->SetOverflow(meta_hash, index, stash_pos);
   } else {
     index = next->FindOverflowSlot();
-    if (index < 4) {
+    if (index < BucketBase::kOverflowLen) {
       next->SetOverflow(meta_hash, index, stash_pos);
       // overflow_member_ specifies which records relate to other bucket.
       next->overflow_member_ |= (1 << index);
@@ -105,11 +75,12 @@ void Segment::SetStashPtr(unsigned stash_pos, uint8_t meta_hash, Bucket* target,
       target->overflow_count_++;
     }
   }
-  target->overflow_bitmap_ |= Bucket::kOverflowBit;
+  target->overflow_bitmap_ |= BucketBase::kOverflowBit;
 }
 
 // stash_pos is index of the stash bucket, it is in the range of [0, kNumStashBucket].
-void Segment::UnsetStashPtr(unsigned stash_pos, uint8_t meta_hash, Bucket* target, Bucket* next) {
+void Segment::UnsetStashPtr(unsigned stash_pos, uint8_t meta_hash, BucketBase* target,
+                            BucketBase* next) {
   /*also needs to ensure that this meta_hash must belongs to other bucket*/
   bool clear_success = target->ClearStash(meta_hash, stash_pos, true);
 
@@ -118,7 +89,7 @@ void Segment::UnsetStashPtr(unsigned stash_pos, uint8_t meta_hash, Bucket* targe
   }
 
   if (!clear_success) {
-
+    DCHECK_GT(target->overflow_count_, 0);
     target->overflow_count_--;
   }
 
@@ -126,15 +97,15 @@ void Segment::UnsetStashPtr(unsigned stash_pos, uint8_t meta_hash, Bucket* targe
   // we need it because of the next, though if we make sure to move stash pointers upon split/delete
   // towards the owner we should not reach the state where mask1 == 0 but mask2 &
   // next->overflow_member_ != 0.
-  unsigned mask1 = target->overflow_bitmap_ & Bucket::kOverflowMask;
-  unsigned mask2 = next->overflow_bitmap_ & Bucket::kOverflowMask;
+  unsigned mask1 = target->overflow_bitmap_ & BucketBase::kOverflowMask;
+  unsigned mask2 = next->overflow_bitmap_ & BucketBase::kOverflowMask;
   if (((mask1 & (~target->overflow_member_)) == 0) && (target->overflow_count_ == 0) &&
       ((mask2 & next->overflow_member_) == 0)) {
-    target->overflow_bitmap_ &= ~Bucket::kOverflowBit;
+    target->overflow_bitmap_ &= ~BucketBase::kOverflowBit;
   }
 }
 
-int Segment::Insert(Key_t key, Value_t value, size_t key_hash, Bucket::comp_fun cmp_fun) {
+int Segment::Insert(Key_t key, Value_t value, size_t key_hash, comp_fun cmp_fun) {
   /*unique check, needs to check 2 hash table*/
   Iterator it = FindIt(key, key_hash, cmp_fun);
   if (it.found()) {
@@ -151,36 +122,57 @@ int Segment::Insert(Key_t key, Value_t value, size_t key_hash, Bucket::comp_fun 
   return -1;
 }
 
-auto Segment::FindIt(Key_t key, size_t key_hash, Bucket::comp_fun cf) const -> Iterator {
+auto Segment::FindIt(Key_t key, size_t key_hash, comp_fun cf) const -> Iterator {
   unsigned bidx = BucketIndex(key_hash);
-  const Bucket* target = bucket_ + bidx;
+  const BucketBase& target = bucket_[bidx].b;
+
   uint8_t fp_hash = key_hash & kFpMask;
+  unsigned mask = target.Find(fp_hash, false);
+  BucketBase::SlotId sid = BucketBase::kNanSlot;
+  if (mask) {
+    if (cf) {
+      sid = FindByMask(bidx, key, mask, cf);
+    } else {
+      sid = FindByMask(bidx, key, mask, [](auto k1, auto k2) { return k1 == k2; });
+    }
 
-  Bucket::SlotId sid = cf ? target->Find(key, cf, fp_hash, false) : target->Find(key, fp_hash, false);
-  if (sid != Bucket::kNanSlot) {
-    return Iterator{bidx, sid};
+    if (sid != BucketBase::kNanSlot) {
+      return Iterator{bidx, sid};
+    }
   }
+
   uint8_t nid = (bidx + 1) & kBucketMask;
-  const Bucket* probe = bucket_ + nid;
-
-  sid = cf ? probe->Find(key, cf, fp_hash, true) : probe->Find(key, fp_hash, true);
-  if (sid != Bucket::kNanSlot) {
-    return Iterator{nid, sid};
+  const BucketBase& probe = bucket_[nid].b;
+  mask = probe.Find(fp_hash, true);
+  if (mask) {
+    sid = cf ? FindByMask(nid, key, mask, cf)
+             : FindByMask(nid, key, mask, [](auto k1, auto k2) { return k1 == k2; });
+    if (sid != BucketBase::kNanSlot) {
+      return Iterator{nid, sid};
+    }
   }
 
-  if (!target->HasStash()) {
+  if (!target.HasStash()) {
     return Iterator{};
   }
 
-  auto stash_cb = [&](unsigned overflow_index, unsigned pos) -> Bucket::SlotId {
-    const Bucket* bucket = bucket_ + kNumBucket + pos;
-    return cf ? bucket->Find(key, cf, fp_hash, false) : bucket->Find(key, fp_hash, false);
+  auto stash_cb = [&](unsigned overflow_index, unsigned pos) -> BucketBase::SlotId {
+    DCHECK_LT(pos, kNumStashBucket);
+
+    pos += kNumBucket;
+    const BucketBase& bucket = bucket_[pos].b;
+    unsigned mask = bucket.Find(fp_hash, false);
+    if (!mask)
+      return BucketBase::kNanSlot;
+
+    return cf ? FindByMask(pos, key, mask, cf)
+              : FindByMask(pos, key, mask, [](auto k1, auto k2) { return k1 == k2; });
   };
 
-  if (target->HasStashOverflow()) {
+  if (target.HasStashOverflow()) {
     for (unsigned i = 0; i < kNumStashBucket; ++i) {
       auto sid = stash_cb(0, i);
-      if (sid != Bucket::kNanSlot) {
+      if (sid != BucketBase::kNanSlot) {
         return Iterator{kNumBucket + i, sid};
       }
     }
@@ -188,13 +180,13 @@ auto Segment::FindIt(Key_t key, size_t key_hash, Bucket::comp_fun cf) const -> I
     return Iterator{};
   }
 
-  auto stash_res = target->IterateStash(fp_hash, true, stash_cb);
-  if (stash_res.second != Bucket::kNanSlot) {
+  auto stash_res = target.IterateStash(fp_hash, true, stash_cb);
+  if (stash_res.second != BucketBase::kNanSlot) {
     return Iterator{kNumBucket + stash_res.first, stash_res.second};
   }
 
-  stash_res = probe->IterateStash(fp_hash, false, stash_cb);
-  if (stash_res.second != Bucket::kNanSlot) {
+  stash_res = probe.IterateStash(fp_hash, false, stash_cb);
+  if (stash_res.second != BucketBase::kNanSlot) {
     return Iterator{kNumBucket + stash_res.first, stash_res.second};
   }
   return Iterator{};
@@ -202,11 +194,11 @@ auto Segment::FindIt(Key_t key, size_t key_hash, Bucket::comp_fun cf) const -> I
 
 void Segment::DeleteKeys(DtorFn dfun) {
   for (unsigned i = 0; i < kNumBucket + kNumStashBucket; ++i) {
-    bucket_[i].ForEach([&](unsigned, Key_t k, Value_t, bool) { dfun(k); });
+    ForEach(i, [&](unsigned, Key_t k, Value_t, bool) { dfun(k); });
   }
 }
 
-bool Segment::Delete(Key_t key, size_t key_hash, Bucket::comp_fun cf, DtorFn dfun) {
+bool Segment::Delete(Key_t key, size_t key_hash, comp_fun cf, DtorFn dfun) {
   auto it = FindIt(key, key_hash, cf);
 
   if (!it.found())
@@ -214,29 +206,29 @@ bool Segment::Delete(Key_t key, size_t key_hash, Bucket::comp_fun cf, DtorFn dfu
 
   if (it.index >= kNumBucket) {
     unsigned y = BucketIndex(key_hash);
-    auto* owner = bucket_ + y;
-    auto* probe = bucket_ + ((y + 1) & kBucketMask);
+    auto* owner = &bucket_[y].b;
+    auto* probe = &bucket_[(y + 1) & kBucketMask].b;
     UnsetStashPtr(it.index - kNumBucket, key_hash & kFpMask, owner, probe);
   }
   if (dfun) {
-    dfun(bucket_[it.index].value(it.slot));
+    dfun(value(it.index, it.slot));
   }
-  bucket_[it.index].ClearHash(it.slot);
+  bucket_[it.index].b.ClearHash(it.slot);
 
   return true;
 }
 
-bool Segment::Find(Key_t key, size_t key_hash, Bucket::comp_fun cf, Value_t* res) const {
+bool Segment::Find(Key_t key, size_t key_hash, comp_fun cf, Value_t* res) const {
   auto it = FindIt(key, key_hash, cf);
   if (!it.found())
     return false;
 
-  const Bucket& b = bucket_[it.index];
-  *res = b.value(it.slot);
+  *res = value(it.index, it.slot);
+
   return true;
 }
 
-void Segment::Split(HashFn hfn, Segment* dest) {
+void Segment::Split(Segment::HashFn hfn, Segment* dest) {
   ++local_depth_;
   dest->local_depth_ = local_depth_;
   unsigned removed = 0;
@@ -255,7 +247,7 @@ void Segment::Split(HashFn hfn, Segment* dest) {
       if ((hash >> (64 - local_depth_) & 1) == 0)
         return;  // keep this key in the source
 
-      Bucket* dest_bucket = dest->bucket_ + i;
+      // Bucket* dest_bucket = dest->bucket_ + i;
       invalid_mask |= (1u << slot);
       ++removed;
 
@@ -264,18 +256,22 @@ void Segment::Split(HashFn hfn, Segment* dest) {
       // slower.
       // We know that we insert new items and that the new bucket must have place for them because
       // the old one has.
+      // DCHECK(!dest_bucket->IsFull());
+      dest->InsertToBucket(Iterator{i, slot}, k, v, hash & kFpMask, probe);
 
-      dest_bucket->InsertUniq(k, v, hash & kFpMask, slot, probe);
+      // dest_bucket->InsertUniq(k, v, hash & kFpMask, slot, probe);
+      // CHECK(dest->InsertUniq(k, v, hash));
+
       dest->size_++;
     };
 
-    Bucket& bucket = bucket_[i];
-    bucket.ForEach(std::move(cb));
-    bucket.ClearSlots(invalid_mask);
+    // Bucket& bucket = bucket_[i];
+    ForEach(i, std::move(cb));
+    bucket_[i].b.ClearSlots(invalid_mask);
   }
 
   for (unsigned i = 0; i < kNumStashBucket; ++i) {
-    Bucket& bucket = bucket_[kNumBucket + i];
+    BucketBase& bucket = bucket_[kNumBucket + i].b;
     uint32_t invalid_mask = 0;
 
     auto cb = [&](unsigned slot, Key_t key, Value_t v, bool probe) {
@@ -286,64 +282,70 @@ void Segment::Split(HashFn hfn, Segment* dest) {
       invalid_mask |= (1u << slot);
 
       dest->InsertUniq(key, v, hash);
+
       dest->size_++;
       ++removed;
 
       // Remove stash pointer referencing to this bucket.
       auto bucket_ix = BucketIndex(hash);
-      auto* owner = bucket_ + bucket_ix;
-      auto* neighbor_bucket = bucket_ + ((bucket_ix + 1) & kBucketMask);
+      auto* owner = &bucket_[bucket_ix].b;
+      auto* neighbor_bucket = &bucket_[(bucket_ix + 1) & kBucketMask].b;
       UnsetStashPtr(i, hash & kFpMask, owner, neighbor_bucket);
     };
-    bucket.ForEach(std::move(cb));
+    ForEach(kNumBucket + i, std::move(cb));
     bucket.ClearSlots(invalid_mask);
   }
 
-
+  DCHECK_LE(removed, size_);
   size_ -= removed;
 }
 
 bool Segment::InsertUniq(Key_t key, Value_t value, size_t key_hash) {
-  auto y = BucketIndex(key_hash);
-  Bucket* target = bucket_ + y;
-  Bucket* neighbor = bucket_ + ((y + 1) & kBucketMask);
-  Bucket* insert_target = target;
+  unsigned y = BucketIndex(key_hash);
+  unsigned neighbor_idx = (y + 1) & kBucketMask;
+  BucketBase* target = &bucket_[y].b;
+  BucketBase* neighbor = &bucket_[neighbor_idx].b;
+  BucketBase* insert_target = target;
+  unsigned target_idx = y;
+
   uint8_t meta_hash = key_hash & kFpMask;
   bool probe = false;
 
   if (target->Size() > neighbor->Size()) {
     insert_target = neighbor;
+    target_idx = neighbor_idx;
     probe = true;
   }
 
   if (!insert_target->IsFull()) {
     unsigned slot = insert_target->GetEmptySlot();
-    insert_target->InsertUniq(key, value, meta_hash, slot, probe);
+    InsertToBucket(Iterator{target_idx, slot}, key, value, meta_hash, probe);
 
     return true;
   }
 
-  Bucket* next_neighbor = bucket_ + ((y + 2) & kBucketMask);
-  int displace_index = neighbor->MoveToOther(true, next_neighbor);
+  int displace_index = MoveToOther(true, neighbor_idx, (y + 2) & kBucketMask);
   if (displace_index >= 0) {
-    neighbor->InsertUniq(key, value, meta_hash, displace_index, true);
+    InsertToBucket(Iterator{neighbor_idx, unsigned(displace_index)}, key, value, meta_hash, true);
     return true;
   }
 
-  Bucket* prev_neighbor = (y == 0) ? bucket_ + kNumBucket - 1 : bucket_ + y - 1;
-  displace_index = target->MoveToOther(false, prev_neighbor);
+  unsigned prev_idx = (y == 0) ? kNumBucket - 1 : y - 1;
+  displace_index = MoveToOther(false, y, prev_idx);
   if (displace_index >= 0) {
-    target->InsertUniq(key, value, meta_hash, displace_index, false);
+    InsertToBucket(Iterator{y, unsigned(displace_index)}, key, value, meta_hash, false);
     return true;
   }
 
   return StashInsertUniq(target, neighbor, key, value, meta_hash, y & kStashMask);
 }
 
+}  // namespace detail
+
 DashTable::DashTable(size_t capacity_log) : global_depth_(capacity_log) {
   segment_.resize(1 << global_depth_);
   for (auto& ptr : segment_) {
-    ptr = new Segment(global_depth_);
+    ptr = new detail::Segment(global_depth_);
   }
   unique_segments_ = segment_.size();
 }
@@ -351,19 +353,19 @@ DashTable::DashTable(size_t capacity_log) : global_depth_(capacity_log) {
 DashTable::~DashTable() {
   size_t i = 0;
   while (i < segment_.size()) {
-    Segment* s = segment_[i];
-    size_t delta = (1u << (global_depth_ - s->local_depth_));
+    auto* seg = segment_[i];
+    size_t delta = (1u << (global_depth_ - seg->local_depth()));
 
     if (key_dtor_fun_) {
-      s->DeleteKeys(key_dtor_fun_);
+      seg->DeleteKeys(key_dtor_fun_);
     }
-    delete s;
+    delete seg;
     i += delta;
   }
 }
 
 void DashTable::Reserve(size_t size) {
-  size_t sg_cnt = 1 + size / Segment::capacity();
+  size_t sg_cnt = 1 + size / detail::Segment::capacity();
   if (sg_cnt < segment_.size()) {
     return;
   }
@@ -373,37 +375,39 @@ void DashTable::Reserve(size_t size) {
   // TBD: to create and split segments.
 }
 
-int DashTable::Insert(Key_t key, Value_t value) {
+bool DashTable::Insert(Key_t key, Value_t value) {
   uint64_t key_hash = Hash(key);
 
   while (true) {
     // Keep last global_depth_ msb bits of the hash.
     size_t x = SegmentId(key_hash);
-
-    Segment* target = segment_[x];
+    DCHECK_LT(x, segment_.size());
+    auto* target = segment_[x];
 
     int ret = target->Insert(key, value, key_hash, cmp_fun_);
 
     if (ret == -3) { /*duplicate insert, insertion failure*/
-      return -1;
+      return false;
     }
 
     if (ret == 0) {
       ++size_;
-      return 0;
+      break;
     }
 
-    if (target->local_depth_ == global_depth_) {
+    DCHECK_EQ(-1, ret);  // Full
+
+    if (target->local_depth() == global_depth_) {
       IncreaseDepth(global_depth_ + 1);
 
       x = SegmentId(key_hash);
-
+      DCHECK(x < segment_.size() && segment_[x] == target);
     }
 
-    size_t chunk_size = 1u << (global_depth_ - target->local_depth_);
+    size_t chunk_size = 1u << (global_depth_ - target->local_depth());
     size_t start_idx = x & (~(chunk_size - 1));
-
-    Segment* s = new Segment(target->local_depth_ + 1);
+    DCHECK(segment_[start_idx] == target && segment_[start_idx + chunk_size - 1] == target);
+    auto* s = new detail::Segment(target->local_depth() + 1);
     target->Split(hash_fn_, s);  // increases the depth.
     ++unique_segments_;
 
@@ -412,11 +416,12 @@ int DashTable::Insert(Key_t key, Value_t value) {
     }
   }
 
-  return 0;
+  return true;
 }
 
 void DashTable::IncreaseDepth(unsigned new_depth) {
-
+  DCHECK(!segment_.empty());
+  DCHECK_GT(new_depth, global_depth_);
   size_t prev_sz = segment_.size();
   size_t repl_cnt = 1ul << (new_depth - global_depth_);
   segment_.resize(1ul << new_depth);
