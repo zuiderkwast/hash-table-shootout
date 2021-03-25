@@ -34,3 +34,6 @@
 [submodule "klibs"]
 	path = klibs
 	url = https://github.com/attractivechaos/klib.git
+[submodule "xxhash"]
+	path = xxhash
+	url = git@github.com:Cyan4973/xxHash.git

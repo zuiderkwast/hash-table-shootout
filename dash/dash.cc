@@ -10,20 +10,33 @@
 
 #include "aquahash.h"
 
+#define XXH_VECTOR XXH_SSE2
+#define XXH_INLINE_ALL
+
+#include "xxhash/xxhash.h"
+
 #define DCHECK_EQ(x, y)
 #define DCHECK(x)
 #define  DCHECK_LT(x, y)
 #define  DCHECK_LE(x, y)
 #define  DCHECK_GT(x, y)
 
+#define USE_XXHASH
 namespace base {
 
 namespace {
 
+#ifdef USE_XXHASH
+uint64_t HashFun(DashTable::Key_t k) {
+  return XXH3_64bits(&k, sizeof(k));
+}
+
+#else
 uint64_t HashFun(DashTable::Key_t k) {
   auto hash = AquaHash::SmallKeyAlgorithm(reinterpret_cast<const uint8_t*>(&k), sizeof(k));
   return _mm_cvtsi128_si64x(hash);
 }
+#endif
 
 }  // namespace
 

@@ -31,12 +31,11 @@ redis/%.o: redis/%.c
 
 DASH_LIB = libdash.a
 
+dash/%.o : dash/%.cc
+	$(CC) -c $(CXXFLAGS) -I. -o $@  $<
+
 $(DASH_LIB): dash/dash.o 
 	ar -r -o $@ $^
-
-dash/%.o: dash/%.c 
-	$(CC) -c $(CXXFLAGS) -o $@  $<
-
 
 ifeq ($(filter glib_tree,${APPS}), glib_tree)
 CXXFLAGS_glib_tree ?= $(shell pkg-config --cflags glib-2.0) \
