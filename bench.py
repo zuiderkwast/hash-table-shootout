@@ -16,7 +16,7 @@ for line in open("apps.txt"):
         programs.append(line)
 
 minkeys  =  2*100*1000
-maxkeys  = 10*1000*1000
+maxkeys  = 15*1000*1000
 #interval =  2*100*1000
 step_percent =  30 # you may use this variable instead of "interval" for exponetial step
 best_out_of = 5
@@ -35,15 +35,15 @@ short_names = {
     ],
     'random_full': [
         'insert_random_full', 'reinsert_random_full',
-        'insert_random_full_reserve',
+#        'insert_random_full_reserve',
         'read_random_full', 'read_miss_random_full',
         'delete_random_full', 'read_random_full_after_delete',
-        'iteration_random_full'
+#        'iteration_random_full'
     ],
     
     'small_string': [
         'insert_small_string', 'reinsert_small_string',
-        'insert_small_string_reserve',
+#        'insert_small_string_reserve',
         'read_small_string', 'read_miss_small_string',
         'delete_small_string',
         'read_small_string_after_delete'
@@ -68,9 +68,10 @@ if len(sys.argv) > 1:
     for x in sys.argv[1:]:
         benchtypes.extend(short_names.get(x, [x]))
 else:
-    benchtypes = short_names['random_shuffle_range'] + short_names['random_full'] \
-    + short_names['small_string'] + short_names['string']
+    benchtypes =  short_names['random_full'] \
+    + short_names['small_string'] #+ short_names['string']
 
+    '''short_names['random_shuffle_range'] + '''
 if "interval" in dir():
     points = range(minkeys, maxkeys + 1, interval)
 else:

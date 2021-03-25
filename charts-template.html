@@ -36,7 +36,7 @@
                                return parseInt(num/1000) + 'k'; 
                            }
         },
-        min: 1000000,
+        min: 100000,
         // transform: function(v) { return Math.log(v+0.000001)/Math.log(11); }
     };
 
@@ -47,6 +47,7 @@
 
     yaxis_memory_settings = {
         min: 0,
+	tickSize: 10,
         tickFormatter: function(num, obj) { return parseInt(num) + 'B'; }
     };
 
